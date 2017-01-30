@@ -1,9 +1,12 @@
 package ru.evotor.devices.drivers;
 
 public abstract class Constants {
+
     public static final String INTENT_FILTER_DRIVER_MANAGER = "ru.evotor.devices.drivers.DriverManager";
+    public static final String INTENT_FILTER_VIRTUAL_DRIVER_MANAGER = "ru.evotor.devices.drivers.VirtualDriverManager";
     public static final String INTENT_FILTER_SCALES = "ru.evotor.devices.drivers.ScalesService";
     public static final String INTENT_FILTER_PRICE_PRINTER = "ru.evotor.devices.drivers.PricePrinterService";
+    public static final String INTENT_FILTER_PAY_SYSTEM = "ru.evotor.devices.drivers.PaySystemService";
     public static final String INTENT_FILTER_CASH_DRAWER = "ru.evotor.devices.drivers.CashDrawer";
 
     // (строка) название производителя устройства
@@ -24,8 +27,11 @@ public abstract class Constants {
 
     // доступные категории устройств
     public enum DeviceCategory {
+        OTHER,
         SCALES,
-        CASHDRAWER
+        CASHDRAWER,
+        PAYSYSTEM,
+        PRICEPRINTER
     }
 
 }

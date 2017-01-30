@@ -7,6 +7,6 @@ interface ICashDrawerDriverService {
 	/**
 	* открывает денежный ящик
 	*/
-	void openCashDrawer(int deviceId);
+	void openCashDrawer(int instanceId);
 
 }

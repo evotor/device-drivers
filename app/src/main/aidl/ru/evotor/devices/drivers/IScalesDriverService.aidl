@@ -8,6 +8,8 @@ interface IScalesDriverService {
 
 	/**
 	* Получить вес и прочие характеристики
+	*
+    * @param instanceId    - номер экзмпляра драйвера
 	*/
     Weight getWeight(int instanceId);
 
