@@ -371,11 +371,13 @@ private class MyPricePrinterStub extends IPricePrinterDriverService.Stub {
 
 Все методы принимают на вход номер экземпляра драйвера. Метод `printPrice` также принимает на вход параметры печатаемого ценника: название, цену, штрихкод и код товара.
  
+
 #### `IPaySystemDriverService.Stub` - класс для работы с конкретными экземплярами
 
 ```
 import ru.evotor.devices.drivers.IPaySystemDriverService;
 import ru.evotor.devices.drivers.paysystem.PayResult;
+import ru.evotor.devices.drivers.paysystem.PayInfo;
 
 public class MyPaySystemStub implements IPaySystemDriverService.Stub {
 
@@ -386,23 +388,23 @@ public class MyPaySystemStub implements IPaySystemDriverService.Stub {
     }
 
     @Override
-    public PayResult payment(int instanceId, String sum) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).payment(sum);
+    public PayResult payment(int instanceId, PayInfo payInfo) throws RemoteException {
+        return myDeviceService.getMyDevice(instanceId).payment(payInfo);
     }
 
     @Override
-    public PayResult cancelPayment(int instanceId, String sum, String rrn) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).cancelPayment(sum, rrn);
+    public PayResult cancelPayment(int instanceId, PayInfo payInfo, String rrn) throws RemoteException {
+        return myDeviceService.getMyDevice(instanceId).cancelPayment(payInfo, rrn);
     }
 
     @Override
-    public PayResult payback(int instanceId, String sum, String rrn) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).payback(sum, rrn);
+    public PayResult payback(int instanceId, PayInfo payInfo, String rrn) throws RemoteException {
+        return myDeviceService.getMyDevice(instanceId).payback(payInfo, rrn);
     }
 
     @Override
-    public PayResult cancelPayback(int instanceId, String sum, String rrn) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).cancelPayback(sum, rrn);
+    public PayResult cancelPayback(int instanceId, PayInfo payInfo, String rrn) throws RemoteException {
+        return myDeviceService.getMyDevice(instanceId).cancelPayback(payInfo, rrn);
     }
 
     @Override
@@ -456,9 +458,12 @@ public class MyPaySystemStub implements IPaySystemDriverService.Stub {
     }
 }
 ```
+
 Все методы принимают на вход номер экземпляра драйвера.
- 
-### 5. После того, как описаны все классы для взаимодействия с инфраструктурой смарт-терминала, можно описать сам класс работы с оборудованием:
+
+Метод оплаты принимает на вход информацию об оплате (сумму), методы возврата и отмены дополнительно к этому принимают на вход `РРН` прошлой операции.
+   
+  ### 5. После того, как описаны все классы для взаимодействия с инфраструктурой смарт-терминала, можно описать сам класс работы с оборудованием:
 
 Например, для USB-весов это выглядит следующим образом:
 
