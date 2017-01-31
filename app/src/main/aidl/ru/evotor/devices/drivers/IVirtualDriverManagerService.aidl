@@ -20,5 +20,5 @@ interface IVirtualDriverManagerService {
     /**
      * Уничтожает драйвер (при отключении оборудования или вручную пользователем)
      */
-    void destroy(int instanceId);
+    oneway void destroy(int instanceId);
 }
