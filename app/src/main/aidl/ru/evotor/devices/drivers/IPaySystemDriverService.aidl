@@ -1,6 +1,7 @@
 package ru.evotor.devices.drivers;
 
 import ru.evotor.devices.drivers.paysystem.PayResult;
+import ru.evotor.devices.drivers.paysystem.PayInfo;
 
 interface IPaySystemDriverService {
 
@@ -8,45 +9,44 @@ interface IPaySystemDriverService {
 	 * Производит оплату на указанную сумму
 	 *
 	 * @param instanceId    - номер экземпляра драйвера
-	 * @param sum           - сумма в рублях, десятичный разделитель - точка
+	 * @param payinfo       - информация об оплате (сумма)
 	 * @return              - параметры успешного завершения результата
 	 * @throws              - RuntimeException в случае неуспешного завершения
 	 */
-	PayResult payment(int instanceId, String sum);
+	PayResult payment(int instanceId, in PayInfo payinfo);
 
 	/**
 	 * Производит отмену оплаты на указанную сумму
 	 *
 	 * @param instanceId    - номер экземпляра драйвера
-	 * @param sum           - сумма в рублях, десятичный разделитель - точка
+	 * @param payinfo       - информация об оплате (сумма)
 	 * @param rrn           - РРН отменяемой операции
 	 * @return              - параметры успешного завершения результата
 	 * @throws              - RuntimeException в случае неуспешного завершения
      */
-	PayResult cancelPayment(int instanceId, String sum, String rrn);
+	PayResult cancelPayment(int instanceId, in PayInfo payinfo, String rrn);
 
 	/**
 	 * Производит возврат на указанную сумму
 	 *
 	 * @param instanceId    - номер экземпляра драйвера
-
-	 * @param sum           - сумма в рублях, десятичный разделитель - точка
+	 * @param payinfo       - информация об оплате (сумма)
 	 * @param rrn           - РРН операции оплаты
 	 * @return              - параметры успешного завершения результата
 	 * @throws              - RuntimeException в случае неуспешного завершения
      */
-	PayResult payback(int instanceId, String sum, String rrn);
+	PayResult payback(int instanceId, in PayInfo payinfo, String rrn);
 
 	/**
 	 * Производит отмену возврата на указанную сумму
 	 *
 	 * @param instanceId    - номер экземпляра драйвера
-	 * @param sum           - сумма в рублях, десятичный разделитель - точка
+	 * @param payinfo       - информация об оплате (сумма)
 	 * @param rrn           - РРН отменяемой операции
 	 * @return              - параметры успешного завершения результата
 	 * @throws              - RuntimeException в случае неуспешного завершения
 	 */
-	PayResult cancelPayback(int instanceId, String sum, String rrn);
+	PayResult cancelPayback(int instanceId, in PayInfo payinfo, String rrn);
 
 	/**
 	 * Производит закрытие банковской смены

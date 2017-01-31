@@ -8,11 +8,19 @@ import lombok.Getter;
 @Getter
 public class PayResult implements Parcelable {
 
-    // ррн проведённой операции
+    /**
+     * ррн проведённой операции
+     */
     private final String rrn;
-    // количество строк банковского чека для печати
+
+    /**
+     * количество строк банковского чека для печати
+     */
     private final int slipLength;
-    // строки банковского чека для печати
+
+    /**
+     * строки банковского чека для печати
+     */
     private final String[] slip;
 
     public PayResult(String rrn, String[] slip) {
