@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 
-group='com.github.evotor'
+group = 'com.github.evotor'
 
 android {
     compileSdkVersion 25
@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 22
         targetSdkVersion 25
-        versionCode 11
-        versionName "1.1.1"
+        versionCode 12
+        versionName "1.1.2"
     }
     buildTypes {
         release {
@@ -25,7 +25,6 @@ dependencies {
     provided 'org.glassfish:javax.annotation:10.0-b28'
 }
 
-
 // build a jar with source files
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -33,7 +32,7 @@ task sourcesJar(type: Jar) {
 }
 
 task javadoc(type: Javadoc) {
-    failOnError  false
+    failOnError false
     source = android.sourceSets.main.java.sourceFiles
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     classpath += configurations.compile

@@ -30,4 +30,5 @@ public interface IPaySystem {
 
     String getServerIP();
 
+    boolean isNotNeedRRN();
 }
