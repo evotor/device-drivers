@@ -78,4 +78,12 @@ interface IPaySystemDriverService {
 	String getCashier(int instanceId);
 	String getServerIP(int instanceId);
 
+    /**
+	 * банковскому терминалу не требуется РРН для возврата/отмены операции
+	 *
+	 * @param instanceId    - номер экземпляра драйвера
+	 * @return  true    -   РРН не требуется
+	 *          false   -   РРН требуется
+	 */
+    boolean isNotNeedRRN(int instanceId);
 }
