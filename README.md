@@ -202,7 +202,17 @@ public class MyDeviceService extends Service {
 
 ### 4. Опишите указанные Binder'ы.
 
-Для всех описываемых методов в случае невозможности выполнить требуемое действие (например, взвесить для метода `getWeight`) следует задействовать любой `RuntimeException` с текстовым человекочитаемым описанием проблемы.
+Для всех описываемых методов в случае невозможности выполнить требуемое действие (например, взвесить для метода `getWeight`) следует задействовать поддерживаемый `Exception` тип (с текстовым человекочитаемым описанием проблемы).
+
+Поддерживаемые `Exception` типы:
+`BadParcelableException`;
+`IllegalArgumentException`;
+`IllegalStateException`;
+`NullPointerException`;
+`SecurityException`;
+`NetworkOnMainThreadException`.
+
+Proof: https://developer.android.com/reference/android/os/Parcel.html#writeException%28java.lang.Exception%29
 
 #### `IUsbDriverManagerService.Stub` - класс для управления драйверами usb-устройств: подключение и отключение устройств происходят здесь.  Требуется реализовать методы `addUsbDevice` и `destroy`.
 
@@ -256,7 +266,8 @@ public class MyDriverManagerStub extends IVirtualDriverManagerService.Stub {
 
     @Override
     public int addNewVirtualDevice() throws RemoteException {
-        return myDeviceService.createNewDevice(usbDevice);
+
+            return myDeviceService.createNewDevice(usbDevice);
     }
 
     @Override
