@@ -12,9 +12,9 @@
 
 1. [Подготовка к разработке.](https://github.com/Draudr/device-drivers/blob/master/Preparation_for_development.md)  
 1.1. [Подключение к своему проекту библиотеку для работы с оборудованием.](https://github.com/Draudr/device-drivers/blob/master/Preparation_for_development.md#101)  
-1.2. [Определение внешний сервис в `AndroidManifest.xml` приложения.](#102)  
-1.3. [В реализации метода подключения к сервису для всех action указанных в интент-фильтрах укажите соответствующие `Binder'ы`](#103)  
-1.4. [Описание указанных `Binder'ов`.](#104)
+1.2. [Определение внешний сервис в `AndroidManifest.xml` приложения.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Preparation_for_development.md#102)  
+1.3. [В реализации метода подключения к сервису для всех action указанных в интент-фильтрах укажите соответствующие `Binder'ы`](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Preparation_for_development.md#103)  
+1.4. [Описание указанных `Binder'ов`.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Preparation_for_development.md#104)
 2. [SDK для Банковских Терминалов.](https://github.com/Draudr/device-drivers/blob/master/README_PinPad.md)
 3. [SDK для Денежных Ящиков.]()
 4. [SDK для Принтеров Ценников.]()
