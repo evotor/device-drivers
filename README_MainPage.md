@@ -10,11 +10,11 @@
 
 Разделы проекта:
 
-1. <span style="color: red;">[Подготовка к разработке.](https://github.com/VedbeN/device-drivers/blob/master/MultiDescriptive_SDK.md)</span>
-2. [SDK для Банковских Терминалов.](https://github.com/VedbeN/device-drivers/blob/master/BankTerminals_SDK.md)
-3. [SDK для Денежных Ящиков.](https://github.com/VedbeN/device-drivers/blob/master/CashDrawer_SDK.md)
-4. [SDK для Принтеров Ценников.](https://github.com/VedbeN/device-drivers/blob/master/PricePrinter_SDK.md)
-5. [SDK для Весов.](https://github.com/VedbeN/device-drivers/blob/master/Scales_SDK.md)
-6. [SDK для других устройств работающих с USB-оборудованием.](https://github.com/VedbeN/device-drivers/blob/master/OtherDevices_SDK.md)
+1. [Подготовка к разработке.]()
+2. [SDK для Банковских Терминалов.](https://github.com/Draudr/device-drivers/blob/master/README_PinPad.md)
+3. [SDK для Денежных Ящиков.]()
+4. [SDK для Принтеров Ценников.]()
+5. [SDK для Весов.](https://github.com/Draudr/device-drivers/blob/master/README_Scales)  
+6. [SDK для других устройств работающих с USB-оборудованием.]()
 -----
 ###### Более подробную информацию по разрабатке своих решений для бизнеса на платформе Эвотор, Вы можете найти на нашем сайте для разработчиков: https://developer.evotor.ru/
