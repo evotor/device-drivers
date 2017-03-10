@@ -1,4 +1,7 @@
-# SDK для работы с оборудованием смарт-терминала Эвотор
+
+[Главная страница](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/README.md) > SDK для Банковских Терминалов
+
+# 2. SDK для Банковских Терминалов
 
 [![Build Status](https://img.shields.io/travis/evotor/device-drivers/master.svg)](https://travis-ci.org/evotor/device-drivers)
 
