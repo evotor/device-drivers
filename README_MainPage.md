@@ -11,7 +11,7 @@
 Разделы проекта:
 
 1. [Подготовка к разработке.](https://github.com/Draudr/device-drivers/blob/master/Preparation_for_development.md)  
-1.1. [Подключение к своему проекту библиотеку для работы с оборудованием.](https://github.com/Draudr/device-drivers/blob/master/Preparation_for_development.md)(#101)  
+1.1. [Подключение к своему проекту библиотеку для работы с оборудованием.](https://github.com/Draudr/device-drivers/blob/master/Preparation_for_development.md#101)  
 1.2. [Определение внешний сервис в `AndroidManifest.xml` приложения.](#102)  
 1.3. [В реализации метода подключения к сервису для всех action указанных в интент-фильтрах укажите соответствующие `Binder'ы`](#103)  
 1.4. [Описание указанных `Binder'ов`.](#104)
