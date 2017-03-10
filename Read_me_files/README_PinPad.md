@@ -3,7 +3,7 @@
 
 # 2. SDK для Банковских Терминалов
 
-
+[![Build Status](https://img.shields.io/travis/evotor/device-drivers/master.svg)](https://travis-ci.org/evotor/device-drivers)
 
 В этом проекте описаны все необходимые интерфейсы, константы и пр., необходимые для работы с оборудованием на смарт-терминале Эвотор и разработки собственных драйверов для него.
 
@@ -122,7 +122,7 @@ dependencies {
 
 В манифесте приложения у сервиса должны быть указаны `android:icon` и `android:label` - картинка и имя драйвера (показывается пользователю). Картинку желательно делать квадратной, png без фона.
 
-![Пример отображения иконки и имени драйвера](https://github.com/VedbeN/device-drivers/blob/master/icon_xmpl.png?raw=true "Пример отображения иконки и имени драйвера")
+![Пример отображения иконки и имени драйвера](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Read_me_files/images/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA.PNG?raw=true "Пример отображения иконки и имени драйвера")
 
 Можно задать `activity`  настроек, если это требуется:
 
