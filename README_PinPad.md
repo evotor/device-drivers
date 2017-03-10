@@ -32,7 +32,7 @@ dependencies {
 
 ### 2. Определите внешний сервис в `AndroidManifest.xml` приложения.
 
-Для сервиса должен быть указан хотя бы один из интент-фильтров `INTENT_FILTER_DRIVER_MANAGER` или `INTENT_FILTER_VIRTUAL_DRIVER_MANAGER`. 
+Для сервиса должен быть указан хотя бы один из интент-фильтров `INTENT_FILTER_DRIVER_MANAGER` или `INTENT_FILTER_VIRTUAL_DRIVER_MANAGER`.
 
 Пример объявленного сервиса:
 
