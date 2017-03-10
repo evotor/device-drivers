@@ -5,7 +5,11 @@
 _Содержание:_  
 
 5.1. [Определение роли и категории устройства.](#501)  
-5.2. [Присвоение картинки для драйвера](#502)
+5.2. [Присвоение картинки для драйвера](#502)  
+5.3. [В реализации метода подключения к сервису для всех action указанных в интент-фильтрах укажите соответствующие `Binder'ы`](#503)  
+5.4. [Описание указанных `Binder'ов`.](#504)  
+5.5. [Описание класса для таботы с оборудованием.](#505)  
+5.6. [Завершение работы.](#506)
 
 <a name="501"></a>
 ## 5.1. Определение роли и категории устройства  
@@ -54,20 +58,14 @@ defaultConfig {
 ```
 
 `MinSdkVersion` должна быть не выше версии 22!
-
-### 3. В реализации метода подключения к сервису для всех `action` указанных в интент-фильтрах укажите соответствующие Binder'ы:
+<a name="503"></a>
+## 5.3. В реализации метода подключения к сервису для всех action указанных в интент-фильтрах укажите соответствующие `Binder'ы`
 
 для `INTENT_FILTER_DRIVER_MANAGER` - класс наследник `ru.evotor.devices.drivers.IUsbDriverManagerService.Stub`;
 
 для `INTENT_FILTER_VIRTUAL_DRIVER_MANAGER` - класс наследник `ru.evotor.devices.drivers.IVirtualDriverManagerService.Stub`;
 
 для `INTENT_FILTER_SCALES` - класс наследник `ru.evotor.devices.drivers.IScalesDriverService.Stub`;
-
-для `INTENT_FILTER_PRICE_PRINTER` - класс наследник `ru.evotor.devices.drivers.IPricePrinterDriverService.Stub`;
-
-для `INTENT_FILTER_PAY_SYSTEM` - класс наследник `ru.evotor.devices.drivers.IPaySystemDriverService.Stub`;
-
-для `INTENT_FILTER_CASH_DRAWER` - класс наследник `ru.evotor.devices.drivers.ICashDrawerDriverService.Stub`.
 
 Например:
 
@@ -110,7 +108,8 @@ public class MyDeviceService extends Service {
 
 В этом же сервисе удобно определить `Map` для хранения списка активных экземпляров драйверов (а их, потенциально, может быть больше, чем 1 в системе одновременно), т.к. обращаться к нему придётся из всех указанных Stub'ов.
 
-### 4. Опишите указанные Binder'ы.
+<a name="504"></a>
+## 5.4. Описание указанных `Binder'ов`.
 
 Для всех описываемых методов в случае невозможности выполнить требуемое действие (например, взвесить для метода `getWeight`) следует задействовать поддерживаемый `Exception` тип (с текстовым человекочитаемым описанием проблемы).
 
@@ -239,26 +238,6 @@ public class MyScalesStub extends IScalesDriverService.Stub {
  4) `stable` - флаг стабильности взвешивания, если поддерживается. Иначе - любое значение.
 
 
-#### `ICashDrawerDriverService.Stub` - класс для работы с конкретными экземплярами денежных ящиков.
-
-```
-import ru.evotor.devices.drivers.ICashDrawerDriverService;
-
-private class MyCashDrawerStub extends ICashDrawerDriverService.Stub {
-
-    private MyDeviceService myDeviceService;
-
-    public MyCashDrawerStub(MyDeviceService myDeviceService) {
-        this.myDeviceService = myDeviceService;
-    }
-
-    @Override
-    public void openCashDrawer(int instanceId) throws RemoteException {
-        myDeviceService.getMyDevice(instanceId).openCashDrawer();
-    }
-}
-```
-Метод `openCashDrawer` принимает на вход номер экземпляра драйвера и открывает указанный денежный ящик.
 
 #### `IPricePrinterDriverService.Stub` - класс для работы с конкретными экземплярами
 
@@ -386,7 +365,9 @@ public class MyPaySystemStub implements IPaySystemDriverService.Stub {
 
 Метод оплаты принимает на вход информацию об оплате (сумму), методы возврата и отмены дополнительно к этому принимают на вход `РРН` прошлой операции.
 
-### 5. После того, как описаны все классы для взаимодействия с инфраструктурой смарт-терминала, можно описать сам класс работы с оборудованием:
+<a name="504"></a>
+## 5.5. Описание класса для работы с оборудованием.  
+После того, как описаны все классы для взаимодействия с инфраструктурой смарт-терминала, можно описать сам класс работы с оборудованием:
 
 Например, для USB-весов это выглядит следующим образом:
 
@@ -425,6 +406,7 @@ public class MyDevice implements IScales {
 
 Банковский терминал - `ru.evotor.devices.drivers.paysystem.IPaySystem`.
 
-### 6. Всё готово.
+<a class="506"></a>
+## 5.6. Завершение работы.
 
 Загрузите приложение на смарт-терминал, чтобы работать с Вашим драйвером.
