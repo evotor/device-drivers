@@ -1,104 +1,23 @@
+[Главная страница](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/README.md) > SDK для Весов
+> Прежде чем изучать материал представленный на данной странице, Вы должны убедиться, что были реализованы все шаги, описанные в пункте [Подготовка к разработке.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Preparation_for_development.md)
 
-[Главная страница](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/README.md) > SDK для Банковских Терминалов
+# __5. SDK для весов.__
+_Содержание:_  
 
-# 2. SDK для Банковских Терминалов
+5.1. [Определение роли и категории устройства.](#501)  
+5.2. [Присвоение картинки для драйвера](#502)  
+5.3. [В реализации метода подключения к сервису для всех action указанных в интент-фильтрах укажите соответствующие `Binder'ы`](#503)  
+5.4. [Описание указанных `Binder'ов`.](#504)  
+5.5. [Описание класса для работы с оборудованием.](#505)  
+5.6. [Завершение работы.](#506)
 
-[![Build Status](https://img.shields.io/travis/evotor/device-drivers/master.svg)](https://travis-ci.org/evotor/device-drivers)
-
-В этом проекте описаны все необходимые интерфейсы, константы и пр., необходимые для работы с оборудованием на смарт-терминале Эвотор и разработки собственных драйверов для него.
-
-## Разработка драйверов для смарт-терминала Эвотор
-
-Для написания приложения-драйвера для Эвотор, требуется выполнить несколько простых шагов.
-> Здесь и далее по тексту все имена констант указаны из ru.evotor.devices.drivers.Constants.
-
-### 1. Подключить к своему проекту библиотеку для работы с оборудованием.
-
-Для этого в `build.gradle` проекта добавьте ссылку репозиторий jitpack:
-
-```
-allprojects {
-    repositories {
-        jcenter()
-        maven { url 'https://jitpack.io' }
-    }
-}
-```
-
-и в модуле `build.gradle` добавьте зависимость следующим образом:
+<a name="501"></a>
+## 5.1. Определение роли и категории устройства  
+Следующий интент-фильтры используются для реализации роли устройства для которого пишется драйвер:
 
 ```
-dependencies {
-    compile 'com.github.evotor:device-drivers:+'
-}
+`INTENT_FILTER_SCALES`
 ```
-
-### 2. Определите внешний сервис в `AndroidManifest.xml` приложения.
-
-Для сервиса должен быть указан хотя бы один из интент-фильтров `INTENT_FILTER_DRIVER_MANAGER` или `INTENT_FILTER_VIRTUAL_DRIVER_MANAGER`.
-
-Пример объявленного сервиса:
-
-```
-<service
-    android:name="ru.mycompany.drivers.MyDeviceService"
-    android:enabled="true"
-    android:exported="true"
-    android:icon="@drawable/logo"
-    android:label="@string/service_name">
-    <intent-filter>
-        <action android:name="ru.evotor.devices.drivers.DriverManager" />
-        <action android:name="ru.evotor.devices.drivers.ScalesService" />
-    </intent-filter>
-    <meta-data
-        android:name="vendor_name"
-        android:value="CAS" />
-    <meta-data
-        android:name="model_name"
-        android:value="AD" />
-    <meta-data
-        android:name="usb_device"
-        android:value="VID_1659PID_8963" />
-    <meta-data
-        android:name="settings_activity"
-        android:value="" />
-    <meta-data
-        android:name="device_categories"
-        android:value="SCALES" />
-</service>
-```  
-
-`INTENT_FILTER_DRIVER_MANAGER` - используется для драйверов, которые требуют для работы подключенное USB-оборудование. Вместе с этим необходимо указать для сервиса в `meta-data` характеристики VendorID и ProductID целевого устройства (десятичными числами):
-
-```
-<meta-data
-    android:name="usb_device"
-    android:value="VID_1659PID_8963" />
-```
-
-При необходимости, можно указать несколько устройств следующим образом: `"VID_1659PID_8963|VID_123PID_456|VID_1659PID_8964"`.
-
-Экземпляр драйвера будет автоматически создан/удалён при подключении/отключении указанного оборудования к смарт-терминалу. При наличии нескольких подходящих драйверов, пользователю будет предложен выбор.
-
-`INTENT_FILTER_VIRTUAL_DRIVER_MANAGER` - используется для драйверов, не требующих USB-оборудования (сетевое, bluetooth и др. оборудование). Вместе с этим необходимо указать в `meta-data`, что драйвер является виртуальным:
-
-```
-<meta-data
-    android:name="virtual_device"
-    android:value="true" />
-```
-
-Такой драйвер может быть создан только пользователем вручную через меню настройки оборудования. В этом случае все работы по подключению к нужному устройству берёт на себя производитель драйвера.
-
-Следующие интент-фильтры используются для реализации ролей устройства:
-
-`INTENT_FILTER_SCALES` - для весов;
-
-`INTENT_FILTER_PRICE_PRINTER` - для принтеров ценников;
-
-`INTENT_FILTER_PAY_SYSTEM` - для банковских терминалов;
-
-`INTENT_FILTER_CASH_DRAWER` - для денежных ящиков.
 
 Вместе с этим необходимо указать в `meta-data` категорию устройства:
 
@@ -107,20 +26,12 @@ dependencies {
     android:name="device_categories"
     android:value="SCALES" />
 ```
-
-`SCALES` - для весов;
-
-`CASHDRAWER` - для денежных ящиков;
-
-`PAYSYSTEM` - для банковских терминалов;
-
-`PRICEPRINTER` - для принтеров ценников.
-
-Можно указать сразу несколько категорий устройств следующим образом: `"SCALES|PRICEPRINTER|CASHDRAWER"`.
-
-Для работы с USB-оборудованием, которое не подпадает ни под одну из указанных категорий, ни один из этих интент-фильтров не указывается, а категорию устройства необходимо задать как `OTHER`.
-
-В манифесте приложения у сервиса должны быть указаны `android:icon` и `android:label` - картинка и имя драйвера (показывается пользователю). Картинку желательно делать квадратной, png без фона.
+Можно указать сразу несколько ролей устройству следующим образом: `"SCALES|PRICEPRINTER|CASHDRAWER"`_(весы | принтер чеков | денежный ящик-примечание)._
+<a name="502"></a>
+## 5.2. Присвоение картинки для драйвера
+В манифесте приложения у сервиса должны быть указаны:  
+* `android:icon` - картинка устройства, которая будет отображаться пользователю при инициализации устройства;  
+* `android:label` - имя драйвера, которое будет отображаться пользователю при инициализации устройства
 
 ![Пример отображения иконки и имени драйвера](https://github.com/VedbeN/device-drivers/blob/master/icon_xmpl.png?raw=true "Пример отображения иконки и имени драйвера")
 
@@ -147,20 +58,14 @@ defaultConfig {
 ```
 
 `MinSdkVersion` должна быть не выше версии 22!
-
-### 3. В реализации метода подключения к сервису для всех `action` указанных в интент-фильтрах укажите соответствующие Binder'ы:
+<a name="503"></a>
+## 5.3. В реализации метода подключения к сервису для всех action указанных в интент-фильтрах укажите соответствующие `Binder'ы`
 
 для `INTENT_FILTER_DRIVER_MANAGER` - класс наследник `ru.evotor.devices.drivers.IUsbDriverManagerService.Stub`;
 
 для `INTENT_FILTER_VIRTUAL_DRIVER_MANAGER` - класс наследник `ru.evotor.devices.drivers.IVirtualDriverManagerService.Stub`;
 
 для `INTENT_FILTER_SCALES` - класс наследник `ru.evotor.devices.drivers.IScalesDriverService.Stub`;
-
-для `INTENT_FILTER_PRICE_PRINTER` - класс наследник `ru.evotor.devices.drivers.IPricePrinterDriverService.Stub`;
-
-для `INTENT_FILTER_PAY_SYSTEM` - класс наследник `ru.evotor.devices.drivers.IPaySystemDriverService.Stub`;
-
-для `INTENT_FILTER_CASH_DRAWER` - класс наследник `ru.evotor.devices.drivers.ICashDrawerDriverService.Stub`.
 
 Например:
 
@@ -203,7 +108,8 @@ public class MyDeviceService extends Service {
 
 В этом же сервисе удобно определить `Map` для хранения списка активных экземпляров драйверов (а их, потенциально, может быть больше, чем 1 в системе одновременно), т.к. обращаться к нему придётся из всех указанных Stub'ов.
 
-### 4. Опишите указанные Binder'ы.
+<a name="504"></a>
+## 5.4. Описание указанных `Binder'ов`.
 
 Для всех описываемых методов в случае невозможности выполнить требуемое действие (например, взвесить для метода `getWeight`) следует задействовать поддерживаемый `Exception` тип (с текстовым человекочитаемым описанием проблемы).
 
@@ -332,26 +238,6 @@ public class MyScalesStub extends IScalesDriverService.Stub {
  4) `stable` - флаг стабильности взвешивания, если поддерживается. Иначе - любое значение.
 
 
-#### `ICashDrawerDriverService.Stub` - класс для работы с конкретными экземплярами денежных ящиков.
-
-```
-import ru.evotor.devices.drivers.ICashDrawerDriverService;
-
-private class MyCashDrawerStub extends ICashDrawerDriverService.Stub {
-
-    private MyDeviceService myDeviceService;
-
-    public MyCashDrawerStub(MyDeviceService myDeviceService) {
-        this.myDeviceService = myDeviceService;
-    }
-
-    @Override
-    public void openCashDrawer(int instanceId) throws RemoteException {
-        myDeviceService.getMyDevice(instanceId).openCashDrawer();
-    }
-}
-```
-Метод `openCashDrawer` принимает на вход номер экземпляра драйвера и открывает указанный денежный ящик.
 
 #### `IPricePrinterDriverService.Stub` - класс для работы с конкретными экземплярами
 
@@ -479,7 +365,9 @@ public class MyPaySystemStub implements IPaySystemDriverService.Stub {
 
 Метод оплаты принимает на вход информацию об оплате (сумму), методы возврата и отмены дополнительно к этому принимают на вход `РРН` прошлой операции.
 
-### 5. После того, как описаны все классы для взаимодействия с инфраструктурой смарт-терминала, можно описать сам класс работы с оборудованием:
+<a name="504"></a>
+## 5.5. Описание класса для работы с оборудованием.  
+После того, как описаны все классы для взаимодействия с инфраструктурой смарт-терминала, можно описать сам класс работы с оборудованием:
 
 Например, для USB-весов это выглядит следующим образом:
 
@@ -518,6 +406,9 @@ public class MyDevice implements IScales {
 
 Банковский терминал - `ru.evotor.devices.drivers.paysystem.IPaySystem`.
 
-### 6. Всё готово.
+<a class="506"></a>
+## 5.6. Завершение работы.
 
-Загрузите приложение на смарт-терминал, чтобы работать с Вашим драйвером.
+Загрузите приложение на смарт-терминал, чтобы работать с Вашим драйвером.  
+-----
+###### Более подробную информацию по разрабатке своих решений для бизнеса на платформе Эвотор, Вы можете найти на нашем сайте для разработчиков: https://developer.evotor.ru/
