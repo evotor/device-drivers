@@ -16,7 +16,7 @@
 1.5. [SDK для Весов.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Read_me_files/README_Scales.md#1501)  
  1.6. [SDK для других устройств работающих с USB-оборудованием.]()  
 2. Разработка приложений.  
-2.1. SDK для принтеров ценников
+2.1. [SDK для принтера Эвотор](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Read_me_files/README_printer.md#2111)
 
 
 -----
