@@ -20,7 +20,7 @@ interface IPrinterService {
     int getAllowablePixelLineLength(int deviceId);
 
     /**
-    * Печатает указанный массив объектов (тест, штриихкоды, картинки)
+    * Печатает указанный массив объектов (тест, штрихкоды, картинки)
     *
     * @param deviceId           - номер устройства
     * @param printedObjects     - объекты для печати

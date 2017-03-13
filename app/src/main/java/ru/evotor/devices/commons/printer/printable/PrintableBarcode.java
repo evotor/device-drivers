@@ -5,7 +5,7 @@ import android.os.Parcel;
 import lombok.Getter;
 
 @Getter
-public class Barcode implements IPrintable {
+public class PrintableBarcode implements IPrintable {
 
     /**
      * Значение штрихкода
@@ -17,12 +17,12 @@ public class Barcode implements IPrintable {
      */
     private final BarcodeType barcodeType;
 
-    public Barcode(String barcodeValue, BarcodeType barcodeType) {
+    public PrintableBarcode(String barcodeValue, BarcodeType barcodeType) {
         this.barcodeValue = barcodeValue;
         this.barcodeType = barcodeType;
     }
 
-    private Barcode(Parcel parcel) {
+    private PrintableBarcode(Parcel parcel) {
         barcodeValue = parcel.readString();
         int barcodeTypeNumber = parcel.readInt();
         barcodeType = BarcodeType.values()[barcodeTypeNumber < BarcodeType.values().length ? barcodeTypeNumber : 0];
@@ -39,14 +39,14 @@ public class Barcode implements IPrintable {
         parcel.writeInt(barcodeType.ordinal());
     }
 
-    public static final Creator<Barcode> CREATOR = new Creator<Barcode>() {
+    public static final Creator<PrintableBarcode> CREATOR = new Creator<PrintableBarcode>() {
 
-        public Barcode createFromParcel(Parcel in) {
-            return new Barcode(in);
+        public PrintableBarcode createFromParcel(Parcel in) {
+            return new PrintableBarcode(in);
         }
 
-        public Barcode[] newArray(int size) {
-            return new Barcode[size];
+        public PrintableBarcode[] newArray(int size) {
+            return new PrintableBarcode[size];
         }
     };
 

@@ -5,18 +5,18 @@ import android.os.Parcel;
 import lombok.Getter;
 
 @Getter
-public class Text implements IPrintable {
+public class PrintableText implements IPrintable {
 
     /**
      * текст для печати
      */
-    String text;
+    private final String text;
 
-    public Text(String text) {
+    public PrintableText(String text) {
         this.text = text;
     }
 
-    private Text(Parcel parcel) {
+    private PrintableText(Parcel parcel) {
         text = parcel.readString();
     }
 
@@ -30,14 +30,14 @@ public class Text implements IPrintable {
         parcel.writeString(text);
     }
 
-    public static final Creator<Text> CREATOR = new Creator<Text>() {
+    public static final Creator<PrintableText> CREATOR = new Creator<PrintableText>() {
 
-        public Text createFromParcel(Parcel in) {
-            return new Text(in);
+        public PrintableText createFromParcel(Parcel in) {
+            return new PrintableText(in);
         }
 
-        public Text[] newArray(int size) {
-            return new Text[size];
+        public PrintableText[] newArray(int size) {
+            return new PrintableText[size];
         }
     };
 

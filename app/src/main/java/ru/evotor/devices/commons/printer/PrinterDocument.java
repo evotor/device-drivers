@@ -12,9 +12,9 @@ public class PrinterDocument implements Parcelable {
     /**
      * массив объектов для печати
      */
-    IPrintable[] printables;
+    private final IPrintable[] printables;
 
-    public PrinterDocument(IPrintable[] printables) {
+    public PrinterDocument(IPrintable... printables) {
         this.printables = printables;
     }
 

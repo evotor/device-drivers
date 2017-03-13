@@ -9,22 +9,36 @@ import android.os.DeadObjectException;
 import android.os.IBinder;
 import android.util.Log;
 
-import ru.evotor.devices.publics.R;
-
-import static ru.evotor.devices.commons.Constants.ACTION_PRINTER_SERVICE;
-import static ru.evotor.devices.commons.Constants.DEVICE_SERVICE_CLASS_NAME;
-import static ru.evotor.devices.commons.Constants.DEVICE_SERVICE_PACKAGE;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DeviceServiceConnector {
 
     protected static final String TAG = "DeviceServiceConnector";
-    protected static final String TARGET_PACKAGE = DEVICE_SERVICE_PACKAGE;
-    protected static final String TARGET_CLASS_NAME = DEVICE_SERVICE_CLASS_NAME;
+
+    public static final String TARGET_PACKAGE = "ru.evotor.devices";
+    public static final String TARGET_CLASS_NAME = "ru.evotor.devices.DeviceService";
+
+    public static final String ACTION_PRINTER_SERVICE = "ru.evotor.devices.PrintService";
 
     protected static Context context;
 
     protected static volatile IPrinterService printerService;
     protected static volatile ServiceConnection printerServiceConnection;
+
+    protected static volatile List<ConnectionWrapper> connectionWrappers = new ArrayList<>();
+
+    public static void addConnectionWrapper(ConnectionWrapper connectionWrapper) {
+        connectionWrappers.add(connectionWrapper);
+    }
+
+    public static void removeConnectionWrapper(ConnectionWrapper connectionWrapper) {
+        connectionWrappers.remove(connectionWrapper);
+    }
+
+    public static void clearConnectionWrappers() {
+        connectionWrappers.clear();
+    }
 
     public static IPrinterService getPrinterService() {
         if (printerService == null) {
@@ -42,12 +56,18 @@ public class DeviceServiceConnector {
                 @Override
                 public void onServiceConnected(ComponentName name, IBinder service) {
                     printerService = IPrinterService.Stub.asInterface(service);
+                    for (ConnectionWrapper connectionWrapper : connectionWrappers) {
+                        connectionWrapper.onPrinterServiceConnected(printerService);
+                    }
                 }
 
                 @Override
                 public void onServiceDisconnected(ComponentName name) {
                     printerService = null;
                     initPrinterServiceConnection(false);
+                    for (ConnectionWrapper connectionWrapper : connectionWrappers) {
+                        connectionWrapper.onPrinterServiceDisconnected();
+                    }
                 }
             };
         }
@@ -80,6 +100,9 @@ public class DeviceServiceConnector {
             context.unbindService(printerServiceConnection);
             printerServiceConnection = null;
             printerService = null;
+            for (ConnectionWrapper connectionWrapper : connectionWrappers) {
+                connectionWrapper.onPrinterServiceDisconnected();
+            }
         }
     }
 
@@ -87,16 +110,6 @@ public class DeviceServiceConnector {
         if (exc instanceof DeadObjectException) {
             DeviceServiceConnector.initConnections(context, true);
         }
-        Log.e(TAG, getRemoteExceptionMessage(exc));
+        Log.e(TAG, exc == null || exc.getMessage() == null ? "-" : exc.getMessage());
     }
-
-    public static String getRemoteExceptionMessage(Exception exc) {
-
-        if (exc == null || exc.getMessage() == null || exc.getMessage().isEmpty()) {
-            return context.getString(R.string.error_in_remote_service_unknown);
-        } else {
-            return exc.getMessage();
-        }
-    }
-
 }

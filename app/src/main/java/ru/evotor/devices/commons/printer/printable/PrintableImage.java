@@ -6,18 +6,18 @@ import android.os.Parcel;
 import lombok.Getter;
 
 @Getter
-public class Image implements IPrintable {
+public class PrintableImage implements IPrintable {
 
     /**
      * картинка для печати
      */
-    Bitmap bitmap;
+    private final Bitmap bitmap;
 
-    public Image(Bitmap bitmap) {
+    public PrintableImage(Bitmap bitmap) {
         this.bitmap = bitmap;
     }
 
-    private Image(Parcel parcel) {
+    private PrintableImage(Parcel parcel) {
         bitmap = parcel.readParcelable(Bitmap.class.getClassLoader());
     }
 
@@ -31,14 +31,14 @@ public class Image implements IPrintable {
         parcel.writeParcelable(bitmap, 0);
     }
 
-    public static final Creator<Image> CREATOR = new Creator<Image>() {
+    public static final Creator<PrintableImage> CREATOR = new Creator<PrintableImage>() {
 
-        public Image createFromParcel(Parcel in) {
-            return new Image(in);
+        public PrintableImage createFromParcel(Parcel in) {
+            return new PrintableImage(in);
         }
 
-        public Image[] newArray(int size) {
-            return new Image[size];
+        public PrintableImage[] newArray(int size) {
+            return new PrintableImage[size];
         }
     };
 
