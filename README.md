@@ -11,12 +11,10 @@
 
 1. Разработка драйверов.  
 1.1. [Подготовка к разработке.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Read_me_files/Preparation_for_development.md#1101)  
-1.2. [SDK для Банковских Терминалов.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Read_me_files/README_PinPad.md#1202)  
-1.3. [SDK для Принтеров Ценников.]()     
-1.5. [SDK для Весов.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Read_me_files/README_Scales.md#1501)  
- 1.6. [SDK для других устройств работающих с USB-оборудованием.]()  
+1.2. [SDK для Банковских Терминалов.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Read_me_files/README_PinPad.md#1202)      
+1.3. [SDK для Весов.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Read_me_files/README_Scales.md#1301)  
 2. Разработка приложений.  
-2.1. [SDK для принтера Эвотор](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Read_me_files/README_printer.md#2111)
+2.1. [SDK для принтера Эвотор.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Read_me_files/README_printer.md#2111)
 
 
 -----
