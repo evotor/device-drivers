@@ -349,7 +349,7 @@ public class MyDevice implements IScales {
 
 Банковский терминал - `ru.evotor.devices.drivers.paysystem.IPaySystem`.
 
-<a class="306"></a>
+<a name="306"></a>
 ## 1.3.7. Завершение работы.  
 Загрузите приложение на смарт-терминал, чтобы работать с Вашим драйвером.   
 
