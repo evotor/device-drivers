@@ -10,7 +10,7 @@ _Содержание:_
 2.1.5. [Особенности работы оборудования с `DeviceServiceConnector`.](#2015)  
 
 
-<a name="2011">
+<a name="2011"></a>
 ### 2.1.1. Подключение к своему проекту библиотеку для работы с оборудованием.
 
 Для этого в `build.gradle` проекта добавьте ссылку репозиторий jitpack:
@@ -31,13 +31,13 @@ dependencies {
     compile 'com.github.evotor:device-drivers:1.2.0+'
 }
 ```
-<a name="2012">
+<a name="2012"></a>
 ### 2.1.2. Инициализация класса `ru.evotor.devices.commons.DeviceServiceConnector`  
 Для того, что бы начать обращаться к принтеру достаточно проинициализировать класс `ru.evotor.devices.commons.DeviceServiceConnector`, который был подставлен в подключенную на прошлом шаге библиотеку. Проинициализирйте его при запуске приложения или старте activity:  
 ```  
 DeviceServiceConnector.initConnections(getApplicationContext());
 ```
-<a name="2013">  
+<a name="2013"></a>
 ### 2.1.3. Вызов метода `DeviceServiceConnector.getPrinterService()` и взаимодействие с его ответом.  
 * В ответ на вызов метода  `DeviceServiceConnector.getPrinterService()` вернется объект `ru.evotor.devices.commons.IPrinterService`.  
 * В свою очередь у объекта `ru.evotor.devices.commons.IPrinterService` вызвать методы:  
@@ -51,7 +51,7 @@ DeviceServiceConnector.initConnections(getApplicationContext());
 
 > __На данный момент печатать можно только на встроенной в СТ2 ККМ, поэтому вместо номера устройства всегда следует передавать константу `ru.evotor.devices.commons.Constants.DEFAULT_DEVICE_INDEX_UNSET`.__  
 
-<a name="2014">
+<a name="2014"></a>
 ### 2.1.4. Передача данных в печать.  
 Для печати Вам необходимо воспользоваться методом:
 ```
@@ -74,7 +74,7 @@ DeviceServiceConnector.getPrinterService().printDocument(
             new PrintableImage(bitmap1)
     ));
 ```
-<a name="2015">
+<a name="2015"></a>
 ### 2.1.5. Особенности работы оборудования с `DeviceServiceConnector`.  
 При работе оборудования с `DeviceServiceConnector` следует помнить, что методы, по факту, исполняются в другом приложении, в связи с этим могут возникать различные `Exception`. В связи с этим необходимо отслеживать и перехватывать любые `RuntimeException`, так как они могут быть проброшены сквозь приложения.  
 
