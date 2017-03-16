@@ -1,7 +1,7 @@
 
 [Главная страница](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/README.md) > SDK для Банковских Терминалов,
 
-> Прежде чем изучать материал, представленный на данной странице, Вы должны убедиться, что были реализованы все шаги, описанные в пункте [Подготовка к разработке.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Preparation_for_development.md)  
+> Прежде чем изучать материал, представленный на данной странице, Вы должны убедиться, что были реализованы все шаги, описанные в пункте [Подготовка к разработке.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Read_me_files/Preparation_for_development.md#1101)  
 
 <a name="1201"></a>
 # __1.2. SDK для Банковских Терминалов.__
@@ -14,7 +14,7 @@ _Содержание:_
 1.2.6. [Описание класса для работы с оборудованием.](#206)  
 1.2.7. [Завершение работы.](#207)  
 
-<a mane="201"></a>
+<a name="201"></a>
 ### 1.2.1. Определение внешнего сервиса в `AndroidManifest.xml`.
 
 При разработке приложенияя необходимо указать хоят бы один  Intent filter: `INTENT_FILTER_DRIVER_MANAGER` или `INTENT_FILTER_VIRTUAL_DRIVER_MANAGER`.
@@ -374,7 +374,7 @@ public class MyPaySystemStub extends IPaySystemDriverService.Stub {
 <a name="206"></a>
 ### 1.2.6. Описание класса для работы с оборудованием.
 
-Например, для USB-весов это выглядит следующим образом:
+Например, для Банковских Терминалов, работающих через USB, это выглядит следующим образом:
 
 ```
 public class MyDevice implements IPaySystem {
