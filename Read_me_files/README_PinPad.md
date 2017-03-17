@@ -154,7 +154,7 @@ public class MyDeviceService extends Service {
             case Constants.INTENT_FILTER_DRIVER_MANAGER:
                 return new MyDriverManagerStub(MyDeviceService.this);
             case Constants.INTENT_FILTER_PAY_SYSTEM:
-                return new MyScalesStub(MyDeviceService.this);
+                return new paySystemService(MyDeviceService.this);
             default:
                 return null;
         }
