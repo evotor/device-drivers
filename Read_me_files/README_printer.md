@@ -4,7 +4,7 @@
 # __2.1. SDK для принтера Эвотор__
 _Содержание:_  
 2.1.1. [Подключение библиотеки для работы с оборудованием к своему проекту.](#2011)  
-2.1.2. [Инициализация класса `ru.evotor.devices.commons.DeviceServiceConnector](#2012)`.  
+2.1.2. [Инициализация класса `ru.evotor.devices.commons.DeviceServiceConnector.`](#2012)
 2.1.3. [Вызов метода `DeviceServiceConnector.getPrinterService()` и взаимодействие с его ответом.](#2013)  
 2.1.4. [Передача данных в печать.  ](#2014)  
 2.1.5. [Особенности работы оборудования с `DeviceServiceConnector`.](#2015)  
