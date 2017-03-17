@@ -1,3 +1,4 @@
+[![Build Status](https://img.shields.io/travis/evotor/device-drivers/master.svg)](https://travis-ci.org/evotor/device-drivers)
 # SDK для работы с оборудованием смарт-терминала Эвотор
 
 
