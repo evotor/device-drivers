@@ -1,58 +1,63 @@
 
-[Главная страница](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/README.md) > SDK для Банковских Терминалов
-> Прежде чем изучать материал, представленный на данной странице, Вы должны убедиться, что были реализованы все шаги, описанные в пункте [Подготовка к разработке.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Preparation_for_development.md#10101)
+[Главная страница](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/README.md) > SDK для Банковских Терминалов.
+
+> Прежде чем изучать материал, представленный на данной странице, Вы должны убедиться, что были реализованы все шаги, описанные в пункте [Подготовка к разработке.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Read_me_files/Preparation_for_development.md#1101)  
 
 <a name="1201"></a>
-# __1.2. SDK для Банковских Терминалов..__
+# __1.2. SDK для Банковских Терминалов.__
 _Содержание:_  
-1.2.1. [Определение внешний сервис в `AndroidManifest.xml` приложения.](#201)  
+1.2.1. [Определение внешнего сервиса в `AndroidManifest.xml`.](#201)  
 1.2.2. [Определение роли и категории устройства.](#202)  
 1.2.3. [Присвоение картинки для драйвера.](#203)  
-1.2.4. [В реализации метода подключения к сервису для всех `action` указанных в интент-фильтрах укажите соответствующие `Binder'ы`](#204)  
-1.2.5. [Описание указанных `Binder'ов`.`.](#205)  
+1.2.4. [В реализации метода подключения к сервису для всех `action`, указанных в интент-фильтрах укажите соответствующие `Binder'ы`](#204)  
+1.2.5. [Описание указанных `Binder'ов`.](#205)  
 1.2.6. [Описание класса для работы с оборудованием.](#206)  
 1.2.7. [Завершение работы.](#207)  
 
-<a mane="201"></a>
-### 1.2.1. Определение внешний сервис в `AndroidManifest.xml` приложения.
+<a name="201"></a>
+### 1.2.1. Определение внешнего сервиса в `AndroidManifest.xml`.
 
-Для сервиса должен быть указан хотя бы один из интент-фильтров `INTENT_FILTER_DRIVER_MANAGER` или `INTENT_FILTER_VIRTUAL_DRIVER_MANAGER`.
+При разработке приложенияя необходимо указать хоят бы один  Intent filter: `INTENT_FILTER_DRIVER_MANAGER` или `INTENT_FILTER_VIRTUAL_DRIVER_MANAGER`.
 
 Пример объявленного сервиса:
 
 ```
 <service
-    android:name="ru.mycompany.drivers.MyDeviceService"
-    android:enabled="true"
-    android:exported="true"
-    android:icon="@drawable/logo"
-    android:label="@string/service_name">
-    <intent-filter>
-        <action android:name="ru.evotor.devices.drivers.DriverManager" />
-        <action android:name="ru.evotor.devices.drivers.ScalesService" />
-    </intent-filter>
-    <meta-data
-        android:name="vendor_name"
-        android:value="CAS" />
-    <meta-data
-        android:name="model_name"
-        android:value="AD" />
-    <meta-data
-        android:name="usb_device"
-        android:value="VID_1659PID_8963" />
-    <meta-data
-        android:name="settings_activity"
-        android:value="" />
-    <meta-data
-        android:name="device_categories"
-        android:value="SCALES" />
-</service>
+      android:name="ru.mycompany.drivers.MyPaySystemService"
+      android:enabled="true"
+      android:exported="true"
+      android:icon="@drawable/logo"
+      android:label="@string/service_name">
+            <intent-filter>
+                <action android:name="ru.evotor.devices.drivers.DriverManager" />
+                <action android:name="ru.evotor.devices.drivers.PaySystemService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="vendor_name"
+                android:value="Ingenico" />
+            <meta-data
+                android:name="model_name"
+                android:value="IPP320" />
+            <meta-data
+                android:name="usb_device"
+                android:value="VID_1947PID_40" />
+            <meta-data
+                android:name="virtual_device"
+                android:value="false" />
+            <meta-data
+                android:name="settings_activity"
+                android:value="" />
+            <meta-data
+                android:name="device_categories"
+                android:value="PAYSYSTEM" />
+        </service>
 ```  
 `vendor_name`- наименование производителя, которое будет отображаться при подключении устройства.
 
 `model_name` - наименование модели устройства.  
 
-`INTENT_FILTER_DRIVER_MANAGER` - используется для драйверов, которые требуют для работы подключенное USB-оборудование. Вместе с этим необходимо указать для сервиса в `meta-data` характеристики VendorID и ProductID целевого устройства (десятичными числами):
+`INTENT_FILTER_DRIVER_MANAGER` - используется для драйверов, для которых требуется подключение USB- оборудования. Помимо `Intent filter` в `meta-data` необходимо указать   характеристики `VendorID` и `ProductID` целевого устройства (десятичными числами):
 
 ```
 <meta-data
@@ -64,7 +69,7 @@ _Содержание:_
 
 Экземпляр драйвера будет автоматически создан/удалён при подключении/отключении указанного оборудования к смарт-терминалу. При наличии нескольких подходящих драйверов, пользователю будет предложен выбор.
 
-`INTENT_FILTER_VIRTUAL_DRIVER_MANAGER` - используется для драйверов, не требующих USB-оборудования (сетевое, bluetooth и др. оборудование). Вместе с этим необходимо указать в `meta-data`, что драйвер является виртуальным:
+`INTENT_FILTER_VIRTUAL_DRIVER_MANAGER` - используется для драйверов, не требующих подключения USB-оборудования (сетевое, bluetooth и др.). Помимо `Intent filter` в `meta-data` необходимо указать, что драйвер является виртуальным:
 
 ```
 <meta-data
@@ -72,11 +77,11 @@ _Содержание:_
     android:value="true" />
 ```
 
-Такой драйвер может быть создан только пользователем вручную через меню настройки оборудования. В этом случае все работы по подключению к нужному устройству берёт на себя производитель драйвера.
+Экземпляр такого драйвера пользователь может создать исключительно вручную через настройки оборудования. В этом случае все работы по подключению к нужному устройству берёт на себя производитель драйвера.
 
 <a name="202"></a>
 ## 1.2.2. Определение роли и категории устройства  
-Следующий интент-фильтр используется для реализации роли устройства для которого пишется драйвер:
+Для того, чтобы устройство было распознано, как банковский терминал используйте следующий `Intent filter`:
 
 ```
 `INTENT_FILTER_PAY_SYSTEM`
@@ -107,13 +112,13 @@ _Содержание:_
     android:value="ru.mycompany.drivers.MySettingsActivity" />
 ```
 
-Указанная `activity`  должна находиться в текущем `package` и будет вызвана при первом подключении устройства или по нажатию на строчку с оборудованием в меню настроек оборудования.
+Указанная `activity`  должна находиться в текущем `package` и будет вызвана при первом подключении устройства или при выборе устройства в меню настроек оборудования.
 
 Версия драйвера (`versionCode` и `versionName`) берётся из `build.gradle`:
 
 ```
 defaultConfig {
-    applicationId "ru.mycompany.drivers.myscales"
+    applicationId "ru.mycompany.drivers.mypaysystem"
     minSdkVersion 22
     targetSdkVersion 24
     versionCode 2
@@ -124,19 +129,14 @@ defaultConfig {
 `MinSdkVersion` должна быть не выше версии 22!
 
 <a name="204"></a>
-### 1.2.4. В реализации метода подключения к сервису для всех `action` указанных в интент-фильтрах укажите соответствующие `Binder'ы`:
+### 1.2.4. В реализации метода подключения к сервису для всех `action`, указанных в интент-фильтрах укажите соответствующие `Binder'ы`:
 
 для `INTENT_FILTER_DRIVER_MANAGER` - класс наследник `ru.evotor.devices.drivers.IUsbDriverManagerService.Stub`;
 
 для `INTENT_FILTER_VIRTUAL_DRIVER_MANAGER` - класс наследник `ru.evotor.devices.drivers.IVirtualDriverManagerService.Stub`;
 
-для `INTENT_FILTER_SCALES` - класс наследник `ru.evotor.devices.drivers.IScalesDriverService.Stub`;
-
-для `INTENT_FILTER_PRICE_PRINTER` - класс наследник `ru.evotor.devices.drivers.IPricePrinterDriverService.Stub`;
-
 для `INTENT_FILTER_PAY_SYSTEM` - класс наследник `ru.evotor.devices.drivers.IPaySystemDriverService.Stub`;
 
-для `INTENT_FILTER_CASH_DRAWER` - класс наследник `ru.evotor.devices.drivers.ICashDrawerDriverService.Stub`.
 
 Например:
 
@@ -154,7 +154,7 @@ public class MyDeviceService extends Service {
             case Constants.INTENT_FILTER_DRIVER_MANAGER:
                 return new MyDriverManagerStub(MyDeviceService.this);
             case Constants.INTENT_FILTER_PAY_SYSTEM:
-                return new MyScalesStub(MyDeviceService.this);
+                return new MyPaySystemService(MyDeviceService.this);
             default:
                 return null;
         }
@@ -179,7 +179,7 @@ public class MyDeviceService extends Service {
 
 В этом же сервисе удобно определить `Map` для хранения списка активных экземпляров драйверов (а их, потенциально, может быть больше, чем 1 в системе одновременно), т.к. обращаться к нему придётся из всех указанных Stub'ов.
 
-<a name="205">
+<a name="205"></a>
 ### 1.2.5.  Описание указанных `Binder'ов`.
 
 Для всех описываемых методов, в случае невозможности выполнить требуемое действие (например, "взвесить" для метода `getWeight`), слудует использовать один из поддерживаемых типов `Exception` с легкочитаемым описанием.   
@@ -282,82 +282,87 @@ import ru.evotor.devices.drivers.IPaySystemDriverService;
 import ru.evotor.devices.drivers.paysystem.PayResult;
 import ru.evotor.devices.drivers.paysystem.PayInfo;
 
-public class MyPaySystemStub implements IPaySystemDriverService.Stub {
+public class MyPaySystemStub extends IPaySystemDriverService.Stub {
 
-    private MyDeviceService myDeviceService;
+    private MyPaySystemService paySystemService;
 
-    public MyPaySystemStub(MyDeviceService myDeviceService) {
-        this.myDeviceService = myDeviceService;
+    public MyPaySystemStub(MyPaySystemService paySystemService) {
+        this.paySystemService = paySystemService;
     }
 
     @Override
     public PayResult payment(int instanceId, PayInfo payInfo) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).payment(payInfo);
+        return paySystemService.getPaySystem(instanceId).payment(payInfo);
     }
 
     @Override
     public PayResult cancelPayment(int instanceId, PayInfo payInfo, String rrn) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).cancelPayment(payInfo, rrn);
+        return paySystemService.getPaySystem(instanceId).cancelPayment(payInfo, rrn);
     }
 
     @Override
     public PayResult payback(int instanceId, PayInfo payInfo, String rrn) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).payback(payInfo, rrn);
+        return paySystemService.getPaySystem(instanceId).payback(payInfo, rrn);
     }
 
     @Override
     public PayResult cancelPayback(int instanceId, PayInfo payInfo, String rrn) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).cancelPayback(payInfo, rrn);
+        return paySystemService.getPaySystem(instanceId).cancelPayback(payInfo, rrn);
     }
 
     @Override
     public PayResult closeSession(int instanceId) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).closeSession();
+        return paySystemService.getPaySystem(instanceId).closeSession();
     }
 
     @Override
     public void openServiceMenu(int instanceId) throws RemoteException {
-        myDeviceService.getMyDevice(instanceId).openServiceMenu();
+        paySystemService.getPaySystem(instanceId).openServiceMenu();
     }
 
     @Override
     public String getBankName(int instanceId) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).getBankName();
+        return paySystemService.getPaySystem(instanceId).getBankName();
     }
 
     @Override
     public int getTerminalNumber(int instanceId) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).getTerminalNumber();
+        return paySystemService.getPaySystem(instanceId).getTerminalNumber();
     }
 
     @Override
     public String getTerminalID(int instanceId) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).getTerminalID();
+        return paySystemService.getPaySystem(instanceId).getTerminalID();
     }
 
     @Override
     public String getMerchNumber(int instanceId) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).getMerchNumber();
+        return paySystemService.getPaySystem(instanceId).getMerchEngName();
     }
 
     @Override
     public String getMerchCategoryCode(int instanceId) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).String();
+        return paySystemService.getPaySystem(instanceId).getMerchCategoryCode();
     }
 
     @Override
     public String getMerchEngName(int instanceId) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).getMerchEngName();
+        return paySystemService.getPaySystem(instanceId).getMerchEngName();
     }
 
     @Override
     public String getCashier(int instanceId) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).getCashier();
+        return paySystemService.getPaySystem(instanceId).getCashier();
     }
 
     @Override
     public String getServerIP(int instanceId) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).getServerIP();
+        return paySystemService.getPaySystem(instanceId).getServerIP();
+    }
+
+    @Override
+    public boolean isNotNeedRRN(int instanceId) throws RemoteException {
+        return paySystemService.getPaySystem(instanceId).isNotNeedRRN();
     }
 }
 ```
@@ -369,42 +374,89 @@ public class MyPaySystemStub implements IPaySystemDriverService.Stub {
 <a name="206"></a>
 ### 1.2.6. Описание класса для работы с оборудованием.
 
-Например, для USB-весов это выглядит следующим образом:
+Например, для Банковских Терминалов, работающих через USB, это выглядит следующим образом:
 
 ```
-import ru.evotor.devices.drivers.scales.IScales;
-import ru.evotor.devices.drivers.scales.Weight;
-
-public class MyDevice implements IScales {
-
-    private Context context;
-    private UsbDevice usbDevice;
-
-    public MyDevice(Context context, UsbDevice usbDevice) {
-        super();
-        this.context = context;
-        this.usbDevice = usbDevice;
+public class MyDevice implements IPaySystem {
+    @Override
+    public PayResult payment(PayInfo payInfo) {
+        //TODO Ваш код
     }
 
-	public void destroy(){
-	}
+    @Override
+    public PayResult cancelPayment(PayInfo payInfo, String s) {
+        //TODO Ваш код
+    }
 
     @Override
-    public Weight getWeight() {
-        //TODO Ваш код запроса веса
+    public PayResult payback(PayInfo payInfo, String s) {
+        //TODO Ваш код
+    }
+
+    @Override
+    public PayResult cancelPayback(PayInfo payInfo, String s) {
+        //TODO Ваш код
+    }
+
+    @Override
+    public PayResult closeSession() {
+        //TODO Ваш код
+    }
+
+    @Override
+    public void openServiceMenu() {
+        //TODO Ваш код
+    }
+
+    @Override
+    public String getBankName() {
+        //TODO Ваш код
+    }
+
+    @Override
+    public int getTerminalNumber() {
+        //TODO Ваш код
+    }
+
+    @Override
+    public String getTerminalID() {
+        //TODO Ваш код
+    }
+
+    @Override
+    public String getMerchNumber() {
+        //TODO Ваш код
+    }
+
+    @Override
+    public String getMerchCategoryCode() {
+        //TODO Ваш код
+    }
+
+    @Override
+    public String getMerchEngName() {
+        //TODO Ваш код
+    }
+
+    @Override
+    public String getCashier() {
+        //TODO Ваш код
+    }
+
+    @Override
+    public String getServerIP() {
+        //TODO Ваш код
+    }
+
+    @Override
+    public boolean isNotNeedRRN() {
+        //TODO Ваш код
     }
 }
 ```
 
-Для устройств других категорий требуется реализовать соответствующие интерфейсы:
+Для устройств других категорий требуется реализовать соответствующие интерфейсы.
 
-Весы - `ru.evotor.devices.drivers.scales.IScales`;
-
-Денежный ящик - `ru.evotor.devices.drivers.cashdrawer.ICashDrawer`;
-
-Принтер ценников - `ru.evotor.devices.drivers.priceprinter.IPricePrinter`;
-
-Банковский терминал - `ru.evotor.devices.drivers.paysystem.IPaySystem`.
 <a name="207"></a>
 ### 1.2.7. Завершение работы.
 
