@@ -33,14 +33,15 @@ dependencies {
 ```
 <a name="2012"></a>
 ### 2.1.2. Инициализация класса `ru.evotor.devices.commons.DeviceServiceConnector`  
-Для того, что бы начать обращаться к принтеру достаточно проинициализировать класс `ru.evotor.devices.commons.DeviceServiceConnector`, который был подставлен в подключенную на прошлом шаге библиотеку. Проинициализирйте его при запуске приложения или старте activity:  
+Для того, что бы начать обращаться к принтеру достаточно проинициализировать класс `ru.evotor.devices.commons.DeviceServiceConnector`.
+Данный класс был подставлен в подключенную на прошлом шаге библиотеку. Проинициализирйте его при запуске приложения или старте `activity`:  
 ```  
 DeviceServiceConnector.initConnections(getApplicationContext());
 ```
 <a name="2013"></a>
 ### 2.1.3. Вызов метода `DeviceServiceConnector.getPrinterService()` и взаимодействие с его ответом.  
 * В ответ на вызов метода  `DeviceServiceConnector.getPrinterService()` вернется объект `ru.evotor.devices.commons.IPrinterService`.  
-* В свою очередь у объекта `ru.evotor.devices.commons.IPrinterService` вызвать методы:  
+* В свою очередь у объекта `ru.evotor.devices.commons.IPrinterService` можно вызвать методы:  
   * `int getAllowableSymbolsLineLength(int deviceId)` - возвращает количество печатных символов, которые помещаются на 1 строке;
   * `int getAllowablePixelLineLength(int deviceId)` - возвращает доступную для печати ширину бумаги в пикселях;  
   * `void printDocument(int deviceId, in PrinterDocument printerDocument)` - печатает указанный массив объектов (тест, штрихкоды, картинки).  
@@ -55,7 +56,7 @@ DeviceServiceConnector.initConnections(getApplicationContext());
 ### 2.1.4. Передача данных в печать.  
 Для печати Вам необходимо воспользоваться методом:
 ```
-printDocument((int deviceId, in PrinterDocument printerDocument);
+printDocument(int deviceId, in PrinterDocument printerDocument);
 ```
 `PrinterDocument` - второй аргумент функции. Должен содержать список печатный элементов `IPrintable`:  
 * Тексты - `ru.evotor.devices.commons.printer.printable.PrintableText`;
