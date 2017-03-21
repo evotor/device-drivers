@@ -1,7 +1,7 @@
 
-[Главная страница](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/README.md) > SDK для Банковских Терминалов.
+[Главная страница](https://github.com/Draudr/device-drivers/blob/master/README.md) > SDK для Банковских Терминалов.
 
-> Прежде чем изучать материал, представленный на данной странице, Вы должны убедиться, что были реализованы все шаги, описанные в пункте [Подготовка к разработке.](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Read_me_files/Preparation_for_development.md#1101)  
+> Прежде чем изучать материал, представленный на данной странице, Вы должны убедиться, что были реализованы все шаги, описанные в пункте [Подготовка к разработке.](https://github.com/Draudr/device-drivers/blob/master/Read_me_files/Preparation_for_development.md)  
 
 <a name="1201"></a>
 # __1.2. SDK для Банковских Терминалов.__
