@@ -1,5 +1,5 @@
 
-[Главная страница](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/README.md) > Подготовка к разработке
+[Главная страница](https://github.com/Draudr/device-drivers/blob/master/README.md) > Подготовка к разработке
 > * Ниже описаны шаги, которые необходимо выполнить прежде, чем приступтаь к разработке драйверов, описанной в других разделах.  
 > * Здесь и далее по тексту все имена констант указаны из `ru.evotor.devices.drivers.Constants`.  
 
