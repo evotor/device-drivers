@@ -102,7 +102,7 @@ _Содержание:_
 * `android:icon` - картинка устройства, которая будет отображаться пользователю при инициализации устройства;  
 * `android:label` - имя драйвера, которое будет отображаться пользователю при инициализации устройства  
 
-![Пример отображения иконки и имени драйвера](https://github.com/Draudr/device-drivers/blob/New_structure_of_SDK_manual/Read_me_files/images/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA.PNG?raw=true "Пример отображения иконки и имени драйвера")
+![Пример отображения иконки и имени драйвера](https://github.com/Draudr/device-drivers/blob/master/Read_me_files/images/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA.PNG "Пример отображения иконки и имени драйвера")
 
 Можно задать `activity`  настроек, если это требуется:
 
