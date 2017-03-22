@@ -1,4 +1,4 @@
-[Главная страница](https://github.com/Draudr/device-drivers/blob/master/README.md) > SSDK для принтера Эвотор
+[Главная страница](https://github.com/evotor/device-drivers/blob/master/README.md > SSDK для принтера Эвотор
 
 
 # __2.1. SDK для принтера Эвотор__
