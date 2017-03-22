@@ -31,10 +31,10 @@ _Содержание:_
     </intent-filter>
     <meta-data
         android:name="vendor_name"
-        android:value="CAS" />
+        android:value="DT" />
     <meta-data
         android:name="model_name"
-        android:value="AD" />
+        android:value="DT100U />
     <meta-data
         android:name="usb_device"
         android:value="VID_1659PID_8963" />
@@ -43,7 +43,7 @@ _Содержание:_
         android:value="" />
     <meta-data
         android:name="device_categories"
-        android:value="CashDrawer" />
+        android:value="CASHDRAWER" />
 </service>
 ```
 `vendor_name` - наименование производителя, которое будет отображаться при подключении устройства.
@@ -78,7 +78,7 @@ _Содержание:_
 Следующий интент-фильтр используется для реализации роли устройства для которого пишется драйвер:
 
 ```
-`INTENT_FILTER_SCALES`
+`INTENT_FILTER_CASH_DRAWER`
 ```
 
 Вместе с этим необходимо указать в `meta-data` категорию устройства:
@@ -194,21 +194,16 @@ import ru.evotor.devices.drivers.IUsbDriverManagerService;
 
 public class MyDriverManagerStub extends IUsbDriverManagerService.Stub {
 
-    private MyDeviceService myDeviceService;
+  private MyDeviceService myDeviceService;
 
-    public MyDriverManagerStub(MyDeviceService myDeviceService) {
-        this.myDeviceService = myDeviceService;
-    }
+   public CashDrawerStub(MyDeviceService myDeviceService) {
+       this.myDeviceService = myDeviceService;
+   }
 
-    @Override
-    public int addUsbDevice(UsbDevice usbDevice, String usbPortPath) throws RemoteException {
-        return myDeviceService.createNewDevice(usbDevice);
-    }
-
-    @Override
-    public void destroy(int instanceId) throws RemoteException {
-        myDeviceService.destroy(instanceId);
-    }
+   @Override
+   public void openCashDrawer(int instanceId) throws RemoteException {
+       myDeviceService.getCashDrawer(instanceId).openCashDrawer();
+   }
 }
 ```
 
@@ -231,29 +226,17 @@ import ru.evotor.devices.drivers.IVirtualDriverManagerService;
 
 public class MyDriverManagerStub extends IVirtualDriverManagerService.Stub {
 
-    private MyDeviceService myDeviceService;
+  private MyDeviceService myDeviceService;
 
-    public MyDriverManagerStub(MyDeviceService myDeviceService) {
-        this.myDeviceService = myDeviceService;
-    }
+ public CashDrawerStub(MyDeviceService myDeviceService) {
+     this.myDeviceService = myDeviceService;
+ }
 
-    @Override
-    public int addNewVirtualDevice() throws RemoteException {
-
-            return myDeviceService.createNewDevice(usbDevice);
-    }
-
-    @Override
-    public void recreateNewVirtualDevice(int instanceId) throws RemoteException {
-        myDeviceService.recreateNewVirtualDevice(instanceId);
-    }
-
-    @Override
-    public void destroy(int i) throws RemoteException {
-        myDeviceService.destroy(instanceId);
-    }
+ @Override
+ public void openCashDrawer(int instanceId) throws RemoteException {
+     myDeviceService.getCashDrawer(instanceId).openCashDrawer();
+ }
 }
-```
 
 Метод `addNewVirtualDevice` возвращает номер экземпляра драйвера внутри приложения. По этому номеру будет происходить обращение к конкретному драйверу.
 
@@ -267,7 +250,7 @@ public class MyDriverManagerStub extends IVirtualDriverManagerService.Stub {
 
 Метод `destroy` будет вызван для устройства, которое пользователь вручную удалил из списка оборудования.
 
-#### `ICashDrawerDriverService.Stub` - класс для работы с конкретными экземплярами весов.  Требуется реализовать метод `getWeight`.
+#### `ICashDrawerDriverService.Stub` - класс для работы с конкретными экземплярами весов.
 
 ```
 import ru.evotor.devices.drivers.IScalesDriverService;
@@ -318,23 +301,18 @@ public class MyScalesStub extends IScalesDriverService.Stub {
 import ru.evotor.devices.drivers.scales.IScales;
 import ru.evotor.devices.drivers.scales.Weight;
 
-public class MyDevice implements IScales {
+public class MyDevice implements ICashDrawer {
 
     private Context context;
-    private UsbDevice usbDevice;
 
     public MyDevice(Context context, UsbDevice usbDevice) {
         super();
         this.context = context;
-        this.usbDevice = usbDevice;
     }
 
-	public void destroy(){
-	}
-
     @Override
-    public Weight getWeight() {
-        //TODO Ваш код запроса веса
+    public void openCashDrawer() {
+        //TODO Ваш код открытия денежного ящика
     }
 }
 ```
@@ -343,7 +321,6 @@ public class MyDevice implements IScales {
 
 Весы - `ru.evotor.devices.drivers.scales.IScales`;
 
-Денежный ящик - `ru.evotor.devices.drivers.cashdrawer.ICashDrawer`;
 
 Принтер ценников - `ru.evotor.devices.drivers.priceprinter.IPricePrinter`;
 
