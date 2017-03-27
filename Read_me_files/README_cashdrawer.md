@@ -145,7 +145,7 @@ public class MyDeviceService extends Service {
             case Constants.INTENT_FILTER_DRIVER_MANAGER:
                 return new MyDriverManagerStub(MyDeviceService.this);
             case Constants.INTENT_FILTER_CASHDRAWER:
-                return new myCashDrawerStub(MyDeviceService.this);
+                return new MyCashDrawerStub(MyDeviceService.this);
             default:
                 return null;
         }
@@ -162,7 +162,7 @@ public class MyDeviceService extends Service {
     }
 
     public void destroy(int instanceId) {
-		getMyDevice(instanceId).destroy();
+	getMyDevice(instanceId).destroy();
         instances.remove(instanceId);
     }
 }
@@ -194,16 +194,21 @@ import ru.evotor.devices.drivers.IUsbDriverManagerService;
 
 public class MyDriverManagerStub extends IUsbDriverManagerService.Stub {
 
-  private MyDeviceService myDeviceService;
+    private MyDeviceService myDeviceService;
 
-   public CashDrawerStub(MyDeviceService myDeviceService) {
-       this.myDeviceService = myDeviceService;
-   }
+    public MyDriverManagerStub(MyDeviceService myDeviceService) {
+        this.myDeviceService = myDeviceService;
+    }
 
-   @Override
-   public void openCashDrawer(int instanceId) throws RemoteException {
-       myDeviceService.getCashDrawer(instanceId).openCashDrawer();
-   }
+    @Override
+    public int addUsbDevice(UsbDevice usbDevice, String usbPortPath) throws RemoteException {
+        return myDeviceService.createNewDevice(usbDevice);
+    }
+
+    @Override
+    public void destroy(int instanceId) throws RemoteException {
+        myDeviceService.destroy(instanceId);
+    }
 }
 ```
 
@@ -226,17 +231,29 @@ import ru.evotor.devices.drivers.IVirtualDriverManagerService;
 
 public class MyDriverManagerStub extends IVirtualDriverManagerService.Stub {
 
-  private MyDeviceService myDeviceService;
+    private MyDeviceService myDeviceService;
 
- public CashDrawerStub(MyDeviceService myDeviceService) {
-     this.myDeviceService = myDeviceService;
- }
+    public MyDriverManagerStub(MyDeviceService myDeviceService) {
+        this.myDeviceService = myDeviceService;
+    }
 
- @Override
- public void openCashDrawer(int instanceId) throws RemoteException {
-     myDeviceService.getCashDrawer(instanceId).openCashDrawer();
- }
+    @Override
+    public int addNewVirtualDevice() throws RemoteException {
+
+            return myDeviceService.createNewDevice(usbDevice);
+    }
+
+    @Override
+    public void recreateNewVirtualDevice(int instanceId) throws RemoteException {
+        myDeviceService.recreateNewVirtualDevice(instanceId);
+    }
+
+    @Override
+    public void destroy(int i) throws RemoteException {
+        myDeviceService.destroy(instanceId);
+    }
 }
+```
 
 Метод `addNewVirtualDevice` возвращает номер экземпляра драйвера внутри приложения. По этому номеру будет происходить обращение к конкретному драйверу.
 
@@ -250,46 +267,20 @@ public class MyDriverManagerStub extends IVirtualDriverManagerService.Stub {
 
 Метод `destroy` будет вызван для устройства, которое пользователь вручную удалил из списка оборудования.
 
-#### `ICashDrawerDriverService.Stub` - класс для работы с конкретными экземплярами весов.
+Все методы принимают на вход номер экземпляра драйвера.
 
+`ICashDrawerDriverService.Stub` - класс для работы с конкретными экземплярами денежных ящиков.
 ```
-import ru.evotor.devices.drivers.IScalesDriverService;
-import ru.evotor.devices.drivers.scales.Weight;
-
-public class MyScalesStub extends IScalesDriverService.Stub {
+public class MyCashDrawerStub extends ICashDrawerDriverService.Stub {
 
     private MyDeviceService myDeviceService;
 
-    public MyScalesStub(MyDeviceService myDeviceService) {
+    public MyCashDrawerStub(MyDeviceService myDeviceService) {
         this.myDeviceService = myDeviceService;
     }
-
-    @Override
-    public Weight getWeight(int instanceId) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).getWeight();
-    }
 }
-
 ```
 
-Метод `getWeight` принимает на вход номер экземпляра драйвера (тот, который вернул `addUsbDevice` на прошлом шаге).
-
-Метод `getWeight` возвращает объект класса `ru.evotor.devices.drivers.scales.Weight`. В конструкторе требуется указать:
-
- 1) `originalWeight` - считанный вес, в тех единицах измерения, в которых его вернули весы;
-
- 2) `multiplierToGrams` - коэффициент для приведения веса в граммы;
-
- 3) `supportStable` - поддерживают ли весы флаг стабильности;
-
- 4) `stable` - флаг стабильности взвешивания, если поддерживается. Иначе - любое значение.
-
-
-
-
-Все методы принимают на вход номер экземпляра драйвера.
-
-Метод оплаты принимает на вход информацию об оплате (сумму), методы возврата и отмены дополнительно к этому принимают на вход `РРН` прошлой операции.
 
 <a name="305"></a>
 ## 1.3.6. Описание класса для работы с оборудованием.
