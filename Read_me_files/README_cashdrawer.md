@@ -269,7 +269,7 @@ public class MyDriverManagerStub extends IVirtualDriverManagerService.Stub {
 
 Все методы принимают на вход номер экземпляра драйвера.
 
-###`ICashDrawerDriverService.Stub` - класс для работы с конкретными экземплярами денежных ящиков.
+#### `ICashDrawerDriverService.Stub` - класс для работы с конкретными экземплярами денежных ящиков.
 ```
 public class MyCashDrawerStub extends ICashDrawerDriverService.Stub {
 
