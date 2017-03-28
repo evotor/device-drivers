@@ -269,7 +269,7 @@ public class MyDriverManagerStub extends IVirtualDriverManagerService.Stub {
 
 Все методы принимают на вход номер экземпляра драйвера.
 
-`ICashDrawerDriverService.Stub` - класс для работы с конкретными экземплярами денежных ящиков.
+###`ICashDrawerDriverService.Stub` - класс для работы с конкретными экземплярами денежных ящиков.
 ```
 public class MyCashDrawerStub extends ICashDrawerDriverService.Stub {
 
@@ -278,9 +278,14 @@ public class MyCashDrawerStub extends ICashDrawerDriverService.Stub {
     public MyCashDrawerStub(MyDeviceService myDeviceService) {
         this.myDeviceService = myDeviceService;
     }
+   
+    @Override
+    public void openCashDrawer(int instanceId) throws RemoteException {
+        myDeviceService.getCashDrawer(instanceId).openCashDrawer();
+    }
 }
 ```
-
+Метод `openCashDrawer` принимает на вход номер экземпляра драйвера и открывает указанный денежный ящик.
 
 <a name="305"></a>
 ## 1.3.6. Описание класса для работы с оборудованием.
@@ -289,9 +294,7 @@ public class MyCashDrawerStub extends ICashDrawerDriverService.Stub {
 Например, для USB-весов это выглядит следующим образом:
 
 ```
-import ru.evotor.devices.drivers.scales.IScales;
-import ru.evotor.devices.drivers.scales.Weight;
-
+import ru.evotor.devices.drivers.cashdrawer.ICashDrawer;
 public class MyDevice implements ICashDrawer {
 
     private Context context;
@@ -311,7 +314,6 @@ public class MyDevice implements ICashDrawer {
 Для устройств других категорий требуется реализовать соответствующие интерфейсы:
 
 Весы - `ru.evotor.devices.drivers.scales.IScales`;
-
 
 Принтер ценников - `ru.evotor.devices.drivers.priceprinter.IPricePrinter`;
 
