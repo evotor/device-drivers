@@ -10,12 +10,12 @@
 Разделы проекта:
 
 1. Разработка драйверов.  
-1.1. [Подготовка к разработке.](https://github.com/evotor/device-drivers/blob/master/Read_me_files/Preparation_for_development.md)  
-1.2. [SDK для Банковских Терминалов.](https://github.com/evotor/device-drivers/blob/master/Read_me_files/README_PinPad.md#1202)      
-1.3. [SDK для Весов.](https://github.com/evotor/device-drivers/blob/master/Read_me_files/README_Scales.md#1301)  
-1.4. [SDK денежных ящиков.](https://github.com/evotor/device-drivers/blob/master/Read_me_files/README_cashdrawer.md#407)  
+1.1. [Подготовка к разработке](https://github.com/evotor/device-drivers/blob/master/Read_me_files/Preparation_for_development.md)  
+1.2. [SDK для Банковских Терминалов](https://github.com/evotor/device-drivers/blob/master/Read_me_files/README_PinPad.md#1202)      
+1.3. [SDK для Весов](https://github.com/evotor/device-drivers/blob/master/Read_me_files/README_Scales.md#1301)  
+1.4. [SDK денежных ящиков](https://github.com/evotor/device-drivers/blob/master/Read_me_files/README_cashdrawer.md#407)  
 2. Разработка приложений.  
-2.1. [SDK для принтера Эвотор.](https://github.com/evotor/device-drivers/blob/master/Read_me_files/README_printer.md#2111)
+2.1. [SDK для принтера Эвотор](https://github.com/evotor/device-drivers/blob/master/Read_me_files/README_printer.md#2111)
 
 
 
