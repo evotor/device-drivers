@@ -1,4 +1,4 @@
-[Главная страница](https://github.com/Draudr/device-drivers/blob/master/README.md) > SSDK для принтера Эвотор
+[Главная страница](https://github.com/evotor/device-drivers/blob/master/README.md > SSDK для принтера Эвотор
 
 
 # __2.1. SDK для принтера Эвотор__
@@ -49,7 +49,7 @@ DeviceServiceConnector.initConnections(getApplicationContext());
 
 При возникновении каких - либо проблем в ходе вызова любого из перечисленных ранее методов - система вернет значение = `Exception`.
 
-> __На данный момент печатать можно только на встроенной в СТ2 ККМ, поэтому вместо номера устройства всегда следует передавать константу `ru.evotor.devices.commons.Constants.DEFAULT_DEVICE_INDEX_UNSET`.__  
+> __На данный момент печатать можно только на встроенной в СТ2 ККМ, поэтому вместо номера устройства всегда следует передавать константу `ru.evotor.devices.commons.Constants.DEFAULT_DEVICE_INDEX`.__  
 
 <a name="2014"></a>
 ### 2.1.4. Передача данных в печать.  
