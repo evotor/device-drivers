@@ -1,18 +1,18 @@
 [Главная страница](https://github.com/evotor/device-drivers/blob/master/README.md) > SDK для Весов
 > Прежде чем изучать материал, представленный на данной странице, Вы должны убедиться, что были реализованы все шаги, описанные в пункте [Подготовка к разработке.](https://github.com/evotor/device-drivers/blob/master/Read_me_files/Preparation_for_development.md#1101)
 <a name="1501"></a>
-# __1.3. SDK для весов.__
-_Содержание:_  
-1.3.1. [Определение внешнего сервиса в `AndroidManifest.xml`.](#307).  
-1.3.2. [Определение роли и категории устройства.](#301)  
-1.3.3. [Присвоение картинки для драйвера.](#302)  
-1.3.4. [В реализации метода подключения к сервису для всех action указанных в интент-фильтрах укажите соответствующие `Binder'ы`.](#303)  
-1.3.5. [Описание указанных `Binder'ов`.](#304)  
-1.3.6. [Описание класса для работы с оборудованием.](#305)  
-1.3.7. [Завершение работы.](#306)
+# __1.4. SDK денежных ящиков.__
+_Содержание:_
+1.4.1. [Определение внешнего сервиса в `AndroidManifest.xml`.](#407).  
+1.4.2. [Определение роли и категории устройства.](#401)  
+1.4.3. [Присвоение картинки для драйвера.](#402)  
+1.4.4. [В реализации метода подключения к сервису для всех action указанных в интент-фильтрах укажите соответствующие `Binder'ы`.](#403)  
+1.4.5. [Описание указанных `Binder'ов`.](#404)  
+1.4.6. [Описание класса для работы с оборудованием.](#405)  
+1.4.7. [Завершение работы.](#406)  
 
-<a name="307"></a>
-### 1.3.1. Определение внешнего сервиса в `AndroidManifest.xml`.
+<a name="407"></a>
+### 1.4.1. Определение внешнего сервиса в `AndroidManifest.xml`.
 
 Для сервиса должен быть указан хотя бы один из интент-фильтров `INTENT_FILTER_DRIVER_MANAGER` или `INTENT_FILTER_VIRTUAL_DRIVER_MANAGER`.
 
@@ -27,14 +27,14 @@ _Содержание:_
     android:label="@string/service_name">
     <intent-filter>
         <action android:name="ru.evotor.devices.drivers.DriverManager" />
-        <action android:name="ru.evotor.devices.drivers.ScalesService" />
+        <action android:name="ru.evotor.devices.drivers.CashDrawer" />
     </intent-filter>
     <meta-data
         android:name="vendor_name"
-        android:value="CAS" />
+        android:value="DT" />
     <meta-data
         android:name="model_name"
-        android:value="AD" />
+        android:value="DT100U />
     <meta-data
         android:name="usb_device"
         android:value="VID_1659PID_8963" />
@@ -43,9 +43,9 @@ _Содержание:_
         android:value="" />
     <meta-data
         android:name="device_categories"
-        android:value="SCALES" />
+        android:value="CASHDRAWER" />
 </service>
-```  
+```
 `vendor_name` - наименование производителя, которое будет отображаться при подключении устройства.
 
 `model_name` - наименование модели устройства.
@@ -73,12 +73,12 @@ _Содержание:_
 
 Экземпляр такого драйвера пользователь может создать исключительно вручную через настройки оборудования. В этом случае все работы по подключению к нужному устройству берёт на себя производитель драйвера.
 
-<a name="301"></a>
-## 1.3.2. Определение роли и категории устройства  
+<a name="401"></a>
+## 1.4.2. Определение роли и категории устройства
 Следующий интент-фильтр используется для реализации роли устройства для которого пишется драйвер:
 
 ```
-`INTENT_FILTER_SCALES`
+`INTENT_FILTER_CASH_DRAWER`
 ```
 
 Вместе с этим необходимо указать в `meta-data` категорию устройства:
@@ -86,13 +86,13 @@ _Содержание:_
 ```
 <meta-data
     android:name="device_categories"
-    android:value="SCALES" />
+    android:value="CASHDRAWER" />
 ```
 Можно указать сразу несколько ролей устройству следующим образом: `"SCALES|PRICEPRINTER|CASHDRAWER"`_(примечение: весы | принтер чеков | денежный ящик)._
 <a name="302"></a>
-## 1.3.3. Присвоение картинки для драйвера
-В манифесте приложения у сервиса должны быть указаны:  
-* `android:icon` - картинка устройства, которая будет отображаться пользователю при инициализации устройства;  
+## 1.4.3. Присвоение картинки для драйвера
+В манифесте приложения у сервиса должны быть указаны:
+* `android:icon` - картинка устройства, которая будет отображаться пользователю при инициализации устройства;
 * `android:label` - имя драйвера, которое будет отображаться пользователю при инициализации устройства
 
 ![Пример отображения иконки и имени драйвера](https://github.com/VedbeN/device-drivers/blob/master/icon_xmpl.png?raw=true "Пример отображения иконки и имени драйвера")
@@ -111,7 +111,7 @@ _Содержание:_
 
 ```
 defaultConfig {
-    applicationId "ru.mycompany.drivers.myscales"
+    applicationId "ru.mycompany.drivers.mycashdrawer"
     minSdkVersion 22
     targetSdkVersion 24
     versionCode 2
@@ -121,13 +121,13 @@ defaultConfig {
 
 `MinSdkVersion` должна быть не выше версии 22!
 <a name="303"></a>
-## 1.3.4. В реализации метода подключения к сервису для всех action указанных в интент-фильтрах укажите соответствующие `Binder'ы`
+## 1.4.4. В реализации метода подключения к сервису для всех action указанных в интент-фильтрах укажите соответствующие `Binder'ы`
 
 для `INTENT_FILTER_DRIVER_MANAGER` - класс наследник `ru.evotor.devices.drivers.IUsbDriverManagerService.Stub`;
 
 для `INTENT_FILTER_VIRTUAL_DRIVER_MANAGER` - класс наследник `ru.evotor.devices.drivers.IVirtualDriverManagerService.Stub`;
 
-для `INTENT_FILTER_SCALES` - класс наследник `ru.evotor.devices.drivers.IScalesDriverService.Stub`;
+для `INTENT_FILTER_CASHDRAWER` - класс наследник `ru.evotor.devices.drivers.ICashDrawerDriverService.Stub`;
 
 Например:
 
@@ -144,8 +144,8 @@ public class MyDeviceService extends Service {
         switch (action) {
             case Constants.INTENT_FILTER_DRIVER_MANAGER:
                 return new MyDriverManagerStub(MyDeviceService.this);
-            case Constants.INTENT_FILTER_SCALES:
-                return new MyScalesStub(MyDeviceService.this);
+            case Constants.INTENT_FILTER_CASHDRAWER:
+                return new MyCashDrawerStub(MyDeviceService.this);
             default:
                 return null;
         }
@@ -162,7 +162,7 @@ public class MyDeviceService extends Service {
     }
 
     public void destroy(int instanceId) {
-		getMyDevice(instanceId).destroy();
+	getMyDevice(instanceId).destroy();
         instances.remove(instanceId);
     }
 }
@@ -171,9 +171,9 @@ public class MyDeviceService extends Service {
 В этом же сервисе удобно определить `Map` для хранения списка активных экземпляров драйверов (а их, потенциально, может быть больше, чем 1 в системе одновременно), т.к. обращаться к нему придётся из всех указанных Stub'ов.
 
 <a name="304"></a>
-## 1.3.5. Описание указанных `Binder'ов`.
+## 1.4.5. Описание указанных `Binder'ов`.
 
-Для всех описываемых методов, в случае невозможности выполнить требуемое действие (например, "взвесить" для метода `getWeight`), слудует использовать один из поддерживаемых типов `Exception` с легкочитаемым описанием.   
+Для всех описываемых методов, в случае невозможности выполнить требуемое действие (например, "взвесить" для метода `getWeight`), слудует использовать один из поддерживаемых типов `Exception` с легкочитаемым описанием.
 
 Перечень поддерживаемых типов `Exception`:
 `BadParcelableException`;
@@ -267,74 +267,46 @@ public class MyDriverManagerStub extends IVirtualDriverManagerService.Stub {
 
 Метод `destroy` будет вызван для устройства, которое пользователь вручную удалил из списка оборудования.
 
-#### `IScalesDriverService.Stub` - класс для работы с конкретными экземплярами весов.  Требуется реализовать метод `getWeight`.
+Все методы принимают на вход номер экземпляра драйвера.
 
+#### `ICashDrawerDriverService.Stub` - класс для работы с конкретными экземплярами денежных ящиков.
 ```
-import ru.evotor.devices.drivers.IScalesDriverService;
-import ru.evotor.devices.drivers.scales.Weight;
-
-public class MyScalesStub extends IScalesDriverService.Stub {
+public class MyCashDrawerStub extends ICashDrawerDriverService.Stub {
 
     private MyDeviceService myDeviceService;
 
-    public MyScalesStub(MyDeviceService myDeviceService) {
+    public MyCashDrawerStub(MyDeviceService myDeviceService) {
         this.myDeviceService = myDeviceService;
     }
-
+   
     @Override
-    public Weight getWeight(int instanceId) throws RemoteException {
-        return myDeviceService.getMyDevice(instanceId).getWeight();
+    public void openCashDrawer(int instanceId) throws RemoteException {
+        myDeviceService.getCashDrawer(instanceId).openCashDrawer();
     }
 }
-
 ```
-
-Метод `getWeight` принимает на вход номер экземпляра драйвера (тот, который вернул `addUsbDevice` на прошлом шаге).
-
-Метод `getWeight` возвращает объект класса `ru.evotor.devices.drivers.scales.Weight`. В конструкторе требуется указать:
-
- 1) `originalWeight` - считанный вес, в тех единицах измерения, в которых его вернули весы;
-
- 2) `multiplierToGrams` - коэффициент для приведения веса в граммы;
-
- 3) `supportStable` - поддерживают ли весы флаг стабильности;
-
- 4) `stable` - флаг стабильности взвешивания, если поддерживается. Иначе - любое значение.
-
-
-
-
-Все методы принимают на вход номер экземпляра драйвера.
-
-Метод оплаты принимает на вход информацию об оплате (сумму), методы возврата и отмены дополнительно к этому принимают на вход `РРН` прошлой операции.
+Метод `openCashDrawer` принимает на вход номер экземпляра драйвера и открывает указанный денежный ящик.
 
 <a name="305"></a>
-## 1.3.6. Описание класса для работы с оборудованием.  
+## 1.3.6. Описание класса для работы с оборудованием.
 После того, как описаны все классы для взаимодействия с инфраструктурой смарт-терминала, можно описать сам класс работы с оборудованием:
 
 Например, для USB-весов это выглядит следующим образом:
 
 ```
-import ru.evotor.devices.drivers.scales.IScales;
-import ru.evotor.devices.drivers.scales.Weight;
-
-public class MyDevice implements IScales {
+import ru.evotor.devices.drivers.cashdrawer.ICashDrawer;
+public class MyDevice implements ICashDrawer {
 
     private Context context;
-    private UsbDevice usbDevice;
 
     public MyDevice(Context context, UsbDevice usbDevice) {
         super();
         this.context = context;
-        this.usbDevice = usbDevice;
     }
 
-	public void destroy(){
-	}
-
     @Override
-    public Weight getWeight() {
-        //TODO Ваш код запроса веса
+    public void openCashDrawer() {
+        //TODO Ваш код открытия денежного ящика
     }
 }
 ```
@@ -343,15 +315,13 @@ public class MyDevice implements IScales {
 
 Весы - `ru.evotor.devices.drivers.scales.IScales`;
 
-Денежный ящик - `ru.evotor.devices.drivers.cashdrawer.ICashDrawer`;
-
 Принтер ценников - `ru.evotor.devices.drivers.priceprinter.IPricePrinter`;
 
 Банковский терминал - `ru.evotor.devices.drivers.paysystem.IPaySystem`.
 
-<a name="306"></a>
-## 1.3.7. Завершение работы.  
-Загрузите приложение на смарт-терминал, чтобы работать с Вашим драйвером.   
+<a name="406"></a>
+## 1.4.7. Завершение работы.
+Загрузите приложение на смарт-терминал, чтобы работать с Вашим драйвером.
 
 -----
 
