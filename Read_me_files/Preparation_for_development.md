@@ -22,11 +22,11 @@ allprojects {
 }
 ```
 
-в модуле `build.gradle` добавьте зависимость и укажите точную версию (текущая: V1.2.0+):
+в модуле `build.gradle` добавьте зависимость и укажите точную версию (текущая: v1.2.0+):
 
 ```
 dependencies {
-    compile 'com.github.evotor:device-drivers:1.2.0+'
+    compile 'com.github.evotor:device-drivers:v1.2.0+'
 }
 ```
 <a name="102"></a>
