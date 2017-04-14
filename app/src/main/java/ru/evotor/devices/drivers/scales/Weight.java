@@ -5,9 +5,6 @@ import android.os.Parcelable;
 
 import java.math.BigDecimal;
 
-import lombok.Getter;
-
-@Getter
 public class Weight implements Parcelable {
 
     /**
@@ -62,6 +59,22 @@ public class Weight implements Parcelable {
             originalScalesWeight = tmpOriginalScalesWeight;
             multiplierWeightToGrams = tmpMultiplierWeightToGrams;
         }
+    }
+
+    public BigDecimal getOriginalScalesWeight() {
+        return originalScalesWeight;
+    }
+
+    public BigDecimal getMultiplierWeightToGrams() {
+        return multiplierWeightToGrams;
+    }
+
+    public boolean isSupportStable() {
+        return supportStable;
+    }
+
+    public boolean isStable() {
+        return stable;
     }
 
     @Override

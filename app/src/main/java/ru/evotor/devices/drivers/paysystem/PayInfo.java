@@ -5,9 +5,6 @@ import android.os.Parcelable;
 
 import java.math.BigDecimal;
 
-import lombok.Getter;
-
-@Getter
 public class PayInfo implements Parcelable {
 
     /**
@@ -21,6 +18,10 @@ public class PayInfo implements Parcelable {
 
     private PayInfo(Parcel parcel) {
         price = (BigDecimal) parcel.readSerializable();
+    }
+
+    public BigDecimal getPrice() {
+        return price;
     }
 
     @Override
