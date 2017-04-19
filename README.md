@@ -1,6 +1,7 @@
 # SDK для работы с оборудованием смарт-терминала Эвотор
 
 [![Gitter](https://badges.gitter.im/evotor/device-drivers.svg)](https://gitter.im/evotor/device-drivers?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+[![Build Status](https://travis-ci.org/evotor/device-drivers.svg?branch=master)](https://travis-ci.org/evotor/device-drivers)
 
 В этом проекте описаны все необходимые интерфейсы, константы и пр., необходимые для работы с оборудованием на смарт-терминале Эвотор и разработки собственных драйверов для него.
 
