@@ -3,9 +3,6 @@ package ru.evotor.devices.drivers.paysystem;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import lombok.Getter;
-
-@Getter
 public class PayResult implements Parcelable {
 
     /**
@@ -31,6 +28,18 @@ public class PayResult implements Parcelable {
         } else {
             slipLength = slip.length;
         }
+    }
+
+    public String getRrn() {
+        return rrn;
+    }
+
+    public int getSlipLength() {
+        return slipLength;
+    }
+
+    public String[] getSlip() {
+        return slip;
     }
 
     @Override

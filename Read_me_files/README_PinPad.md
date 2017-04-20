@@ -1,7 +1,7 @@
 
-[Главная страница](https://github.com/Draudr/device-drivers/blob/master/README.md) > SDK для Банковских Терминалов.
+[Главная страница](https://github.com/evotor/device-drivers/blob/master/README.md > SDK для Банковских Терминалов.
 
-> Прежде чем изучать материал, представленный на данной странице, Вы должны убедиться, что были реализованы все шаги, описанные в пункте [Подготовка к разработке.](https://github.com/Draudr/device-drivers/blob/master/Read_me_files/Preparation_for_development.md)  
+> Прежде чем изучать материал, представленный на данной странице, Вы должны убедиться, что были реализованы все шаги, описанные в пункте [Подготовка к разработке.](https://github.com/evotor/device-drivers/blob/master/Read_me_files/Preparation_for_development.md#1101)  
 
 <a name="1201"></a>
 # __1.2. SDK для Банковских Терминалов.__
@@ -102,7 +102,7 @@ _Содержание:_
 * `android:icon` - картинка устройства, которая будет отображаться пользователю при инициализации устройства;  
 * `android:label` - имя драйвера, которое будет отображаться пользователю при инициализации устройства  
 
-![Пример отображения иконки и имени драйвера](https://github.com/Draudr/device-drivers/blob/master/Read_me_files/images/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA.PNG "Пример отображения иконки и имени драйвера")
+![Пример отображения иконки и имени драйвера](https://github.com/evotor/device-drivers/blob/master/Read_me_files/images/%D0%A1%D0%BD%D0%B8%D0%BC%D0%BE%D0%BA.PNG "Пример отображения иконки и имени драйвера")
 
 Можно задать `activity`  настроек, если это требуется:
 

@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion 22
         targetSdkVersion 25
-        versionCode 13
-        versionName "1.2.0"
+        versionCode 28
+        versionName "2.1.2"
     }
     buildTypes {
         release {
@@ -21,8 +21,6 @@ android {
 }
 
 dependencies {
-    provided "org.projectlombok:lombok:1.16.6"
-    provided 'org.glassfish:javax.annotation:10.0-b28'
 }
 
 // build a jar with source files
