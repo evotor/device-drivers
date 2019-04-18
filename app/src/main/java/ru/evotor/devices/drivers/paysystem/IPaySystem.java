@@ -18,6 +18,8 @@ public interface IPaySystem {
 
     int getTerminalNumber();
 
+    String getTerminalNumberAsString();
+
     String getTerminalID();
 
     String getMerchNumber();

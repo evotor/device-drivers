@@ -86,4 +86,5 @@ interface IPaySystemDriverService {
 	 *          false   -   РРН требуется
 	 */
     boolean isNotNeedRRN(int instanceId);
+    String getTerminalNumberAsString(int instanceId);
 }
