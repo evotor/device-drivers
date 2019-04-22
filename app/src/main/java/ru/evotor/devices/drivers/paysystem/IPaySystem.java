@@ -16,6 +16,7 @@ public interface IPaySystem {
 
     String getBankName();
 
+    @Deprecated
     int getTerminalNumber();
 
     String getTerminalNumberAsString();

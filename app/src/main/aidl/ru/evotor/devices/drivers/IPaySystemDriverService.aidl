@@ -70,6 +70,10 @@ interface IPaySystemDriverService {
 	 * @param instanceId    - номер экземпляра драйвера
 	 */
 	String getBankName(int instanceId);
+
+	/**
+	* @deprecated используйте getTerminalNumberAsString
+	*/
 	int getTerminalNumber(int instanceId);
 	String getTerminalID(int instanceId);
 	String getMerchNumber(int instanceId);
