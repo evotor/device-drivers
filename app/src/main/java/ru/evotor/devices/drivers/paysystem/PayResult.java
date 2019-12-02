@@ -104,9 +104,9 @@ public class PayResult implements Parcelable {
         rrn = parcel.readString();
         slipLength = parcel.readInt();
         slip = new String[slipLength];
-        //if (slipLength > 0) {
+        if (parcel.readInt() != -1) {
             parcel.readStringArray(slip);
-        //}
+        }
 
         ParcelableUtils.readExpand(parcel, VERSION, new ParcelableUtils.ParcelableReader() {
             @Override
