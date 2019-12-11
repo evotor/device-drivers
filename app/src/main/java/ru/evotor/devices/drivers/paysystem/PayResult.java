@@ -7,6 +7,7 @@ import ru.evotor.devices.drivers.ParcelableUtils;
 
 public class PayResult implements Parcelable {
 
+    private static final String RESULT_CODE_SUCCESS = "0";
     private static int VERSION = 2;
 
     /**
@@ -33,12 +34,12 @@ public class PayResult implements Parcelable {
      * Если операция завершилась неуспешно, и slip == null или slip пустой - не печатаем ничего.
      * Если драйвер вернул PayResult == null - не печатаем ничего!
      */
-    private String resultCode = null;
+    private String resultCode = RESULT_CODE_SUCCESS;
 
     // Используйте конструктор PayResult(String resultCode, String rrn, String[] slip)
     @Deprecated
     public PayResult(String rrn, String[] slip) {
-        this(null, rrn, slip);
+        this(RESULT_CODE_SUCCESS, rrn, slip);
     }
 
     public PayResult(String resultCode, String rrn, String[] slip) {
@@ -82,7 +83,7 @@ public class PayResult implements Parcelable {
         ParcelableUtils.writeExpand(parcel, VERSION, new ParcelableUtils.ParcelableWriter() {
             @Override
             public void write(Parcel parcel) {
-                if (VERSION == 2) {
+                if (VERSION >= 2) {
                     parcel.writeString(resultCode);
                 }
             }
@@ -116,7 +117,7 @@ public class PayResult implements Parcelable {
         ParcelableUtils.readExpand(parcel, VERSION, new ParcelableUtils.ParcelableReader() {
             @Override
             public void read(Parcel parcel, int currentVersion) {
-                if (currentVersion == 2) {
+                if (currentVersion >= 2) {
                     resultCode = parcel.readString();
                 }
             }
