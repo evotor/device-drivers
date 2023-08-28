@@ -100,7 +100,7 @@ interface IPaySystemDriverService {
      * Производит оплату на указанную сумму
      *
      * @param request       - Запрос
-     * @return              - параметры успешного завершения результата
+     * @return              - параметры успешного завершения результата. Не может быть null!
      * @throws              - RuntimeException в случае неуспешного завершения
      */
     PayResult execPaymentRequest(in PaymentRequest request) = 16;
@@ -109,7 +109,7 @@ interface IPaySystemDriverService {
      * Производит отмену оплаты на указанную сумму
      *
      * @param request       - Запрос
-     * @return              - параметры успешного завершения результата
+     * @return              - параметры успешного завершения результата. Не может быть null!
      * @throws              - RuntimeException в случае неуспешного завершения
      */
     PayResult execCancelPaymentRequest(in CancelPaymentRequest request) = 17;
@@ -118,7 +118,7 @@ interface IPaySystemDriverService {
      * Производит возврат на указанную сумму
      *
      * @param request       - Запрос
-     * @return              - параметры успешного завершения результата
+     * @return              - параметры успешного завершения результата. Не может быть null!
      * @throws              - RuntimeException в случае неуспешного завершения
      */
     PayResult execPaybackRequest(in PaybackRequest request) = 18;
@@ -127,7 +127,7 @@ interface IPaySystemDriverService {
      * Производит отмену возврата на указанную сумму
      *
      * @param request       - Запрос
-     * @return              - параметры успешного завершения результата
+     * @return              - параметры успешного завершения результата. Не может быть null!
      * @throws              - RuntimeException в случае неуспешного завершения
      */
     PayResult execCancelPaybackRequest(in CancelPaybackRequest request) = 19;
