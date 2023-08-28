@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.math.BigDecimal;
 
+@Deprecated
 public class PayInfo implements Parcelable {
 
     /**

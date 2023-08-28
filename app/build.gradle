@@ -1,16 +1,15 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.evotor'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 33
     buildToolsVersion "25.0.2"
     defaultConfig {
         minSdkVersion 22
-        targetSdkVersion 25
+        targetSdkVersion 33
         versionCode 28
-        versionName "2.1.2"
+        versionName "2.2.0"
     }
     buildTypes {
         release {
@@ -33,7 +32,6 @@ task javadoc(type: Javadoc) {
     failOnError false
     source = android.sourceSets.main.java.sourceFiles
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
 }
 
 // build a jar with javadoc
