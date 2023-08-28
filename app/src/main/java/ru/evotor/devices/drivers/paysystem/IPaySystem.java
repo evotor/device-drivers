@@ -34,4 +34,12 @@ public interface IPaySystem {
     String getServerIP();
 
     boolean isNotNeedRRN();
+
+    PayResult execPaymentRequest(PaymentRequest request);
+
+    PayResult execCancelPaymentRequest(CancelPaymentRequest request);
+
+    PayResult execPaybackRequest(PaybackRequest request);
+
+    PayResult execCancelPaybackRequest(CancelPaybackRequest request);
 }

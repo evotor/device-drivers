@@ -1,16 +1,16 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'maven-publish'
 
 group = 'com.github.evotor'
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 33
     buildToolsVersion "25.0.2"
     defaultConfig {
         minSdkVersion 22
-        targetSdkVersion 25
+        targetSdkVersion 33
         versionCode 28
-        versionName "2.1.2"
+        versionName "2.2.0"
     }
     buildTypes {
         release {
@@ -33,7 +33,6 @@ task javadoc(type: Javadoc) {
     failOnError false
     source = android.sourceSets.main.java.sourceFiles
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    classpath += configurations.compile
 }
 
 // build a jar with javadoc
@@ -45,4 +44,34 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives sourcesJar
     archives javadocJar
+}
+
+task sourceJar(type: Jar) {
+    classifier "sources"
+    from android.sourceSets.main.java.srcDirs
+}
+
+publishing {
+    publications {
+        mavenKotlin(MavenPublication) {
+            groupId 'com.github.evotor'
+            artifactId "device-drivers"
+            version "v2.3.3"
+            artifact(sourceJar)
+            artifact "${project.buildDir}/outputs/aar/${project.archivesBaseName}-release.aar"
+
+            //generate pom nodes for dependencies
+            pom.withXml {
+                def dependenciesNode = asNode().appendNode('dependencies')
+                configurations.api.allDependencies.each { dependency ->
+                    if (dependency.group) {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', dependency.group)
+                        dependencyNode.appendNode('artifactId', dependency.name)
+                        dependencyNode.appendNode('version', dependency.version)
+                    }
+                }
+            }
+        }
+    }
 }
