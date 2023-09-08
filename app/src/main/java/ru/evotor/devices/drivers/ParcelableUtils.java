@@ -35,7 +35,24 @@ public class ParcelableUtils {
 
     }
 
-    public static <R> R readExpand(Parcel p, int version, ParcelableReader<R> reader) {
+    public static void readExpand(Parcel p, int version, ParcelableReader reader) {
+        readExpandData(p, version, (ParcelableDataReader<Void>) (parcel, currentVersion) -> {
+            if (reader != null) {
+                reader.read(parcel, currentVersion);
+            }
+            return null;
+        });
+    }
+
+    /**
+     * @param p       parcel
+     * @param version версия объекта
+     * @param reader  объект, который будет вызван, если есть дополнительные данные.
+     *                Если дополнительных данных нет, то объект вызван не будет!
+     * @param <R>     возвращаемое значение
+     * @return null если дополнительных данных нет или результат вызова reader, если дополнительные данные есть
+     */
+    public static <R> R readExpandData(Parcel p, int version, ParcelableDataReader<R> reader) {
 
         final int startReadingPosition = p.dataPosition();
 
@@ -61,7 +78,11 @@ public class ParcelableUtils {
         void write(Parcel parcel);
     }
 
-    public interface ParcelableReader<R> {
+    public interface ParcelableReader {
+        void read(Parcel parcel, int currentVersion);
+    }
+
+    public interface ParcelableDataReader<R> {
         R read(Parcel parcel, int currentVersion);
     }
 
