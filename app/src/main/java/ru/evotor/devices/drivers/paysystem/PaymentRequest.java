@@ -78,7 +78,7 @@ public class PaymentRequest implements Parcelable {
     }
 
     private static PaymentRequest create(Parcel parcel) {
-        return ParcelableUtils.readExpand(
+        return ParcelableUtils.readExpandData(
                 parcel,
                 VERSION,
                 (parcel1, currentVersion) -> new PaymentRequest(
