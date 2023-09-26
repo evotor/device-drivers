@@ -6,8 +6,8 @@ import ru.evotor.devices.drivers.paysystem.PaymentRequest;
 import ru.evotor.devices.drivers.paysystem.CancelPaymentRequest;
 import ru.evotor.devices.drivers.paysystem.PaybackRequest;
 import ru.evotor.devices.drivers.paysystem.CancelPaybackRequest;
-import ru.evotor.devices.drivers.paysystem.BuyRequest;
-import ru.evotor.devices.drivers.paysystem.CancelBuyRequest;
+import ru.evotor.devices.drivers.paysystem.PayoutRequest;
+import ru.evotor.devices.drivers.paysystem.CancelPayoutRequest;
 
 interface IPaySystemDriverService {
 
@@ -137,11 +137,11 @@ interface IPaySystemDriverService {
     /**
      * Производит покупку у клиента на указанную сумму
      */
-    PayResult execBuyRequest(in BuyRequest request) = 20;
+    PayResult execPayoutRequest(in PayoutRequest request) = 20;
 
     /**
      * Производит отмену покупки на указанную сумму
      */
-    PayResult execCancelBuyRequest(in CancelBuyRequest request) = 21;
+    PayResult execCancelPayoutRequest(in CancelPayoutRequest request) = 21;
 
 }

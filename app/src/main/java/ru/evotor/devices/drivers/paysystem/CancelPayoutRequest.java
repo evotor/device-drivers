@@ -8,7 +8,7 @@ import java.util.Date;
 
 import ru.evotor.devices.drivers.ParcelableUtils;
 
-public class BuyRequest implements Parcelable {
+public class CancelPayoutRequest implements Parcelable {
     private static final int VERSION = 1;
     /**
      * Идентификатор устройства
@@ -32,16 +32,23 @@ public class BuyRequest implements Parcelable {
      */
     private final String additionalDescription;
 
-    public BuyRequest(
+    /**
+     * RRN
+     */
+    private final String rrn;
+
+    public CancelPayoutRequest(
             int instanceId,
             BigDecimal sum,
             Date expiredAt,
-            String additionalDescription
+            String additionalDescription,
+            String rrn
     ) {
         this.instanceId = instanceId;
         this.sum = sum;
         this.expiredAt = expiredAt;
         this.additionalDescription = additionalDescription;
+        this.rrn = rrn;
     }
 
     public int getInstanceId() {
@@ -60,6 +67,10 @@ public class BuyRequest implements Parcelable {
         return additionalDescription;
     }
 
+    public String getRrn() {
+        return rrn;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -73,30 +84,32 @@ public class BuyRequest implements Parcelable {
                 parcel1.writeString(sum.toPlainString());
                 parcel1.writeSerializable(expiredAt);
                 parcel1.writeString(additionalDescription);
+                parcel1.writeString(rrn);
             }
         });
     }
 
-    private static BuyRequest create(Parcel parcel) {
+    private static CancelPayoutRequest create(Parcel parcel) {
         return ParcelableUtils.readExpandData(
                 parcel,
                 VERSION,
-                (parcel1, currentVersion) -> new BuyRequest(
+                (parcel1, currentVersion) -> new CancelPayoutRequest(
                         parcel1.readInt(),
                         new BigDecimal(parcel1.readString()),
                         (Date) parcel1.readSerializable(),
+                        parcel1.readString(),
                         parcel1.readString()
                 ));
     }
 
-    public static final Creator<BuyRequest> CREATOR = new Creator<BuyRequest>() {
+    public static final Creator<CancelPayoutRequest> CREATOR = new Creator<CancelPayoutRequest>() {
 
-        public BuyRequest createFromParcel(Parcel in) {
+        public CancelPayoutRequest createFromParcel(Parcel in) {
             return create(in);
         }
 
-        public BuyRequest[] newArray(int size) {
-            return new BuyRequest[size];
+        public CancelPayoutRequest[] newArray(int size) {
+            return new CancelPayoutRequest[size];
         }
     };
 

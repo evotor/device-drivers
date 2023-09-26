@@ -8,7 +8,7 @@ import java.util.Date;
 
 import ru.evotor.devices.drivers.ParcelableUtils;
 
-public class CancelBuyRequest implements Parcelable {
+public class PayoutRequest implements Parcelable {
     private static final int VERSION = 1;
     /**
      * Идентификатор устройства
@@ -32,23 +32,16 @@ public class CancelBuyRequest implements Parcelable {
      */
     private final String additionalDescription;
 
-    /**
-     * RRN
-     */
-    private final String rrn;
-
-    public CancelBuyRequest(
+    public PayoutRequest(
             int instanceId,
             BigDecimal sum,
             Date expiredAt,
-            String additionalDescription,
-            String rrn
+            String additionalDescription
     ) {
         this.instanceId = instanceId;
         this.sum = sum;
         this.expiredAt = expiredAt;
         this.additionalDescription = additionalDescription;
-        this.rrn = rrn;
     }
 
     public int getInstanceId() {
@@ -67,10 +60,6 @@ public class CancelBuyRequest implements Parcelable {
         return additionalDescription;
     }
 
-    public String getRrn() {
-        return rrn;
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -84,32 +73,30 @@ public class CancelBuyRequest implements Parcelable {
                 parcel1.writeString(sum.toPlainString());
                 parcel1.writeSerializable(expiredAt);
                 parcel1.writeString(additionalDescription);
-                parcel1.writeString(rrn);
             }
         });
     }
 
-    private static CancelBuyRequest create(Parcel parcel) {
+    private static PayoutRequest create(Parcel parcel) {
         return ParcelableUtils.readExpandData(
                 parcel,
                 VERSION,
-                (parcel1, currentVersion) -> new CancelBuyRequest(
+                (parcel1, currentVersion) -> new PayoutRequest(
                         parcel1.readInt(),
                         new BigDecimal(parcel1.readString()),
                         (Date) parcel1.readSerializable(),
-                        parcel1.readString(),
                         parcel1.readString()
                 ));
     }
 
-    public static final Creator<CancelBuyRequest> CREATOR = new Creator<CancelBuyRequest>() {
+    public static final Creator<PayoutRequest> CREATOR = new Creator<PayoutRequest>() {
 
-        public CancelBuyRequest createFromParcel(Parcel in) {
+        public PayoutRequest createFromParcel(Parcel in) {
             return create(in);
         }
 
-        public CancelBuyRequest[] newArray(int size) {
-            return new CancelBuyRequest[size];
+        public PayoutRequest[] newArray(int size) {
+            return new PayoutRequest[size];
         }
     };
 
