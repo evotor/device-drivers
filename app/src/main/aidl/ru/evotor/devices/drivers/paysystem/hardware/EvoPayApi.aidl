@@ -2,6 +2,7 @@
 package ru.evotor.devices.drivers.paysystem.hardware;
 
 import ru.evotor.devices.drivers.paysystem.hardware.StatusCallback;
+import ru.evotor.devices.drivers.paysystem.hardware.Operation;
 import ru.evotor.devices.drivers.paysystem.hardware.OperationResult;
 import ru.evotor.devices.drivers.paysystem.hardware.TerminalInfo;
 
@@ -9,23 +10,24 @@ interface EvoPayApi {
 
     /**
      * Регистрирует StatusCallback для асинхронного получения статусов операции.
+     * Возвращает id зарегистрированного callback для удаления в будущем.
      */
-    void addCallback(StatusCallback callback) = 1;
+    int addCallback(StatusCallback callback) = 5;
 
     /**
-     * Удаляет StatusCallback из системы. После вызова этого метода новые статусы операций не будут приходить в StatusCallback.
+     * Удаляет callback из системы по его callbackId. После вызова этого метода новые статусы операций не будут приходить в StatusCallback.
      */
-    void removeCallback(StatusCallback callback) = 2;
+    void removeCallback(int callbackId) = 6;
 
     /**
      * Вызывает показ сервисного меню
      */
-    void showServiceMenu() = 3;
+    void showServiceMenu() = 7;
 
     /**
      * Получает информацию о терминале
      */
-    TerminalInfo getTerminalInfo() = 4;
+    TerminalInfo getTerminalInfo() = 8;
 
 
     // После вызова любого из методов start* для фактического начала операции
@@ -71,9 +73,9 @@ interface EvoPayApi {
     long startReconcilation(/*nullable*/ String json) = 25;
 
     /**
-     * Получает @return(OperationResult) статус операции по её @param(operationId).
+     * Получает @return(Operation) статус операции по её @param(operationId).
      */
-    OperationResult getOperationResult(long operationId) = 51;
+    Operation getOperationResult(long operationId) = 51;
 
     /**
      * Отменяет проводимую операцию по её @param(operationId).
@@ -81,7 +83,7 @@ interface EvoPayApi {
      * Если транзакция в операции начата, то возвращает CANCEL_PLANNED и будет отменена автоматически после завершения транзакции.
      * Если транзакция в операции находится в финальном статусе (Finished/Cancel/NOT_FOUND), то вернётся текущий статус и автоматическая отмена произведена не будет.
      */
-    OperationResult cancelOperation(long operationId) = 52;
+    Operation cancelOperation(long operationId) = 52;
 
 
 
