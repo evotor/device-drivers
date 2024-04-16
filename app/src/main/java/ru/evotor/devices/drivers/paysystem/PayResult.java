@@ -8,7 +8,7 @@ import ru.evotor.devices.drivers.ParcelableUtils;
 public class PayResult implements Parcelable {
 
     private static final String RESULT_CODE_SUCCESS = "0";
-    private static int VERSION = 2;
+    private static int VERSION = 3;
 
     /**
      * ррн проведённой операции
@@ -36,13 +36,23 @@ public class PayResult implements Parcelable {
      */
     private String resultCode = RESULT_CODE_SUCCESS;
 
+    // VERSION == 3
+    /**
+     * json расширенного банковского чека для печати
+     */
+    private String extendedSlip = null;
+
     // Используйте конструктор PayResult(String resultCode, String rrn, String[] slip)
     @Deprecated
     public PayResult(String rrn, String[] slip) {
-        this(RESULT_CODE_SUCCESS, rrn, slip);
+        this(RESULT_CODE_SUCCESS, rrn, slip, null);
     }
 
     public PayResult(String resultCode, String rrn, String[] slip) {
+        this(resultCode, rrn, slip, null);
+    }
+
+    public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip) {
         this.resultCode = resultCode;
         this.rrn = rrn;
         this.slip = slip;
@@ -51,6 +61,7 @@ public class PayResult implements Parcelable {
         } else {
             slipLength = slip.length;
         }
+        this.extendedSlip = extendedSlip;
     }
 
     public String getRrn() {
@@ -69,6 +80,8 @@ public class PayResult implements Parcelable {
         return resultCode;
     }
 
+    public String getExtendedSlip() { return extendedSlip; }
+
     @Override
     public int describeContents() {
         return 0;
@@ -85,6 +98,9 @@ public class PayResult implements Parcelable {
             public void write(Parcel parcel) {
                 if (VERSION >= 2) {
                     parcel.writeString(resultCode);
+                }
+                if (VERSION >= 3) {
+                    parcel.writeString(extendedSlip);
                 }
             }
         });
@@ -117,6 +133,9 @@ public class PayResult implements Parcelable {
         ParcelableUtils.readExpand(parcel, VERSION, (parcel1, currentVersion) -> {
             if (currentVersion >= 2) {
                 resultCode = parcel1.readString();
+            }
+            if (currentVersion >= 3) {
+                extendedSlip = parcel1.readString();
             }
         });
     }
