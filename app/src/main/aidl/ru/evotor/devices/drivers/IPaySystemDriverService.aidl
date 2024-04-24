@@ -163,5 +163,5 @@ interface IPaySystemDriverService {
     * @param instanceId    - номер экземпляра драйвера
     */
 
-    void openCashierMenu(int instanceId) = 20;
+    void openCashierMenu(int instanceId) = 24;
 }
