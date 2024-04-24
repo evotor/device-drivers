@@ -157,4 +157,11 @@ interface IPaySystemDriverService {
      */
     PayResult execCancelPayoutRevertRequest(in CancelPayoutRevertRequest request) = 23;
 
+    /**
+    * Открывает на терминале меню кассира
+    *
+    * @param instanceId    - номер экземпляра драйвера
+    */
+
+    void openCashierMenu(int instanceId) = 20;
 }
