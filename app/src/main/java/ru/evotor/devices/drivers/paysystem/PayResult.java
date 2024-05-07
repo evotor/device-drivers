@@ -114,15 +114,11 @@ public class PayResult implements Parcelable {
             slip = null;
         }
 
-        ParcelableUtils.readExpand(parcel, VERSION, new ParcelableUtils.ParcelableReader() {
-            @Override
-            public void read(Parcel parcel, int currentVersion) {
-                if (currentVersion >= 2) {
-                    resultCode = parcel.readString();
-                }
+        ParcelableUtils.readExpand(parcel, VERSION, (parcel1, currentVersion) -> {
+            if (currentVersion >= 2) {
+                resultCode = parcel1.readString();
             }
         });
-
     }
 
 }
