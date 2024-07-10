@@ -6,6 +6,10 @@ import ru.evotor.devices.drivers.paysystem.PaymentRequest;
 import ru.evotor.devices.drivers.paysystem.CancelPaymentRequest;
 import ru.evotor.devices.drivers.paysystem.PaybackRequest;
 import ru.evotor.devices.drivers.paysystem.CancelPaybackRequest;
+import ru.evotor.devices.drivers.paysystem.PayoutRequest;
+import ru.evotor.devices.drivers.paysystem.CancelPayoutRequest;
+import ru.evotor.devices.drivers.paysystem.PayoutRevertRequest;
+import ru.evotor.devices.drivers.paysystem.CancelPayoutRevertRequest;
 
 interface IPaySystemDriverService {
 
@@ -131,4 +135,26 @@ interface IPaySystemDriverService {
      * @throws              - RuntimeException в случае неуспешного завершения
      */
     PayResult execCancelPaybackRequest(in CancelPaybackRequest request) = 19;
+
+    /**
+     * Производит покупку у клиента на указанную сумму
+     */
+    PayResult execPayoutRequest(in PayoutRequest request) = 20;
+
+    /**
+     * Производит отмену покупки на указанную сумму
+     */
+    PayResult execCancelPayoutRequest(in CancelPayoutRequest request) = 21;
+
+
+    /**
+     * Производит возврат покупки у клиента на указанную сумму
+     */
+    PayResult execPayoutRevertRequest(in PayoutRevertRequest request) = 22;
+
+    /**
+     * Производит отмену возврата покупки на указанную сумму
+     */
+    PayResult execCancelPayoutRevertRequest(in CancelPayoutRevertRequest request) = 23;
+
 }
