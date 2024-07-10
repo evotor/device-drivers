@@ -73,6 +73,14 @@ interface EvoPayApi {
     long startReconcilation(/*nullable*/ String json) = 25;
 
     /**
+     * Запускает дополнительную операцию, определяемую параметрами @param(json) метода.
+     * Состав параметров зависит от операции.
+     * Возвращает id операции.
+     * Зарезервировано для будущего использования.
+     */
+    long startAdditionalOperation(/*notnull*/ String json) = 31;
+
+    /**
      * Получает @return(Operation) статус операции по её @param(operationId).
      */
     Operation getOperationResult(long operationId) = 51;
