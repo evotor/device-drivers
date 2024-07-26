@@ -54,6 +54,9 @@ interface StatusCallback {
      */
     const int STATUS_NETWORK_TRANSACTION = 0x08;
 
-
+    /**
+     * Транзакция завершена.
+     */
+    const int STATUS_TRANSACTION_FINISHED = 0x09;
 
 }
