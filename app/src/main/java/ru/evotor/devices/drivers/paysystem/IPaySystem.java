@@ -42,4 +42,6 @@ public interface IPaySystem {
     PayResult execPaybackRequest(PaybackRequest request);
 
     PayResult execCancelPaybackRequest(CancelPaybackRequest request);
+
+    void openCashierMenu();
 }
