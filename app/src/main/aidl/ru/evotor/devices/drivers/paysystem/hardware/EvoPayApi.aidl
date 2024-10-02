@@ -90,8 +90,9 @@ interface EvoPayApi {
      * Если транзакция в операции не начата, то сразу возвращает Cancelled.
      * Если транзакция в операции начата, то возвращает CANCEL_PLANNED и будет отменена автоматически после завершения транзакции.
      * Если транзакция в операции находится в финальном статусе (Finished/Cancel/NOT_FOUND), то вернётся текущий статус и автоматическая отмена произведена не будет.
+     * Может принимать дополнительные параметры в виде @param(json).
      */
-    Operation cancelOperation(long operationId) = 52;
+    Operation cancelOperation(long operationId, String json) = 52;
 
 
 
