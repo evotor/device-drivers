@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 import ru.evotor.devices.drivers.ParcelableUtils;
+import ru.evotor.devices.drivers.UuidValidationUtils;
 
 public class CashlessInfo implements Parcelable {
 
@@ -38,6 +39,7 @@ public class CashlessInfo implements Parcelable {
     }
 
     public CashlessInfo(@NotNull CashlessMethod method, @NotNull String description, @NotNull String uuid) {
+        UuidValidationUtils.checkUuid(uuid);
         this.method = method;
         this.description = description;
         this.uuid = uuid;
