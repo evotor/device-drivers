@@ -59,15 +59,7 @@ public class PayResult implements Parcelable {
     }
 
     public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip) {
-        this.resultCode = resultCode;
-        this.rrn = rrn;
-        this.slip = slip;
-        if (this.slip == null) {
-            slipLength = 0;
-        } else {
-            slipLength = slip.length;
-        }
-        this.extendedSlip = extendedSlip;
+        this(resultCode, rrn, slip, extendedSlip, null);
     }
 
     public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip, CashlessInfo cashlessInfo) {
