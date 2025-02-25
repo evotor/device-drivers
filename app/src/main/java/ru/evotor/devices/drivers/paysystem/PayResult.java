@@ -9,7 +9,7 @@ import ru.evotor.devices.drivers.ParcelableUtils;
 public class PayResult implements Parcelable {
 
     private static final String RESULT_CODE_SUCCESS = "0";
-    private static int VERSION = 3;
+    private static int VERSION = 4;
 
     /**
      * ррн проведённой операции
@@ -45,6 +45,12 @@ public class PayResult implements Parcelable {
 
     // VERSION == 4
     /**
+     * расширенная информация о способе безналичной оплаты
+     */
+    private CashlessInfo cashlessInfo = null;
+
+    // VERSION == 4
+    /**
      * состояние платежа
      */
     private Constants.PaymentState paymentState = null;
@@ -64,6 +70,10 @@ public class PayResult implements Parcelable {
     }
 
     public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip) {
+        this(resultCode, rrn, slip, extendedSlip, null);
+    }
+
+    public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip, CashlessInfo cashlessInfo) {
         this.resultCode = resultCode;
         this.rrn = rrn;
         this.slip = slip;
@@ -73,6 +83,7 @@ public class PayResult implements Parcelable {
             slipLength = slip.length;
         }
         this.extendedSlip = extendedSlip;
+        this.cashlessInfo = cashlessInfo;
     }
 
     public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip, Constants.PaymentState paymentState, String paymentSessionId) {
@@ -117,6 +128,10 @@ public class PayResult implements Parcelable {
         return paymentSessionId;
     }
 
+    public CashlessInfo getCashlessInfo() {
+        return cashlessInfo;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -136,6 +151,9 @@ public class PayResult implements Parcelable {
                 }
                 if (VERSION >= 3) {
                     parcel.writeString(extendedSlip);
+                }
+                if (VERSION >= 4) {
+                    parcel.writeParcelable(cashlessInfo, i);
                 }
                 if (VERSION >= 4) {
                     parcel.writeString(paymentState.name());
@@ -175,6 +193,9 @@ public class PayResult implements Parcelable {
             }
             if (currentVersion >= 3) {
                 extendedSlip = parcel1.readString();
+            }
+            if (currentVersion >= 4) {
+                cashlessInfo = parcel1.readParcelable(CashlessInfo.class.getClassLoader());
             }
             if (currentVersion >= 4) {
                 String paymentStateName = parcel1.readString();
