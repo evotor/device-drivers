@@ -3,6 +3,7 @@ package ru.evotor.devices.drivers.paysystem;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import ru.evotor.devices.drivers.Constants;
 import ru.evotor.devices.drivers.ParcelableUtils;
 
 public class PayResult implements Parcelable {
@@ -42,6 +43,16 @@ public class PayResult implements Parcelable {
      */
     private String extendedSlip = null;
 
+    // VERSION == 4
+    /**
+     * состояние платежа
+     */
+    private Constants.PaymentState paymentState = null;
+    /**
+     * id платёжной сессии, который надо будет передать при втором вызове оплаты для подтверждения платежа.
+     */
+    private String paymentSessionId = null;
+
     // Используйте конструктор PayResult(String resultCode, String rrn, String[] slip)
     @Deprecated
     public PayResult(String rrn, String[] slip) {
@@ -64,6 +75,20 @@ public class PayResult implements Parcelable {
         this.extendedSlip = extendedSlip;
     }
 
+    public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip, Constants.PaymentState paymentState, String paymentSessionId) {
+        this.resultCode = resultCode;
+        this.rrn = rrn;
+        this.slip = slip;
+        if (this.slip == null) {
+            slipLength = 0;
+        } else {
+            slipLength = slip.length;
+        }
+        this.extendedSlip = extendedSlip;
+        this.paymentState = paymentState;
+        this.paymentSessionId = paymentSessionId;
+    }
+
     public String getRrn() {
         return rrn;
     }
@@ -80,7 +105,17 @@ public class PayResult implements Parcelable {
         return resultCode;
     }
 
-    public String getExtendedSlip() { return extendedSlip; }
+    public String getExtendedSlip() {
+        return extendedSlip;
+    }
+
+    public Constants.PaymentState getPaymentState() {
+        return paymentState;
+    }
+
+    public String getPaymentSessionId() {
+        return paymentSessionId;
+    }
 
     @Override
     public int describeContents() {
@@ -101,6 +136,10 @@ public class PayResult implements Parcelable {
                 }
                 if (VERSION >= 3) {
                     parcel.writeString(extendedSlip);
+                }
+                if (VERSION >= 4) {
+                    parcel.writeString(paymentState.name());
+                    parcel.writeString(paymentSessionId);
                 }
             }
         });
@@ -136,6 +175,15 @@ public class PayResult implements Parcelable {
             }
             if (currentVersion >= 3) {
                 extendedSlip = parcel1.readString();
+            }
+            if (currentVersion >= 4) {
+                String paymentStateName = parcel1.readString();
+                if (paymentStateName != null) {
+                    paymentState = Constants.PaymentState.valueOf(paymentStateName);
+                } else {
+                    paymentState = null;
+                }
+                paymentSessionId = parcel1.readString();
             }
         });
     }
