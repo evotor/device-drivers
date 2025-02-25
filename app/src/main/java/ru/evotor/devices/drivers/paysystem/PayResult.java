@@ -9,7 +9,7 @@ import ru.evotor.devices.drivers.ParcelableUtils;
 public class PayResult implements Parcelable {
 
     private static final String RESULT_CODE_SUCCESS = "0";
-    private static int VERSION = 4;
+    private static int VERSION = 5;
 
     /**
      * ррн проведённой операции
@@ -49,7 +49,7 @@ public class PayResult implements Parcelable {
      */
     private CashlessInfo cashlessInfo = null;
 
-    // VERSION == 4
+    // VERSION == 5
     /**
      * состояние платежа
      */
@@ -86,7 +86,7 @@ public class PayResult implements Parcelable {
         this.cashlessInfo = cashlessInfo;
     }
 
-    public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip, Constants.PaymentState paymentState, String paymentSessionId) {
+    public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip, CashlessInfo cashlessInfo, Constants.PaymentState paymentState, String paymentSessionId) {
         this.resultCode = resultCode;
         this.rrn = rrn;
         this.slip = slip;
@@ -96,6 +96,7 @@ public class PayResult implements Parcelable {
             slipLength = slip.length;
         }
         this.extendedSlip = extendedSlip;
+        this.cashlessInfo = cashlessInfo;
         this.paymentState = paymentState;
         this.paymentSessionId = paymentSessionId;
     }
@@ -155,7 +156,7 @@ public class PayResult implements Parcelable {
                 if (VERSION >= 4) {
                     parcel.writeParcelable(cashlessInfo, i);
                 }
-                if (VERSION >= 4) {
+                if (VERSION >= 5) {
                     parcel.writeString(paymentState.name());
                     parcel.writeString(paymentSessionId);
                 }
@@ -197,7 +198,7 @@ public class PayResult implements Parcelable {
             if (currentVersion >= 4) {
                 cashlessInfo = parcel1.readParcelable(CashlessInfo.class.getClassLoader());
             }
-            if (currentVersion >= 4) {
+            if (currentVersion >= 5) {
                 String paymentStateName = parcel1.readString();
                 if (paymentStateName != null) {
                     paymentState = Constants.PaymentState.valueOf(paymentStateName);
