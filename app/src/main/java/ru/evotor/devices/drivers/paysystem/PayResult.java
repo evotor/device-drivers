@@ -8,7 +8,7 @@ import ru.evotor.devices.drivers.ParcelableUtils;
 public class PayResult implements Parcelable {
 
     private static final String RESULT_CODE_SUCCESS = "0";
-    private static int VERSION = 4;
+    private static int VERSION = 5;
 
     /**
      * ррн проведённой операции
@@ -48,6 +48,12 @@ public class PayResult implements Parcelable {
      */
     private CashlessInfo cashlessInfo = null;
 
+    // VERSION == 5
+    /**
+     * расширенная информация о транзакции
+     */
+    private AdditionalTransactionData additionalTransactionData = null;
+
     // Используйте конструктор PayResult(String resultCode, String rrn, String[] slip)
     @Deprecated
     public PayResult(String rrn, String[] slip) {
@@ -62,7 +68,24 @@ public class PayResult implements Parcelable {
         this(resultCode, rrn, slip, extendedSlip, null);
     }
 
-    public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip, CashlessInfo cashlessInfo) {
+    public PayResult(
+            String resultCode,
+            String rrn,
+            String[] slip,
+            String extendedSlip,
+            CashlessInfo cashlessInfo
+    ) {
+        this(resultCode, rrn, slip, extendedSlip, cashlessInfo, null);
+    }
+
+    public PayResult(
+            String resultCode,
+            String rrn,
+            String[] slip,
+            String extendedSlip,
+            CashlessInfo cashlessInfo,
+            AdditionalTransactionData additionalTransactionData
+    ) {
         this.resultCode = resultCode;
         this.rrn = rrn;
         this.slip = slip;
@@ -73,6 +96,7 @@ public class PayResult implements Parcelable {
         }
         this.extendedSlip = extendedSlip;
         this.cashlessInfo = cashlessInfo;
+        this.additionalTransactionData = additionalTransactionData;
     }
 
     public String getRrn() {
@@ -97,6 +121,10 @@ public class PayResult implements Parcelable {
         return cashlessInfo;
     }
 
+    public AdditionalTransactionData getAdditionalTransactionData() {
+        return additionalTransactionData;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -119,6 +147,9 @@ public class PayResult implements Parcelable {
                 }
                 if (VERSION >= 4) {
                     parcel.writeParcelable(cashlessInfo, i);
+                }
+                if (VERSION >= 5) {
+                    parcel.writeParcelable(additionalTransactionData, i);
                 }
             }
         });
@@ -157,6 +188,9 @@ public class PayResult implements Parcelable {
             }
             if (currentVersion >= 4) {
                 cashlessInfo = parcel1.readParcelable(CashlessInfo.class.getClassLoader());
+            }
+            if (currentVersion >= 5) {
+                additionalTransactionData = parcel1.readParcelable(AdditionalTransactionData.class.getClassLoader());
             }
         });
     }
