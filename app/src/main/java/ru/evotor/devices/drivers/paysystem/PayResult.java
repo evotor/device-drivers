@@ -157,7 +157,11 @@ public class PayResult implements Parcelable {
                     parcel.writeParcelable(cashlessInfo, i);
                 }
                 if (VERSION >= 5) {
-                    parcel.writeString(paymentState.name());
+                    if (paymentState != null){
+                        parcel.writeString(paymentState.name());
+                    } else {
+                        parcel.writeString(null);
+                    }
                     parcel.writeString(paymentSessionId);
                 }
             }
