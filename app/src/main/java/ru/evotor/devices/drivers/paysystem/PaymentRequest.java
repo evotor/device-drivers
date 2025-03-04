@@ -13,24 +13,24 @@ public class PaymentRequest implements Parcelable {
     /**
      * Идентификатор устройства
      */
-    private final int instanceId;
+    private int instanceId;
 
     /**
      * Сумма
      */
-    private final BigDecimal sum;
+    private BigDecimal sum;
 
     /**
      * Дата, до которой актуален запрос
      * Может быть null
      */
-    private final Date expiredAt;
+    private Date expiredAt;
 
     /**
      * Дополнительное описание операции
      * Может быть null
      */
-    private final String additionalDescription;
+    private String additionalDescription;
 
     // VERSION = 2
     /**
@@ -114,13 +114,22 @@ public class PaymentRequest implements Parcelable {
     }
 
     private PaymentRequest(Parcel parcel) {
-        instanceId = parcel.readInt();
-        sum = new BigDecimal(parcel.readString());
-        expiredAt = (Date) parcel.readSerializable();
-        additionalDescription = parcel.readString();
-        ParcelableUtils.readExpand(parcel, VERSION, (parcel1, currentVersion) -> {
-            if (currentVersion >= 2) {
-                paymentSessionId = parcel1.readString();
+        ParcelableUtils.readExpandData(parcel, VERSION, (parcel1, currentVersion) -> {
+            if (currentVersion == 1){
+                return new PaymentRequest(
+                        parcel1.readInt(),
+                        new BigDecimal(parcel1.readString()),
+                        (Date) parcel1.readSerializable(),
+                        parcel1.readString()
+                );
+            } else {
+                return new PaymentRequest(
+                        parcel1.readInt(),
+                        new BigDecimal(parcel1.readString()),
+                        (Date) parcel1.readSerializable(),
+                        parcel1.readString(),
+                        parcel1.readString()
+                );
             }
         });
     }
