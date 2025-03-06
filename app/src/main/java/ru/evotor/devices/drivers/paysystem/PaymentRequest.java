@@ -80,16 +80,22 @@ public class PaymentRequest implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         ParcelableUtils.writeExpand(parcel, VERSION, parcel1 -> {
-                parcel1.writeInt(instanceId);
-                parcel1.writeString(sum.toPlainString());
-                parcel1.writeSerializable(expiredAt);
-                parcel1.writeString(additionalDescription);
-                parcel1.writeString(paymentSessionId);
+            parcel1.writeInt(instanceId);
+            parcel1.writeString(sum.toPlainString());
+            parcel1.writeSerializable(expiredAt);
+            parcel1.writeString(additionalDescription);
+            parcel1.writeString(paymentSessionId);
         });
     }
 
     private PaymentRequest(Parcel parcel) {
-        ParcelableUtils.readExpandData(parcel, VERSION, (parcel1, currentVersion) -> new PaymentRequest(parcel1.readInt(), new BigDecimal(parcel1.readString()), (Date) parcel1.readSerializable(), parcel1.readString(), parcel1.readString()));
+        ParcelableUtils.readExpand(parcel, VERSION, (parcel1, currentVersion) -> {
+            instanceId = parcel1.readInt();
+            sum = new BigDecimal(parcel1.readString());
+            expiredAt = (Date) parcel1.readSerializable();
+            additionalDescription = parcel1.readString();
+            paymentSessionId = parcel1.readString();
+        });
     }
 
     public static final Creator<PaymentRequest> CREATOR = new Creator<PaymentRequest>() {
