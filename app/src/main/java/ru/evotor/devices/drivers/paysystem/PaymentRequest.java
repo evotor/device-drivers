@@ -9,7 +9,7 @@ import java.util.Date;
 import ru.evotor.devices.drivers.ParcelableUtils;
 
 public class PaymentRequest implements Parcelable {
-    private static final int VERSION = 2;
+    private static final int VERSION = 1;
     /**
      * Идентификатор устройства
      */
@@ -37,27 +37,6 @@ public class PaymentRequest implements Parcelable {
      * id платёжной сессии для подтверждения платежа в состоянии NEED_CONFIRMATION
      */
     private String paymentSessionId = null;
-
-    // Используйте конструктор
-    // public PaymentRequest(
-    //            int instanceId,
-    //            BigDecimal sum,
-    //            Date expiredAt,
-    //            String additionalDescription,
-    //            @Nullable String paymentSessionId
-    //)
-    @Deprecated
-    public PaymentRequest(
-            int instanceId,
-            BigDecimal sum,
-            Date expiredAt,
-            String additionalDescription
-    ) {
-        this.instanceId = instanceId;
-        this.sum = sum;
-        this.expiredAt = expiredAt;
-        this.additionalDescription = additionalDescription;
-    }
 
     public PaymentRequest(
             int instanceId,
@@ -101,37 +80,16 @@ public class PaymentRequest implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         ParcelableUtils.writeExpand(parcel, VERSION, parcel1 -> {
-            if (VERSION >= 1) {
                 parcel1.writeInt(instanceId);
                 parcel1.writeString(sum.toPlainString());
                 parcel1.writeSerializable(expiredAt);
                 parcel1.writeString(additionalDescription);
-            }
-            if (VERSION >= 2) {
                 parcel1.writeString(paymentSessionId);
-            }
         });
     }
 
     private PaymentRequest(Parcel parcel) {
-        ParcelableUtils.readExpandData(parcel, VERSION, (parcel1, currentVersion) -> {
-            if (currentVersion == 1){
-                return new PaymentRequest(
-                        parcel1.readInt(),
-                        new BigDecimal(parcel1.readString()),
-                        (Date) parcel1.readSerializable(),
-                        parcel1.readString()
-                );
-            } else {
-                return new PaymentRequest(
-                        parcel1.readInt(),
-                        new BigDecimal(parcel1.readString()),
-                        (Date) parcel1.readSerializable(),
-                        parcel1.readString(),
-                        parcel1.readString()
-                );
-            }
-        });
+        ParcelableUtils.readExpandData(parcel, VERSION, (parcel1, currentVersion) -> new PaymentRequest(parcel1.readInt(), new BigDecimal(parcel1.readString()), (Date) parcel1.readSerializable(), parcel1.readString(), parcel1.readString()));
     }
 
     public static final Creator<PaymentRequest> CREATOR = new Creator<PaymentRequest>() {
