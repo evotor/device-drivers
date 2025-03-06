@@ -9,7 +9,7 @@ import java.util.Date;
 import ru.evotor.devices.drivers.ParcelableUtils;
 
 public class PaymentRequest implements Parcelable {
-    private static final int VERSION = 1;
+    private static final int VERSION = 2;
     /**
      * Идентификатор устройства
      */
@@ -37,6 +37,27 @@ public class PaymentRequest implements Parcelable {
      * id платёжной сессии для подтверждения платежа в состоянии NEED_CONFIRMATION
      */
     private String paymentSessionId = null;
+
+    // Используйте конструктор
+    // public PaymentRequest(
+    //            int instanceId,
+    //            BigDecimal sum,
+    //            Date expiredAt,
+    //            String additionalDescription,
+    //            @Nullable String paymentSessionId
+    //)
+    @Deprecated
+    public PaymentRequest(
+            int instanceId,
+            BigDecimal sum,
+            Date expiredAt,
+            String additionalDescription
+    ) {
+        this.instanceId = instanceId;
+        this.sum = sum;
+        this.expiredAt = expiredAt;
+        this.additionalDescription = additionalDescription;
+    }
 
     public PaymentRequest(
             int instanceId,
@@ -80,11 +101,15 @@ public class PaymentRequest implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         ParcelableUtils.writeExpand(parcel, VERSION, parcel1 -> {
-            parcel1.writeInt(instanceId);
-            parcel1.writeString(sum.toPlainString());
-            parcel1.writeSerializable(expiredAt);
-            parcel1.writeString(additionalDescription);
-            parcel1.writeString(paymentSessionId);
+            if (VERSION >= 1) {
+                parcel1.writeInt(instanceId);
+                parcel1.writeString(sum.toPlainString());
+                parcel1.writeSerializable(expiredAt);
+                parcel1.writeString(additionalDescription);
+            }
+            if (VERSION >= 2) {
+                parcel1.writeString(paymentSessionId);
+            }
         });
     }
 
@@ -94,7 +119,9 @@ public class PaymentRequest implements Parcelable {
             sum = new BigDecimal(parcel1.readString());
             expiredAt = (Date) parcel1.readSerializable();
             additionalDescription = parcel1.readString();
-            paymentSessionId = parcel1.readString();
+            if (currentVersion >= 2) {
+                paymentSessionId = parcel1.readString();
+            }
         });
     }
 
