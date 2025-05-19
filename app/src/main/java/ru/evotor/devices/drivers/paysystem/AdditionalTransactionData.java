@@ -15,21 +15,21 @@ public class AdditionalTransactionData implements Parcelable {
     private static final int VERSION = 2;
 
     @Nullable
-    private String tid;
+    private final String tid;
 
-    private long initialDatetime;
-
-    @NotNull
-    private String paymentSystemCode;
+    private final long initialDatetime;
 
     @NotNull
-    private String acquiringBankCode;
+    private final String paymentSystemCode;
 
     @NotNull
-    private String authorizationCode;
+    private final String acquiringBankCode;
+
+    @NotNull
+    private final String authorizationCode;
 
     @Nullable
-    private String transactionId;
+    private final String transactionId;
 
     public AdditionalTransactionData(
             @Nullable String tid,
@@ -91,7 +91,7 @@ public class AdditionalTransactionData implements Parcelable {
     public static final Creator<AdditionalTransactionData> CREATOR = new Creator<AdditionalTransactionData>() {
 
         public AdditionalTransactionData createFromParcel(Parcel in) {
-            return new AdditionalTransactionData(in);
+            return create(in);
         }
 
         public AdditionalTransactionData[] newArray(int size) {
@@ -99,17 +99,20 @@ public class AdditionalTransactionData implements Parcelable {
         }
     };
 
-    private AdditionalTransactionData(Parcel parcel) {
-        ParcelableUtils.readExpand(parcel, VERSION, (parcel1, currentVersion) -> {
+    private static AdditionalTransactionData create(Parcel parcel) {
+        return ParcelableUtils.readExpandData(parcel, VERSION, (parcel1, currentVersion) -> {
             if (currentVersion >= 2) {
-                tid = parcel1.readString();
-                initialDatetime = parcel1.readLong();
-                paymentSystemCode = Objects.requireNonNull(parcel1.readString());
-                acquiringBankCode = Objects.requireNonNull(parcel1.readString());
-                authorizationCode = Objects.requireNonNull(parcel1.readString());
-                transactionId = parcel1.readString();
+                return new AdditionalTransactionData(
+                        parcel1.readString(),
+                        parcel1.readLong(),
+                        Objects.requireNonNull(parcel1.readString()),
+                        Objects.requireNonNull(parcel1.readString()),
+                        Objects.requireNonNull(parcel1.readString()),
+                        parcel1.readString()
+                );
+            } else {
+                return null;
             }
         });
     }
-
 }
