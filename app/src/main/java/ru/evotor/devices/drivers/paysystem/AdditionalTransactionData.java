@@ -12,55 +12,63 @@ import ru.evotor.devices.drivers.ParcelableUtils;
 
 public class AdditionalTransactionData implements Parcelable {
 
-    private static final int VERSION = 1;
-
-    @NotNull
-    private final String tid;
+    private static final int VERSION = 2;
 
     @Nullable
-    private final String inn;
+    private final String tid;
+
+    private final long initialDatetime;
 
     @NotNull
-    private final String primaryAccountNumber;
+    private final String paymentSystemCode;
 
     @NotNull
-    private final String issuerBik;
+    private final String acquiringBankCode;
 
     @NotNull
-    private final String issuerTransactionNumber;
+    private final String authorizationCode;
+
+    @Nullable
+    private final String transactionId;
 
     public AdditionalTransactionData(
-            @NotNull String tid,
-            @Nullable String inn,
-            @NotNull String primaryAccountNumber,
-            @NotNull String issuerBik,
-            @NotNull String issuerTransactionNumber
+            @Nullable String tid,
+            long initialDatetime,
+            @NotNull String paymentSystemCode,
+            @NotNull String acquiringBankCode,
+            @NotNull String authorizationCode,
+            @Nullable String transactionId
     ) {
         this.tid = tid;
-        this.inn = inn;
-        this.primaryAccountNumber = primaryAccountNumber;
-        this.issuerBik = issuerBik;
-        this.issuerTransactionNumber = issuerTransactionNumber;
+        this.initialDatetime = initialDatetime;
+        this.paymentSystemCode = paymentSystemCode;
+        this.acquiringBankCode = acquiringBankCode;
+        this.authorizationCode = authorizationCode;
+        this.transactionId = transactionId;
     }
 
     public String getTid() {
         return tid;
     }
 
-    public String getInn() {
-        return inn;
+    public long getInitialDatetime() {
+        return initialDatetime;
     }
 
-    public String getPrimaryAccountNumber() {
-        return primaryAccountNumber;
+    public String getPaymentSystemCode() {
+        return paymentSystemCode;
     }
 
-    public String getIssuerBik() {
-        return issuerBik;
+    public String getAcquiringBankCode() {
+        return acquiringBankCode;
     }
 
-    public String getIssuerTransactionNumber() {
-        return issuerTransactionNumber;
+    public String getAuthorizationCode() {
+        return authorizationCode;
+    }
+
+    public String getTransactionId() {
+        return transactionId;
     }
 
     @Override
@@ -70,22 +78,20 @@ public class AdditionalTransactionData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int i) {
-        dest.writeString(tid);
-        dest.writeString(inn);
-        dest.writeString(primaryAccountNumber);
-        dest.writeString(issuerBik);
-        dest.writeString(issuerTransactionNumber);
         ParcelableUtils.writeExpand(dest, VERSION, parcel -> {
-            if (VERSION >= 1) {
-                // nothing
-            }
+            dest.writeString(tid);
+            dest.writeLong(initialDatetime);
+            dest.writeString(paymentSystemCode);
+            dest.writeString(acquiringBankCode);
+            dest.writeString(authorizationCode);
+            dest.writeString(transactionId);
         });
     }
 
     public static final Creator<AdditionalTransactionData> CREATOR = new Creator<AdditionalTransactionData>() {
 
         public AdditionalTransactionData createFromParcel(Parcel in) {
-            return new AdditionalTransactionData(in);
+            return create(in);
         }
 
         public AdditionalTransactionData[] newArray(int size) {
@@ -93,18 +99,20 @@ public class AdditionalTransactionData implements Parcelable {
         }
     };
 
-    private AdditionalTransactionData(Parcel parcel) {
-        tid = Objects.requireNonNull(parcel.readString());
-        inn = parcel.readString();
-        primaryAccountNumber = Objects.requireNonNull(parcel.readString());
-        issuerBik = Objects.requireNonNull(parcel.readString());
-        issuerTransactionNumber = Objects.requireNonNull(parcel.readString());
-
-        ParcelableUtils.readExpand(parcel, VERSION, (parcel1, currentVersion) -> {
-            if (currentVersion >= 1) {
-                // nothing
+    private static AdditionalTransactionData create(Parcel parcel) {
+        return ParcelableUtils.readExpandData(parcel, VERSION, (parcel1, currentVersion) -> {
+            if (currentVersion >= 2) {
+                return new AdditionalTransactionData(
+                        parcel1.readString(),
+                        parcel1.readLong(),
+                        Objects.requireNonNull(parcel1.readString()),
+                        Objects.requireNonNull(parcel1.readString()),
+                        Objects.requireNonNull(parcel1.readString()),
+                        parcel1.readString()
+                );
+            } else {
+                return null;
             }
         });
     }
-
 }
