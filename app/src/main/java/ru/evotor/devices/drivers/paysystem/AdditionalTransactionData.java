@@ -105,6 +105,11 @@ public class AdditionalTransactionData implements Parcelable {
     };
 
     private static AdditionalTransactionData create(Parcel parcel) {
+        parcel.readString(); // fake tid
+        parcel.readString(); // fake inn
+        parcel.readString(); // fake primaryAccountNumber
+        parcel.readString(); // fake issuerBik
+        parcel.readString(); // fake issuerTransactionNumber
         return ParcelableUtils.readExpandData(parcel, VERSION, (parcel1, currentVersion) -> {
             if (currentVersion >= 2) {
                 return new AdditionalTransactionData(
