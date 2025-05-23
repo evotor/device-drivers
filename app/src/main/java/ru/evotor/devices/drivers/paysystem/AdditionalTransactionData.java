@@ -78,6 +78,11 @@ public class AdditionalTransactionData implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int i) {
+        dest.writeString(""); // fake tid
+        dest.writeString(""); // fake inn
+        dest.writeString(""); // fake primaryAccountNumber
+        dest.writeString(""); // fake issuerBik
+        dest.writeString(""); // fake issuerTransactionNumber
         ParcelableUtils.writeExpand(dest, VERSION, parcel -> {
             dest.writeString(tid);
             dest.writeLong(initialDatetime);
@@ -100,6 +105,11 @@ public class AdditionalTransactionData implements Parcelable {
     };
 
     private static AdditionalTransactionData create(Parcel parcel) {
+        parcel.readString(); // fake tid
+        parcel.readString(); // fake inn
+        parcel.readString(); // fake primaryAccountNumber
+        parcel.readString(); // fake issuerBik
+        parcel.readString(); // fake issuerTransactionNumber
         return ParcelableUtils.readExpandData(parcel, VERSION, (parcel1, currentVersion) -> {
             if (currentVersion >= 2) {
                 return new AdditionalTransactionData(
