@@ -51,6 +51,12 @@ public class PayResult implements Parcelable {
 
     // VERSION == 5
     /**
+     * расширенная информация о транзакции
+     */
+    private AdditionalTransactionData additionalTransactionData = null;
+
+    // VERSION == 5
+    /**
      * состояние платежа
      */
     private Constants.PaymentState paymentState = null;
@@ -73,7 +79,24 @@ public class PayResult implements Parcelable {
         this(resultCode, rrn, slip, extendedSlip, null);
     }
 
-    public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip, CashlessInfo cashlessInfo) {
+    public PayResult(
+            String resultCode,
+            String rrn,
+            String[] slip,
+            String extendedSlip,
+            CashlessInfo cashlessInfo
+    ) {
+        this(resultCode, rrn, slip, extendedSlip, cashlessInfo, null);
+    }
+
+    public PayResult(
+            String resultCode,
+            String rrn,
+            String[] slip,
+            String extendedSlip,
+            CashlessInfo cashlessInfo,
+            AdditionalTransactionData additionalTransactionData
+    ) {
         this.resultCode = resultCode;
         this.rrn = rrn;
         this.slip = slip;
@@ -84,6 +107,7 @@ public class PayResult implements Parcelable {
         }
         this.extendedSlip = extendedSlip;
         this.cashlessInfo = cashlessInfo;
+        this.additionalTransactionData = additionalTransactionData;
     }
 
     public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip, CashlessInfo cashlessInfo, Constants.PaymentState paymentState, String paymentSessionId) {
@@ -133,6 +157,10 @@ public class PayResult implements Parcelable {
         return cashlessInfo;
     }
 
+    public AdditionalTransactionData getAdditionalTransactionData() {
+        return additionalTransactionData;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -155,6 +183,9 @@ public class PayResult implements Parcelable {
                 }
                 if (VERSION >= 4) {
                     parcel.writeParcelable(cashlessInfo, i);
+                }
+                if (VERSION >= 5) {
+                    parcel.writeParcelable(additionalTransactionData, i);
                 }
                 if (VERSION >= 5) {
                     if (paymentState != null){
@@ -201,6 +232,9 @@ public class PayResult implements Parcelable {
             }
             if (currentVersion >= 4) {
                 cashlessInfo = parcel1.readParcelable(CashlessInfo.class.getClassLoader());
+            }
+            if (currentVersion >= 5) {
+                additionalTransactionData = parcel1.readParcelable(AdditionalTransactionData.class.getClassLoader());
             }
             if (currentVersion >= 5) {
                 String paymentStateName = parcel1.readString();
