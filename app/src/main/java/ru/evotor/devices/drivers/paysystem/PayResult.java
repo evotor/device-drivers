@@ -55,7 +55,7 @@ public class PayResult implements Parcelable {
      */
     private AdditionalTransactionData additionalTransactionData = null;
 
-    // VERSION == 5
+    // VERSION == 6
     /**
      * состояние платежа
      */
@@ -187,7 +187,7 @@ public class PayResult implements Parcelable {
                 if (VERSION >= 5) {
                     parcel.writeParcelable(additionalTransactionData, i);
                 }
-                if (VERSION >= 5) {
+                if (VERSION >= 6) {
                     if (paymentState != null){
                         parcel.writeString(paymentState.name());
                     } else {
@@ -236,7 +236,7 @@ public class PayResult implements Parcelable {
             if (currentVersion >= 5) {
                 additionalTransactionData = parcel1.readParcelable(AdditionalTransactionData.class.getClassLoader());
             }
-            if (currentVersion >= 5) {
+            if (currentVersion >= 6) {
                 String paymentStateName = parcel1.readString();
                 if (paymentStateName != null) {
                     paymentState = Constants.PaymentState.valueOf(paymentStateName);
