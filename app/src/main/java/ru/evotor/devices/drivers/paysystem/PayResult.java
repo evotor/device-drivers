@@ -9,7 +9,7 @@ import ru.evotor.devices.drivers.ParcelableUtils;
 public class PayResult implements Parcelable {
 
     private static final String RESULT_CODE_SUCCESS = "0";
-    private static int VERSION = 6;
+    private static int VERSION = 5;
 
     /**
      * ррн проведённой операции
@@ -65,11 +65,6 @@ public class PayResult implements Parcelable {
      */
     private String paymentSessionId = null;
 
-    /**
-     * маскированный PAN карты при безналичной оплате
-     */
-    private String cardPan = null;
-
     // Используйте конструктор PayResult(String resultCode, String rrn, String[] slip)
     @Deprecated
     public PayResult(String rrn, String[] slip) {
@@ -116,10 +111,6 @@ public class PayResult implements Parcelable {
     }
 
     public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip, CashlessInfo cashlessInfo, Constants.PaymentState paymentState, String paymentSessionId) {
-        this(resultCode, rrn, slip, extendedSlip, cashlessInfo, paymentState, paymentSessionId, null);
-    }
-
-    public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip, CashlessInfo cashlessInfo, Constants.PaymentState paymentState, String paymentSessionId, String cardPan) {
         this.resultCode = resultCode;
         this.rrn = rrn;
         this.slip = slip;
@@ -132,7 +123,6 @@ public class PayResult implements Parcelable {
         this.cashlessInfo = cashlessInfo;
         this.paymentState = paymentState;
         this.paymentSessionId = paymentSessionId;
-        this.cardPan = cardPan;
     }
 
     public String getRrn() {
@@ -161,10 +151,6 @@ public class PayResult implements Parcelable {
 
     public String getPaymentSessionId() {
         return paymentSessionId;
-    }
-
-    public String getCardPan() {
-        return cardPan;
     }
 
     public CashlessInfo getCashlessInfo() {
@@ -208,7 +194,6 @@ public class PayResult implements Parcelable {
                         parcel.writeString(null);
                     }
                     parcel.writeString(paymentSessionId);
-                    parcel.writeString(cardPan);
                 }
             }
         });
@@ -259,7 +244,6 @@ public class PayResult implements Parcelable {
                     paymentState = null;
                 }
                 paymentSessionId = parcel1.readString();
-                cardPan = parcel1.readString();
             }
         });
     }
