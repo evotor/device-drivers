@@ -37,6 +37,10 @@ public class PaymentRequest implements Parcelable {
      * id платёжной сессии для подтверждения платежа в состоянии NEED_CONFIRMATION
      */
     private String paymentSessionId = null;
+    /**
+     * id карты лояльности для передачи его в фабрику СБЕРа (только для платежа в состоянии NEED_CONFIRMATION)
+     */
+    private String loyaltyCardId = null;
 
     // Используйте конструктор
     // public PaymentRequest(
@@ -71,6 +75,7 @@ public class PaymentRequest implements Parcelable {
         this.expiredAt = expiredAt;
         this.additionalDescription = additionalDescription;
         this.paymentSessionId = paymentSessionId;
+        this.loyaltyCardId = loyaltyCardId;
     }
 
     public int getInstanceId() {
@@ -92,6 +97,9 @@ public class PaymentRequest implements Parcelable {
     public String getPaymentSessionId() {
         return paymentSessionId;
     }
+    public String getLoyaltyCardId() {
+        return loyaltyCardId;
+    }
 
     @Override
     public int describeContents() {
@@ -109,6 +117,7 @@ public class PaymentRequest implements Parcelable {
             }
             if (VERSION >= 2) {
                 parcel1.writeString(paymentSessionId);
+                parcel1.writeString(loyaltyCardId);
             }
         });
     }
@@ -121,6 +130,7 @@ public class PaymentRequest implements Parcelable {
             additionalDescription = parcel1.readString();
             if (currentVersion >= 2) {
                 paymentSessionId = parcel1.readString();
+                loyaltyCardId = parcel1.readString();
             }
         });
     }

@@ -64,6 +64,10 @@ public class PayResult implements Parcelable {
      * id платёжной сессии, который надо будет передать при втором вызове оплаты для подтверждения платежа.
      */
     private String paymentSessionId = null;
+    /**
+     * id платёжной сессии, который надо будет передать при втором вызове оплаты для подтверждения платежа.
+     */
+    private String loyaltyCardId = null;
 
     // Используйте конструктор PayResult(String resultCode, String rrn, String[] slip)
     @Deprecated
@@ -110,7 +114,7 @@ public class PayResult implements Parcelable {
         this.additionalTransactionData = additionalTransactionData;
     }
 
-    public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip, CashlessInfo cashlessInfo, Constants.PaymentState paymentState, String paymentSessionId) {
+    public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip, CashlessInfo cashlessInfo, Constants.PaymentState paymentState, String paymentSessionId, String loyaltyCardId) {
         this.resultCode = resultCode;
         this.rrn = rrn;
         this.slip = slip;
@@ -123,6 +127,7 @@ public class PayResult implements Parcelable {
         this.cashlessInfo = cashlessInfo;
         this.paymentState = paymentState;
         this.paymentSessionId = paymentSessionId;
+        this.loyaltyCardId = loyaltyCardId;
     }
 
     public String getRrn() {
@@ -151,6 +156,10 @@ public class PayResult implements Parcelable {
 
     public String getPaymentSessionId() {
         return paymentSessionId;
+    }
+
+    public String getLoyaltyCardId() {
+        return loyaltyCardId;
     }
 
     public CashlessInfo getCashlessInfo() {
@@ -194,6 +203,7 @@ public class PayResult implements Parcelable {
                         parcel.writeString(null);
                     }
                     parcel.writeString(paymentSessionId);
+                    parcel.writeString(loyaltyCardId);
                 }
             }
         });
@@ -244,6 +254,7 @@ public class PayResult implements Parcelable {
                     paymentState = null;
                 }
                 paymentSessionId = parcel1.readString();
+                loyaltyCardId = parcel1.readString();
             }
         });
     }
