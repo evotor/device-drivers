@@ -68,7 +68,8 @@ public class PaymentRequest implements Parcelable {
             BigDecimal sum,
             Date expiredAt,
             String additionalDescription,
-            String paymentSessionId
+            String paymentSessionId,
+            String loyaltyCardId
     ) {
         this.instanceId = instanceId;
         this.sum = sum;
