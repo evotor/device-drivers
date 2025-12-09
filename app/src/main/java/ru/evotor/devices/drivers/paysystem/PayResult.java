@@ -9,7 +9,7 @@ import ru.evotor.devices.drivers.ParcelableUtils;
 public class PayResult implements Parcelable {
 
     private static final String RESULT_CODE_SUCCESS = "0";
-    private static int VERSION = 5;
+    private static int VERSION = 7;
 
     /**
      * ррн проведённой операции
@@ -56,6 +56,15 @@ public class PayResult implements Parcelable {
     private AdditionalTransactionData additionalTransactionData = null;
 
     // VERSION == 6
+    private String maskedPan;
+
+    private CardType cardType;
+
+    private String stan;
+
+    private String authCode;
+
+    // VERSION == 7
     /**
      * состояние платежа
      */
@@ -197,6 +206,12 @@ public class PayResult implements Parcelable {
                     parcel.writeParcelable(additionalTransactionData, i);
                 }
                 if (VERSION >= 6) {
+                    parcel.writeString(maskedPan);
+                    parcel.writeString(cardType.card);
+                    parcel.writeString(stan);
+                    parcel.writeString(authCode);
+                }
+                if (VERSION >= 7) {
                     if (paymentState != null){
                         parcel.writeString(paymentState.name());
                     } else {
@@ -247,6 +262,12 @@ public class PayResult implements Parcelable {
                 additionalTransactionData = parcel1.readParcelable(AdditionalTransactionData.class.getClassLoader());
             }
             if (currentVersion >= 6) {
+                maskedPan = parcel1.readString();
+                cardType = CardType.fromName(parcel1.readString(), CardType.UNKNOWN);
+                stan = parcel.readString();
+                authCode = parcel.readString();
+            }
+            if (currentVersion >= 7) {
                 String paymentStateName = parcel1.readString();
                 if (paymentStateName != null) {
                     paymentState = Constants.PaymentState.valueOf(paymentStateName);
