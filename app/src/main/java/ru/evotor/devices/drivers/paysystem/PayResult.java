@@ -123,7 +123,18 @@ public class PayResult implements Parcelable {
         this.additionalTransactionData = additionalTransactionData;
     }
 
-    public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip, CashlessInfo cashlessInfo, Constants.PaymentState paymentState, String paymentSessionId, String loyaltyCardId) {
+    public PayResult(
+            String resultCode,
+            String rrn,
+            String[] slip,
+            String extendedSlip,
+            CashlessInfo cashlessInfo,
+            AdditionalTransactionData additionalTransactionData,
+            String maskedPan,
+            CardType cardType,
+            String stan,
+            String authCode
+    ) {
         this.resultCode = resultCode;
         this.rrn = rrn;
         this.slip = slip;
@@ -134,6 +145,43 @@ public class PayResult implements Parcelable {
         }
         this.extendedSlip = extendedSlip;
         this.cashlessInfo = cashlessInfo;
+        this.additionalTransactionData = additionalTransactionData;
+        this.maskedPan = maskedPan;
+        this.cardType = cardType;
+        this.stan = stan;
+        this.authCode = authCode;
+    }
+
+    public PayResult(
+            String resultCode,
+            String rrn,
+            String[] slip,
+            String extendedSlip,
+            CashlessInfo cashlessInfo,
+            AdditionalTransactionData additionalTransactionData,
+            String maskedPan,
+            CardType cardType,
+            String stan,
+            String authCode,
+            Constants.PaymentState paymentState,
+            String paymentSessionId,
+            String loyaltyCardId
+    ) {
+        this.resultCode = resultCode;
+        this.rrn = rrn;
+        this.slip = slip;
+        if (this.slip == null) {
+            slipLength = 0;
+        } else {
+            slipLength = slip.length;
+        }
+        this.extendedSlip = extendedSlip;
+        this.cashlessInfo = cashlessInfo;
+        this.additionalTransactionData = additionalTransactionData;
+        this.maskedPan = maskedPan;
+        this.cardType = cardType;
+        this.stan = stan;
+        this.authCode = authCode;
         this.paymentState = paymentState;
         this.paymentSessionId = paymentSessionId;
         this.loyaltyCardId = loyaltyCardId;
