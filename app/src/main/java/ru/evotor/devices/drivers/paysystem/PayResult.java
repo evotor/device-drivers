@@ -130,33 +130,6 @@ public class PayResult implements Parcelable {
             String extendedSlip,
             CashlessInfo cashlessInfo,
             AdditionalTransactionData additionalTransactionData,
-            Constants.PaymentState paymentState,
-            String paymentSessionId,
-            String loyaltyCardId
-    ) {
-        this.resultCode = resultCode;
-        this.rrn = rrn;
-        this.slip = slip;
-        if (this.slip == null) {
-            slipLength = 0;
-        } else {
-            slipLength = slip.length;
-        }
-        this.extendedSlip = extendedSlip;
-        this.cashlessInfo = cashlessInfo;
-        this.additionalTransactionData = additionalTransactionData;
-        this.paymentState = paymentState;
-        this.paymentSessionId = paymentSessionId;
-        this.loyaltyCardId = loyaltyCardId;
-    }
-
-    public PayResult(
-            String resultCode,
-            String rrn,
-            String[] slip,
-            String extendedSlip,
-            CashlessInfo cashlessInfo,
-            AdditionalTransactionData additionalTransactionData,
             String maskedPan,
             CardType cardType,
             String stan,
