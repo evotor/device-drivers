@@ -41,6 +41,14 @@ public class PaymentRequest implements Parcelable {
      * id карты лояльности для передачи его в фабрику СБЕРа (только для платежа в состоянии NEED_CONFIRMATION)
      */
     private String loyaltyCardId = null;
+    /**
+     * Сумма начисленных бонусов для отображения ее экране пинпада
+     */
+    private BigDecimal earnedBonus = BigDecimal.ZERO;
+    /**
+     * Сумма потраченных бонусов для отображения ее экране пинпада
+     */
+    private BigDecimal spentBonus = BigDecimal.ZERO;
 
     // Используйте конструктор
     // public PaymentRequest(
@@ -69,7 +77,9 @@ public class PaymentRequest implements Parcelable {
             Date expiredAt,
             String additionalDescription,
             String paymentSessionId,
-            String loyaltyCardId
+            String loyaltyCardId,
+            BigDecimal earnedBonus,
+            BigDecimal spentBonus
     ) {
         this.instanceId = instanceId;
         this.sum = sum;
@@ -77,6 +87,8 @@ public class PaymentRequest implements Parcelable {
         this.additionalDescription = additionalDescription;
         this.paymentSessionId = paymentSessionId;
         this.loyaltyCardId = loyaltyCardId;
+        this.earnedBonus = earnedBonus;
+        this.spentBonus = spentBonus;
     }
 
     public int getInstanceId() {
@@ -98,8 +110,17 @@ public class PaymentRequest implements Parcelable {
     public String getPaymentSessionId() {
         return paymentSessionId;
     }
+
     public String getLoyaltyCardId() {
         return loyaltyCardId;
+    }
+
+    public BigDecimal getEarnedBonus() {
+        return earnedBonus;
+    }
+
+    public BigDecimal getSpentBonus() {
+        return spentBonus;
     }
 
     @Override
@@ -119,6 +140,8 @@ public class PaymentRequest implements Parcelable {
             if (VERSION >= 2) {
                 parcel1.writeString(paymentSessionId);
                 parcel1.writeString(loyaltyCardId);
+                parcel1.writeString(earnedBonus.toPlainString());
+                parcel1.writeString(spentBonus.toPlainString());
             }
         });
     }
@@ -132,6 +155,8 @@ public class PaymentRequest implements Parcelable {
             if (currentVersion >= 2) {
                 paymentSessionId = parcel1.readString();
                 loyaltyCardId = parcel1.readString();
+                earnedBonus = new BigDecimal(parcel1.readString());
+                spentBonus = new BigDecimal(parcel1.readString());
             }
         });
     }
