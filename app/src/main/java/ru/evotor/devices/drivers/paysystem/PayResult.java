@@ -147,7 +147,7 @@ public class PayResult implements Parcelable {
         this.cashlessInfo = cashlessInfo;
         this.additionalTransactionData = additionalTransactionData;
         this.maskedPan = maskedPan;
-        this.cardType = cardType;
+        this.cardType = cardType != null ? cardType : CardType.UNKNOWN;
         this.stan = stan;
         this.authCode = authCode;
     }
@@ -179,7 +179,7 @@ public class PayResult implements Parcelable {
         this.cashlessInfo = cashlessInfo;
         this.additionalTransactionData = additionalTransactionData;
         this.maskedPan = maskedPan;
-        this.cardType = cardType;
+        this.cardType = cardType != null ? cardType : CardType.UNKNOWN;
         this.stan = stan;
         this.authCode = authCode;
         this.paymentState = paymentState;
