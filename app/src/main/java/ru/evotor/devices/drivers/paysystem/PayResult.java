@@ -312,13 +312,17 @@ public class PayResult implements Parcelable {
             if (currentVersion >= 6) {
                 maskedPan = parcel1.readString();
                 cardType = CardType.fromName(parcel1.readString(), CardType.UNKNOWN);
-                stan = parcel.readString();
-                authCode = parcel.readString();
+                stan = parcel1.readString();
+                authCode = parcel1.readString();
             }
             if (currentVersion >= 7) {
                 String paymentStateName = parcel1.readString();
                 if (paymentStateName != null) {
-                    paymentState = Constants.PaymentState.valueOf(paymentStateName);
+                    try {
+                        paymentState = Constants.PaymentState.valueOf(paymentStateName);
+                    } catch (IllegalArgumentException e) {
+                        paymentState = null;
+                    }
                 } else {
                     paymentState = null;
                 }

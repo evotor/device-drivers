@@ -13,42 +13,42 @@ public class PaymentRequest implements Parcelable {
     /**
      * Идентификатор устройства
      */
-    private int instanceId;
+    private final int instanceId;
 
     /**
      * Сумма
      */
-    private BigDecimal sum;
+    private final BigDecimal sum;
 
     /**
      * Дата, до которой актуален запрос
      * Может быть null
      */
-    private Date expiredAt;
+    private final Date expiredAt;
 
     /**
      * Дополнительное описание операции
      * Может быть null
      */
-    private String additionalDescription;
+    private final String additionalDescription;
 
     // VERSION = 2
     /**
      * id платёжной сессии для подтверждения платежа в состоянии NEED_CONFIRMATION
      */
-    private String paymentSessionId = null;
+    private final String paymentSessionId;
     /**
      * id карты лояльности для передачи его в фабрику СБЕРа (только для платежа в состоянии NEED_CONFIRMATION)
      */
-    private String loyaltyCardId = null;
+    private final String loyaltyCardId;
     /**
      * Сумма начисленных бонусов для отображения ее экране пинпада
      */
-    private BigDecimal earnedBonus = BigDecimal.ZERO;
+    private final BigDecimal earnedBonus;
     /**
      * Сумма потраченных бонусов для отображения ее экране пинпада
      */
-    private BigDecimal spentBonus = BigDecimal.ZERO;
+    private final BigDecimal spentBonus;
 
     // Используйте конструктор
     // public PaymentRequest(
@@ -56,7 +56,10 @@ public class PaymentRequest implements Parcelable {
     //            BigDecimal sum,
     //            Date expiredAt,
     //            String additionalDescription,
-    //            @Nullable String paymentSessionId
+    //            String paymentSessionId,
+    //            String loyaltyCardId,
+    //            BigDecimal earnedBonus,
+    //            BigDecimal spentBonus
     //)
     @Deprecated
     public PaymentRequest(
@@ -69,6 +72,10 @@ public class PaymentRequest implements Parcelable {
         this.sum = sum;
         this.expiredAt = expiredAt;
         this.additionalDescription = additionalDescription;
+        this.paymentSessionId = null;
+        this.loyaltyCardId = null;
+        this.earnedBonus = null;
+        this.spentBonus = null;
     }
 
     public PaymentRequest(
@@ -140,31 +147,39 @@ public class PaymentRequest implements Parcelable {
             if (VERSION >= 2) {
                 parcel1.writeString(paymentSessionId);
                 parcel1.writeString(loyaltyCardId);
-                parcel1.writeString(earnedBonus.toPlainString());
-                parcel1.writeString(spentBonus.toPlainString());
+                parcel1.writeString(earnedBonus != null ? earnedBonus.toPlainString() : null);
+                parcel1.writeString(spentBonus != null ? spentBonus.toPlainString() : null);
             }
         });
     }
 
-    private PaymentRequest(Parcel parcel) {
-        ParcelableUtils.readExpand(parcel, VERSION, (parcel1, currentVersion) -> {
-            instanceId = parcel1.readInt();
-            sum = new BigDecimal(parcel1.readString());
-            expiredAt = (Date) parcel1.readSerializable();
-            additionalDescription = parcel1.readString();
-            if (currentVersion >= 2) {
-                paymentSessionId = parcel1.readString();
-                loyaltyCardId = parcel1.readString();
-                earnedBonus = new BigDecimal(parcel1.readString());
-                spentBonus = new BigDecimal(parcel1.readString());
-            }
-        });
+    private static PaymentRequest create(Parcel parcel) {
+        return ParcelableUtils.readExpandData(
+                parcel,
+                VERSION,
+                (parcel1, version) ->
+                        new PaymentRequest(
+                                parcel1.readInt(),
+                                new BigDecimal(parcel1.readString()),
+                                (Date) parcel1.readSerializable(),
+                                parcel1.readString(),
+                                version >= 2 ? parcel1.readString() : null,
+                                version >= 2 ? parcel1.readString() : null,
+                                version >= 2 ? readNulableBigDecimal(parcel1) : null,
+                                version >= 2 ? readNulableBigDecimal(parcel1) : null
+                        )
+        );
+    }
+
+    private static BigDecimal readNulableBigDecimal(Parcel parcel) {
+        String s = parcel.readString();
+        return s == null ? null : new BigDecimal(s);
     }
 
     public static final Creator<PaymentRequest> CREATOR = new Creator<PaymentRequest>() {
 
         public PaymentRequest createFromParcel(Parcel in) {
-            return new PaymentRequest(in);
+            return create(in);
         }
 
         public PaymentRequest[] newArray(int size) {
