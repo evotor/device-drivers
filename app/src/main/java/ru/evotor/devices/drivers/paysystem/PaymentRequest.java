@@ -54,8 +54,7 @@ public class PaymentRequest implements Parcelable {
     //            String additionalDescription,
     //            String paymentSessionId,
     //            String loyaltyCardId,
-    //            BigDecimal earnedBonus,
-    //            BigDecimal spentBonus
+    //            String additionalLoyaltyData
     //)
     @Deprecated
     public PaymentRequest(
