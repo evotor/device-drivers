@@ -74,7 +74,7 @@ public class PayResult implements Parcelable {
      */
     private String paymentSessionId = null;
     /**
-     * id платёжной сессии, который надо будет передать при втором вызове оплаты для подтверждения платежа.
+     * Внешний id карты лояльности
      */
     private String loyaltyCardId = null;
 
