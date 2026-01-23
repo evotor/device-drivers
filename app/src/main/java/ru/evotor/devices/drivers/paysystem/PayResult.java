@@ -3,12 +3,13 @@ package ru.evotor.devices.drivers.paysystem;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import ru.evotor.devices.drivers.Constants;
 import ru.evotor.devices.drivers.ParcelableUtils;
 
 public class PayResult implements Parcelable {
 
     private static final String RESULT_CODE_SUCCESS = "0";
-    private static int VERSION = 5;
+    private static int VERSION = 7;
 
     /**
      * ррн проведённой операции
@@ -53,6 +54,29 @@ public class PayResult implements Parcelable {
      * расширенная информация о транзакции
      */
     private AdditionalTransactionData additionalTransactionData = null;
+
+    // VERSION == 6
+    private String maskedPan;
+
+    private CardType cardType;
+
+    private String stan;
+
+    private String authCode;
+
+    // VERSION == 7
+    /**
+     * состояние платежа
+     */
+    private Constants.PaymentState paymentState = null;
+    /**
+     * id платёжной сессии, который надо будет передать при втором вызове оплаты для подтверждения платежа.
+     */
+    private String paymentSessionId = null;
+    /**
+     * Внешний id карты лояльности
+     */
+    private String loyaltyCardId = null;
 
     // Используйте конструктор PayResult(String resultCode, String rrn, String[] slip)
     @Deprecated
@@ -99,6 +123,70 @@ public class PayResult implements Parcelable {
         this.additionalTransactionData = additionalTransactionData;
     }
 
+    public PayResult(
+            String resultCode,
+            String rrn,
+            String[] slip,
+            String extendedSlip,
+            CashlessInfo cashlessInfo,
+            AdditionalTransactionData additionalTransactionData,
+            String maskedPan,
+            CardType cardType,
+            String stan,
+            String authCode
+    ) {
+        this.resultCode = resultCode;
+        this.rrn = rrn;
+        this.slip = slip;
+        if (this.slip == null) {
+            slipLength = 0;
+        } else {
+            slipLength = slip.length;
+        }
+        this.extendedSlip = extendedSlip;
+        this.cashlessInfo = cashlessInfo;
+        this.additionalTransactionData = additionalTransactionData;
+        this.maskedPan = maskedPan;
+        this.cardType = cardType != null ? cardType : CardType.UNKNOWN;
+        this.stan = stan;
+        this.authCode = authCode;
+    }
+
+    public PayResult(
+            String resultCode,
+            String rrn,
+            String[] slip,
+            String extendedSlip,
+            CashlessInfo cashlessInfo,
+            AdditionalTransactionData additionalTransactionData,
+            String maskedPan,
+            CardType cardType,
+            String stan,
+            String authCode,
+            Constants.PaymentState paymentState,
+            String paymentSessionId,
+            String loyaltyCardId
+    ) {
+        this.resultCode = resultCode;
+        this.rrn = rrn;
+        this.slip = slip;
+        if (this.slip == null) {
+            slipLength = 0;
+        } else {
+            slipLength = slip.length;
+        }
+        this.extendedSlip = extendedSlip;
+        this.cashlessInfo = cashlessInfo;
+        this.additionalTransactionData = additionalTransactionData;
+        this.maskedPan = maskedPan;
+        this.cardType = cardType != null ? cardType : CardType.UNKNOWN;
+        this.stan = stan;
+        this.authCode = authCode;
+        this.paymentState = paymentState;
+        this.paymentSessionId = paymentSessionId;
+        this.loyaltyCardId = loyaltyCardId;
+    }
+
     public String getRrn() {
         return rrn;
     }
@@ -115,7 +203,21 @@ public class PayResult implements Parcelable {
         return resultCode;
     }
 
-    public String getExtendedSlip() { return extendedSlip; }
+    public String getExtendedSlip() {
+        return extendedSlip;
+    }
+
+    public Constants.PaymentState getPaymentState() {
+        return paymentState;
+    }
+
+    public String getPaymentSessionId() {
+        return paymentSessionId;
+    }
+
+    public String getLoyaltyCardId() {
+        return loyaltyCardId;
+    }
 
     public CashlessInfo getCashlessInfo() {
         return cashlessInfo;
@@ -150,6 +252,21 @@ public class PayResult implements Parcelable {
                 }
                 if (VERSION >= 5) {
                     parcel.writeParcelable(additionalTransactionData, i);
+                }
+                if (VERSION >= 6) {
+                    parcel.writeString(maskedPan);
+                    parcel.writeString(cardType.card);
+                    parcel.writeString(stan);
+                    parcel.writeString(authCode);
+                }
+                if (VERSION >= 7) {
+                    if (paymentState != null){
+                        parcel.writeString(paymentState.name());
+                    } else {
+                        parcel.writeString(null);
+                    }
+                    parcel.writeString(paymentSessionId);
+                    parcel.writeString(loyaltyCardId);
                 }
             }
         });
@@ -191,6 +308,26 @@ public class PayResult implements Parcelable {
             }
             if (currentVersion >= 5) {
                 additionalTransactionData = parcel1.readParcelable(AdditionalTransactionData.class.getClassLoader());
+            }
+            if (currentVersion >= 6) {
+                maskedPan = parcel1.readString();
+                cardType = CardType.fromName(parcel1.readString(), CardType.UNKNOWN);
+                stan = parcel1.readString();
+                authCode = parcel1.readString();
+            }
+            if (currentVersion >= 7) {
+                String paymentStateName = parcel1.readString();
+                if (paymentStateName != null) {
+                    try {
+                        paymentState = Constants.PaymentState.valueOf(paymentStateName);
+                    } catch (IllegalArgumentException e) {
+                        paymentState = null;
+                    }
+                } else {
+                    paymentState = null;
+                }
+                paymentSessionId = parcel1.readString();
+                loyaltyCardId = parcel1.readString();
             }
         });
     }
