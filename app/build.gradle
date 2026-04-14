@@ -3,14 +3,15 @@ apply plugin: 'com.android.library'
 group = 'com.github.evotor'
 
 android {
-    compileSdkVersion 33
-    buildToolsVersion "25.0.2"
+    namespace = "ru.evotor.devices.drivers"
+    compileSdk 35
     defaultConfig {
-        minSdkVersion 22
-        targetSdkVersion 33
-        versionCode 2_02_08_0
-        versionName "2.2.8"
+        minSdkVersion 23
+        targetSdkVersion 35
+        versionCode 3_03_00_0
+        versionName "3.3.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -22,29 +23,15 @@ android {
     }
 }
 
+
 dependencies {
     implementation 'org.jetbrains:annotations:15.0'
 }
-
-// build a jar with source files
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
 }
 
-task javadoc(type: Javadoc) {
-    failOnError false
-    source = android.sourceSets.main.java.sourceFiles
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
 
-// build a jar with javadoc
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
 
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}

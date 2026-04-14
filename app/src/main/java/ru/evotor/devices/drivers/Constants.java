@@ -33,7 +33,6 @@ public abstract class Constants {
         PAYSYSTEM,
         PRICEPRINTER
     }
-
     //  состояние платежа
     public enum PaymentState {
         NEED_CONFIRMATION // необходимо подтверждение платежа при помощи второго вызова оплаты

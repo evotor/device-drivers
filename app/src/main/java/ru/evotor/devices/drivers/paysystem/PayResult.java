@@ -99,28 +99,7 @@ public class PayResult implements Parcelable {
             String extendedSlip,
             CashlessInfo cashlessInfo
     ) {
-        this(resultCode, rrn, slip, extendedSlip, cashlessInfo, null);
-    }
-
-    public PayResult(
-            String resultCode,
-            String rrn,
-            String[] slip,
-            String extendedSlip,
-            CashlessInfo cashlessInfo,
-            AdditionalTransactionData additionalTransactionData
-    ) {
-        this.resultCode = resultCode;
-        this.rrn = rrn;
-        this.slip = slip;
-        if (this.slip == null) {
-            slipLength = 0;
-        } else {
-            slipLength = slip.length;
-        }
-        this.extendedSlip = extendedSlip;
-        this.cashlessInfo = cashlessInfo;
-        this.additionalTransactionData = additionalTransactionData;
+        this(resultCode, rrn, slip, extendedSlip, cashlessInfo, null, "", CardType.UNKNOWN, "", "");
     }
 
     public PayResult(
@@ -207,6 +186,30 @@ public class PayResult implements Parcelable {
         return extendedSlip;
     }
 
+    public String getAuthCode() {
+        return authCode;
+    }
+
+    public CardType getCardType() {
+        return cardType;
+    }
+
+    public String getMaskedPan() {
+        return maskedPan;
+    }
+
+    public String getStan() {
+        return stan;
+    }
+
+    public CashlessInfo getCashlessInfo() {
+        return cashlessInfo;
+    }
+
+    public AdditionalTransactionData getAdditionalTransactionData() {
+        return additionalTransactionData;
+    }
+
     public Constants.PaymentState getPaymentState() {
         return paymentState;
     }
@@ -217,14 +220,6 @@ public class PayResult implements Parcelable {
 
     public String getLoyaltyCardId() {
         return loyaltyCardId;
-    }
-
-    public CashlessInfo getCashlessInfo() {
-        return cashlessInfo;
-    }
-
-    public AdditionalTransactionData getAdditionalTransactionData() {
-        return additionalTransactionData;
     }
 
     @Override
@@ -248,10 +243,10 @@ public class PayResult implements Parcelable {
                     parcel.writeString(extendedSlip);
                 }
                 if (VERSION >= 4) {
-                    parcel.writeParcelable(cashlessInfo, i);
+                    ParcelableUtils.writeParcelable(parcel, cashlessInfo, i);
                 }
                 if (VERSION >= 5) {
-                    parcel.writeParcelable(additionalTransactionData, i);
+                    ParcelableUtils.writeParcelable(parcel, additionalTransactionData, i);
                 }
                 if (VERSION >= 6) {
                     parcel.writeString(maskedPan);
@@ -260,7 +255,7 @@ public class PayResult implements Parcelable {
                     parcel.writeString(authCode);
                 }
                 if (VERSION >= 7) {
-                    if (paymentState != null){
+                    if (paymentState != null) {
                         parcel.writeString(paymentState.name());
                     } else {
                         parcel.writeString(null);
@@ -304,10 +299,10 @@ public class PayResult implements Parcelable {
                 extendedSlip = parcel1.readString();
             }
             if (currentVersion >= 4) {
-                cashlessInfo = parcel1.readParcelable(CashlessInfo.class.getClassLoader());
+                cashlessInfo = ParcelableUtils.readParcelable(parcel1, CashlessInfo.CREATOR);
             }
             if (currentVersion >= 5) {
-                additionalTransactionData = parcel1.readParcelable(AdditionalTransactionData.class.getClassLoader());
+                additionalTransactionData = ParcelableUtils.readParcelable(parcel1, AdditionalTransactionData.CREATOR);
             }
             if (currentVersion >= 6) {
                 maskedPan = parcel1.readString();
