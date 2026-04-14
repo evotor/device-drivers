@@ -1,9 +1,9 @@
-// EvoPayIntentProvider.aidl
+// PayIntentProvider.aidl
 package ru.evotor.devices.drivers.paysystem.hardware;
 
 import android.content.Intent;
 
-interface EvoPayIntentProvider {
+interface PayIntentProvider {
 
     /*nullable*/ Intent provide() = 1;
 

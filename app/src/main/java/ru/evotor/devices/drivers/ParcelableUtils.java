@@ -1,6 +1,7 @@
 package ru.evotor.devices.drivers;
 
 import android.os.Parcel;
+import android.os.Parcelable;
 
 public class ParcelableUtils {
 
@@ -84,6 +85,16 @@ public class ParcelableUtils {
 
     public interface ParcelableDataReader<R> {
         R read(Parcel parcel, int currentVersion);
+    }
+
+    public static void writeParcelable(Parcel parcel, Parcelable parcelable, int flags) {
+        Parcelables.writeAliased(parcel, parcelable, flags);
+    }
+
+    public static <T extends Parcelable> T readParcelable(Parcel p, Parcelable.Creator<T> creator) {
+        String ignoredClass = p.readString();
+        if (ignoredClass == null) return null;
+        return creator.createFromParcel(p);
     }
 
 }

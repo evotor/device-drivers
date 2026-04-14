@@ -157,12 +157,31 @@ interface IPaySystemDriverService {
      */
     PayResult execCancelPayoutRevertRequest(in CancelPayoutRevertRequest request) = 23;
 
-
     /**
     * Открывает на терминале меню кассира
     *
     * @param instanceId    - номер экземпляра драйвера
     */
 
-    void openCashierMenu(int instanceId) = 24;
+    //void openCashierMenu(int instanceId) = 24;
+    PayResult openCashierMenu(int instanceId) = 25;
+
+    /**
+    * Получает от драйвера терминала список отчётов, которые он может сформировать
+    */
+    String getSupportedReports(int instanceId) = 26;
+
+    /**
+    * Формирует отчёт
+    * @param report - имя отчета из getSupportedReports
+    * @param args - json с параметрами формируемого отчёта
+    */
+    PayResult makeReport(int instanceId, String report, String args) = 27;
+
+    /**
+	 * Производит проверку статуса текущей транзакции
+	 * @param rrn - идентификатор транзакции
+	 * @return    - результат проверки
+     */
+	PayResult checkTransactionStatus(int instanceId, String rrn) = 28;
 }
