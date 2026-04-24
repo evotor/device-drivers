@@ -32,7 +32,7 @@ public class Operation implements Parcelable {
             return ParcelableUtils.readExpandData(in, 1, (p, v) -> {
                 if (v == 1) {
                     int status = p.readInt();
-                    OperationResult result = in.readParcelable(OperationResult.class.getClassLoader());
+                    OperationResult result = ParcelableUtils.readParcelable(in, OperationResult.CREATOR);
                     return new Operation(status, result);
                 }
                 throw new IllegalStateException("not yet implemented for version " + v);
@@ -54,7 +54,7 @@ public class Operation implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         ParcelableUtils.writeExpand(dest, 1, (p) -> {
             p.writeInt(status);
-            p.writeParcelable(result, flags);
+            ParcelableUtils.writeParcelable(p, result, flags);
         });
     }
 

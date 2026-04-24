@@ -3,10 +3,10 @@ package ru.evotor.devices.drivers.paysystem;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import ru.evotor.devices.drivers.ParcelableUtils;
+
 import java.math.BigDecimal;
 import java.util.Date;
-
-import ru.evotor.devices.drivers.ParcelableUtils;
 
 public class PaymentRequest implements Parcelable {
     private static final int VERSION = 2;
@@ -113,6 +113,7 @@ public class PaymentRequest implements Parcelable {
     public String getLoyaltyCardId() {
         return loyaltyCardId;
     }
+
     public String getAdditionalLoyaltyData() {
         return additionalLoyaltyData;
     }

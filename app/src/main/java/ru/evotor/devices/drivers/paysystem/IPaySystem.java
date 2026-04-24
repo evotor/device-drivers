@@ -43,5 +43,21 @@ public interface IPaySystem {
 
     PayResult execCancelPaybackRequest(CancelPaybackRequest request);
 
-    void openCashierMenu();
+
+    //void openCashierMenu();
+    PayResult openCashierMenu();
+
+    /**
+     * Получает от драйвера терминала список отчётов, которые он может сформировать
+     */
+    String getSupportedReports();
+
+    /**
+     * Формирует отчёт
+     * @param report - имя отчета из getSupportedReports
+     * @param args - json с параметрами формируемого отчёта
+     */
+    PayResult makeReport(String report, String args);
+
+    PayResult checkTransactionStatus(String rrn);
 }

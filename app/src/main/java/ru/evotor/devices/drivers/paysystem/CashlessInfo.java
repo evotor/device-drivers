@@ -3,12 +3,12 @@ package ru.evotor.devices.drivers.paysystem;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import ru.evotor.devices.drivers.ParcelableUtils;
+import ru.evotor.devices.drivers.UuidValidationUtils;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
-
-import ru.evotor.devices.drivers.ParcelableUtils;
-import ru.evotor.devices.drivers.UuidValidationUtils;
 
 public class CashlessInfo implements Parcelable {
 

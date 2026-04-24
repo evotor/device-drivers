@@ -1,4 +1,3 @@
-// EvoPayApi.aidl
 package ru.evotor.devices.drivers.paysystem.hardware;
 
 import ru.evotor.devices.drivers.paysystem.hardware.StatusCallback;
@@ -6,7 +5,7 @@ import ru.evotor.devices.drivers.paysystem.hardware.Operation;
 import ru.evotor.devices.drivers.paysystem.hardware.OperationResult;
 import ru.evotor.devices.drivers.paysystem.hardware.TerminalInfo;
 
-interface EvoPayApi {
+interface PayApi {
 
     /**
      * Регистрирует StatusCallback для асинхронного получения статусов операции.
