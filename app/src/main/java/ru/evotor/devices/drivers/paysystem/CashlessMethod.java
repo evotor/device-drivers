@@ -8,5 +8,6 @@ public enum CashlessMethod {
     BIOMETRY,
     CARD,
     INTERNET_ACQUIRING,
-    BANK_TRANSFER
+    BANK_TRANSFER,
+    BLUETOOTH
 }
