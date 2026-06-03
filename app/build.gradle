@@ -25,6 +25,11 @@ android {
 
 
 apply plugin: 'maven-publish'
+tasks.register("androidSourcesJar", Jar) {
+    archiveClassifier.set("sources")
+    // Указываем путь к исходникам библиотеки
+    from(android.sourceSets.getByName("main").java.srcDirs)
+}
 afterEvaluate {
     publishing {
         publications {
@@ -33,6 +38,8 @@ afterEvaluate {
                 groupId = 'com.github.evotor'
                 artifactId = 'device-drivers'
                 version = 'v' + android.defaultConfig.versionName
+                artifact tasks.named('bundleReleaseAar')
+                artifact tasks.named('androidSourcesJar')
             }
         }
     }
