@@ -24,6 +24,20 @@ android {
 }
 
 
+apply plugin: 'maven-publish'
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.findByName('release')
+                groupId = 'com.github.evotor'
+                artifactId = 'device-drivers'
+                version = 'v' + android.defaultConfig.versionName
+            }
+        }
+    }
+}
+
 dependencies {
     implementation 'org.jetbrains:annotations:15.0'
 }
