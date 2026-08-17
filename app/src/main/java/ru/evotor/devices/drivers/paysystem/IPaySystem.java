@@ -2,12 +2,16 @@ package ru.evotor.devices.drivers.paysystem;
 
 public interface IPaySystem {
 
+    @Deprecated
     PayResult payment(PayInfo payInfo);
 
+    @Deprecated
     PayResult cancelPayment(PayInfo payInfo, String rrn);
 
+    @Deprecated
     PayResult payback(PayInfo payInfo, String rrn);
 
+    @Deprecated
     PayResult cancelPayback(PayInfo payInfo, String rrn);
 
     PayResult closeSession();
@@ -50,14 +54,26 @@ public interface IPaySystem {
     /**
      * Получает от драйвера терминала список отчётов, которые он может сформировать
      */
-    String getSupportedReports();
+    ReportType[] getSupportedReports();
 
     /**
      * Формирует отчёт
-     * @param report - имя отчета из getSupportedReports
-     * @param args - json с параметрами формируемого отчёта
+     *
+     * @param reportType - тип отчета из getSupportedReports
      */
-    PayResult makeReport(String report, String args);
+    PayResult makeReport(ReportType reportType);
 
-    PayResult checkTransactionStatus(String rrn);
+    /**
+     * Производит проверку статуса текущей транзакции
+     * @param rrn - идентификатор транзакции
+     * @param transactionId - внешний идентификатор транзакции
+     * @return    - результат проверки
+     */
+    PayResult checkTransactionStatus(String rrn, String transactionId);
+
+    /**
+     * Выйти из режима прерывания оплаты (Нужно для автономного POS в режиме спасибо)
+     */
+    void cancelPaymentConfirmationMode();
+
 }

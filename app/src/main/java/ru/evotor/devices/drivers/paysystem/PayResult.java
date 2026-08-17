@@ -6,10 +6,14 @@ import android.os.Parcelable;
 import ru.evotor.devices.drivers.Constants;
 import ru.evotor.devices.drivers.ParcelableUtils;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+@SuppressWarnings({"unused", "SameParameterValue"})
 public class PayResult implements Parcelable {
 
     private static final String RESULT_CODE_SUCCESS = "0";
-    private static int VERSION = 7;
+    private static final int VERSION = 8;
 
     /**
      * ррн проведённой операции
@@ -24,6 +28,7 @@ public class PayResult implements Parcelable {
     /**
      * строки банковского чека для печати
      */
+    @Nullable
     private final String[] slip;
 
     // VERSION == 2
@@ -41,110 +46,140 @@ public class PayResult implements Parcelable {
     /**
      * json расширенного банковского чека для печати
      */
+    @Nullable
     private String extendedSlip = null;
 
     // VERSION == 4
     /**
      * расширенная информация о способе безналичной оплаты
      */
+    @Nullable
     private CashlessInfo cashlessInfo = null;
 
     // VERSION == 5
     /**
      * расширенная информация о транзакции
      */
+    @Nullable
     private AdditionalTransactionData additionalTransactionData = null;
 
     // VERSION == 6
+    @Nullable
     private String maskedPan;
 
     private CardType cardType;
 
+    @Nullable
     private String stan;
 
+    @Nullable
     private String authCode;
 
     // VERSION == 7
     /**
      * состояние платежа
      */
+    @Nullable
     private Constants.PaymentState paymentState = null;
     /**
      * id платёжной сессии, который надо будет передать при втором вызове оплаты для подтверждения платежа.
      */
+    @Nullable
     private String paymentSessionId = null;
     /**
      * Внешний id карты лояльности
      */
+    @Nullable
     private String loyaltyCardId = null;
 
-    // Используйте конструктор PayResult(String resultCode, String rrn, String[] slip)
+    // VERSION == 8
+    @Nullable
+    private String terminalId = null;
+
+    private boolean isOwn = false;
+
+    @SuppressWarnings("deprecation")
     @Deprecated
     public PayResult(String rrn, String[] slip) {
-        this(RESULT_CODE_SUCCESS, rrn, slip, null);
+        this(RESULT_CODE_SUCCESS, rrn, slip);
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     public PayResult(String resultCode, String rrn, String[] slip) {
         this(resultCode, rrn, slip, null);
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip) {
         this(resultCode, rrn, slip, extendedSlip, null);
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     public PayResult(
             String resultCode,
             String rrn,
             String[] slip,
-            String extendedSlip,
-            CashlessInfo cashlessInfo
+            @Nullable String extendedSlip,
+            @Nullable CashlessInfo cashlessInfo
     ) {
         this(resultCode, rrn, slip, extendedSlip, cashlessInfo, null, "", CardType.UNKNOWN, "", "");
     }
 
+    @SuppressWarnings("deprecation")
+    @Deprecated
     public PayResult(
             String resultCode,
             String rrn,
             String[] slip,
-            String extendedSlip,
-            CashlessInfo cashlessInfo,
-            AdditionalTransactionData additionalTransactionData,
-            String maskedPan,
-            CardType cardType,
-            String stan,
-            String authCode
+            @Nullable String extendedSlip,
+            @Nullable CashlessInfo cashlessInfo,
+            @Nullable AdditionalTransactionData additionalTransactionData,
+            @Nullable String maskedPan,
+            @Nullable CardType cardType,
+            @Nullable String stan,
+            @Nullable String authCode
     ) {
-        this.resultCode = resultCode;
-        this.rrn = rrn;
-        this.slip = slip;
-        if (this.slip == null) {
-            slipLength = 0;
-        } else {
-            slipLength = slip.length;
-        }
-        this.extendedSlip = extendedSlip;
-        this.cashlessInfo = cashlessInfo;
-        this.additionalTransactionData = additionalTransactionData;
-        this.maskedPan = maskedPan;
-        this.cardType = cardType != null ? cardType : CardType.UNKNOWN;
-        this.stan = stan;
-        this.authCode = authCode;
+        this(resultCode, rrn, slip, extendedSlip, cashlessInfo, additionalTransactionData, maskedPan, cardType, stan, authCode, null, null, null);
+    }
+
+    @Deprecated
+    public PayResult(
+            String resultCode,
+            String rrn,
+            String[] slip,
+            @Nullable String extendedSlip,
+            @Nullable CashlessInfo cashlessInfo,
+            @Nullable AdditionalTransactionData additionalTransactionData,
+            @Nullable String maskedPan,
+            @Nullable CardType cardType,
+            @Nullable String stan,
+            @Nullable String authCode,
+            @Nullable Constants.PaymentState paymentState,
+            @Nullable String paymentSessionId,
+            @Nullable String loyaltyCardId
+    ) {
+        this(resultCode, rrn, slip, extendedSlip, cashlessInfo, additionalTransactionData, maskedPan, cardType, stan, authCode, paymentState, paymentSessionId, loyaltyCardId, null, false);
     }
 
     public PayResult(
             String resultCode,
             String rrn,
-            String[] slip,
-            String extendedSlip,
-            CashlessInfo cashlessInfo,
-            AdditionalTransactionData additionalTransactionData,
-            String maskedPan,
-            CardType cardType,
-            String stan,
-            String authCode,
-            Constants.PaymentState paymentState,
-            String paymentSessionId,
-            String loyaltyCardId
+            @Nullable String[] slip,
+            @Nullable String extendedSlip,
+            @Nullable CashlessInfo cashlessInfo,
+            @Nullable AdditionalTransactionData additionalTransactionData,
+            @Nullable String maskedPan,
+            @Nullable CardType cardType,
+            @Nullable String stan,
+            @Nullable String authCode,
+            @Nullable Constants.PaymentState paymentState,
+            @Nullable String paymentSessionId,
+            @Nullable String loyaltyCardId,
+            @Nullable String terminalId,
+            boolean isOwn
     ) {
         this.resultCode = resultCode;
         this.rrn = rrn;
@@ -164,7 +199,10 @@ public class PayResult implements Parcelable {
         this.paymentState = paymentState;
         this.paymentSessionId = paymentSessionId;
         this.loyaltyCardId = loyaltyCardId;
+        this.terminalId = terminalId;
+        this.isOwn = isOwn;
     }
+
 
     public String getRrn() {
         return rrn;
@@ -174,6 +212,7 @@ public class PayResult implements Parcelable {
         return slipLength;
     }
 
+    @Nullable
     public String[] getSlip() {
         return slip;
     }
@@ -182,44 +221,63 @@ public class PayResult implements Parcelable {
         return resultCode;
     }
 
+    @Nullable
     public String getExtendedSlip() {
         return extendedSlip;
     }
 
+    @Nullable
     public String getAuthCode() {
         return authCode;
     }
 
+    @Nullable
     public CardType getCardType() {
         return cardType;
     }
 
+    @Nullable
     public String getMaskedPan() {
         return maskedPan;
     }
 
+    @Nullable
     public String getStan() {
         return stan;
     }
 
+    @Nullable
     public CashlessInfo getCashlessInfo() {
         return cashlessInfo;
     }
 
+    @Nullable
     public AdditionalTransactionData getAdditionalTransactionData() {
         return additionalTransactionData;
     }
 
+    @Nullable
     public Constants.PaymentState getPaymentState() {
         return paymentState;
     }
 
+    @Nullable
     public String getPaymentSessionId() {
         return paymentSessionId;
     }
 
+    @Nullable
     public String getLoyaltyCardId() {
         return loyaltyCardId;
+    }
+
+    @Nullable
+    public String getTerminalId() {
+        return terminalId;
+    }
+
+    public boolean isOwn() {
+        return isOwn;
     }
 
     @Override
@@ -227,47 +285,52 @@ public class PayResult implements Parcelable {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    void writeTo(Parcel parcel, int version) {
         parcel.writeString(rrn);
         parcel.writeInt(slip == null ? 0 : slip.length);
         parcel.writeStringArray(slip);
 
-        ParcelableUtils.writeExpand(parcel, VERSION, new ParcelableUtils.ParcelableWriter() {
-            @Override
-            public void write(Parcel parcel) {
-                if (VERSION >= 2) {
-                    parcel.writeString(resultCode);
+        ParcelableUtils.writeExpand(parcel, version, () -> {
+            if (version >= 2) {
+                parcel.writeString(resultCode);
+            }
+            if (version >= 3) {
+                parcel.writeString(extendedSlip);
+            }
+            if (version >= 4) {
+                ParcelableUtils.writeParcelable(parcel, cashlessInfo, 0);
+            }
+            if (version >= 5) {
+                ParcelableUtils.writeParcelable(parcel, additionalTransactionData, 0);
+            }
+            if (version >= 6) {
+                parcel.writeString(maskedPan);
+                parcel.writeString(cardType.card);
+                parcel.writeString(stan);
+                parcel.writeString(authCode);
+            }
+            if (version >= 7) {
+                if (paymentState != null) {
+                    parcel.writeString(paymentState.name());
+                } else {
+                    parcel.writeString(null);
                 }
-                if (VERSION >= 3) {
-                    parcel.writeString(extendedSlip);
-                }
-                if (VERSION >= 4) {
-                    ParcelableUtils.writeParcelable(parcel, cashlessInfo, i);
-                }
-                if (VERSION >= 5) {
-                    ParcelableUtils.writeParcelable(parcel, additionalTransactionData, i);
-                }
-                if (VERSION >= 6) {
-                    parcel.writeString(maskedPan);
-                    parcel.writeString(cardType.card);
-                    parcel.writeString(stan);
-                    parcel.writeString(authCode);
-                }
-                if (VERSION >= 7) {
-                    if (paymentState != null) {
-                        parcel.writeString(paymentState.name());
-                    } else {
-                        parcel.writeString(null);
-                    }
-                    parcel.writeString(paymentSessionId);
-                    parcel.writeString(loyaltyCardId);
-                }
+                parcel.writeString(paymentSessionId);
+                parcel.writeString(loyaltyCardId);
+            }
+            if (version >= 8) {
+                parcel.writeString(terminalId);
+                parcel.writeInt(isOwn ? 1 : 0);
             }
         });
     }
 
-    public static final Creator<PayResult> CREATOR = new Creator<PayResult>() {
+    @Override
+    public void writeToParcel(@NotNull Parcel parcel, int i) {
+        writeTo(parcel, VERSION);
+    }
+
+    public static final Creator<PayResult> CREATOR = new Creator<>() {
 
         public PayResult createFromParcel(Parcel in) {
             return new PayResult(in);
@@ -278,7 +341,7 @@ public class PayResult implements Parcelable {
         }
     };
 
-    private PayResult(Parcel parcel) {
+    PayResult(Parcel parcel) {
         rrn = parcel.readString();
         slipLength = parcel.readInt();
         int len = parcel.readInt();
@@ -291,27 +354,27 @@ public class PayResult implements Parcelable {
             slip = null;
         }
 
-        ParcelableUtils.readExpand(parcel, VERSION, (parcel1, currentVersion) -> {
-            if (currentVersion >= 2) {
-                resultCode = parcel1.readString();
+        ParcelableUtils.readExpand(parcel, (version) -> {
+            if (version >= 2) {
+                resultCode = parcel.readString();
             }
-            if (currentVersion >= 3) {
-                extendedSlip = parcel1.readString();
+            if (version >= 3) {
+                extendedSlip = parcel.readString();
             }
-            if (currentVersion >= 4) {
-                cashlessInfo = ParcelableUtils.readParcelable(parcel1, CashlessInfo.CREATOR);
+            if (version >= 4) {
+                cashlessInfo = ParcelableUtils.readParcelable(parcel, CashlessInfo.CREATOR);
             }
-            if (currentVersion >= 5) {
-                additionalTransactionData = ParcelableUtils.readParcelable(parcel1, AdditionalTransactionData.CREATOR);
+            if (version >= 5) {
+                additionalTransactionData = ParcelableUtils.readParcelable(parcel, AdditionalTransactionData.CREATOR);
             }
-            if (currentVersion >= 6) {
-                maskedPan = parcel1.readString();
-                cardType = CardType.fromName(parcel1.readString(), CardType.UNKNOWN);
-                stan = parcel1.readString();
-                authCode = parcel1.readString();
+            if (version >= 6) {
+                maskedPan = parcel.readString();
+                cardType = CardType.fromName(parcel.readString(), CardType.UNKNOWN);
+                stan = parcel.readString();
+                authCode = parcel.readString();
             }
-            if (currentVersion >= 7) {
-                String paymentStateName = parcel1.readString();
+            if (version >= 7) {
+                String paymentStateName = parcel.readString();
                 if (paymentStateName != null) {
                     try {
                         paymentState = Constants.PaymentState.valueOf(paymentStateName);
@@ -321,8 +384,12 @@ public class PayResult implements Parcelable {
                 } else {
                     paymentState = null;
                 }
-                paymentSessionId = parcel1.readString();
-                loyaltyCardId = parcel1.readString();
+                paymentSessionId = parcel.readString();
+                loyaltyCardId = parcel.readString();
+            }
+            if (version >= 8) {
+                terminalId = parcel.readString();
+                isOwn = parcel.readInt() != 0;
             }
         });
     }

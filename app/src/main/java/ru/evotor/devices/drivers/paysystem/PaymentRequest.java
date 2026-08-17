@@ -5,117 +5,51 @@ import android.os.Parcelable;
 
 import ru.evotor.devices.drivers.ParcelableUtils;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class PaymentRequest implements Parcelable {
-    private static final int VERSION = 2;
-    /**
-     * Идентификатор устройства
-     */
-    private final int instanceId;
+/**
+ * @param instanceId            Идентификатор устройства
+ * @param sum                   Сумма
+ * @param expiredAt             Дата, до которой актуален запрос
+ *                              Может быть null
+ * @param additionalDescription Дополнительное описание операции
+ *                              Может быть null
+ * @param paymentSessionId      id платёжной сессии для подтверждения платежа в состоянии NEED_CONFIRMATION
+ * @param loyaltyCardId         Id примененной карты лояльности
+ * @param additionalLoyaltyData Json, содержащий дополнительные данные о примененной лояльности
+ * @param transactionId         Внешний идентификатор транзакции
+ * @param tipsCode              Код сотрудника для чаевых
+ */
+public record PaymentRequest(int instanceId,
+                             @NotNull BigDecimal sum,
+                             @Nullable Date expiredAt,
+                             @Nullable String additionalDescription,
+                             @Nullable String paymentSessionId,
+                             @Nullable String loyaltyCardId,
+                             @Nullable String additionalLoyaltyData,
+                             @Nullable String transactionId,
+                             @Nullable String tipsCode) implements Parcelable {
+    private static final int VERSION = 3;
 
-    /**
-     * Сумма
-     */
-    private final BigDecimal sum;
-
-    /**
-     * Дата, до которой актуален запрос
-     * Может быть null
-     */
-    private final Date expiredAt;
-
-    /**
-     * Дополнительное описание операции
-     * Может быть null
-     */
-    private final String additionalDescription;
-
-    // VERSION = 2
-    /**
-     * id платёжной сессии для подтверждения платежа в состоянии NEED_CONFIRMATION
-     */
-    private final String paymentSessionId;
-    /**
-     * Id примененной карты лояльности
-     */
-    private final String loyaltyCardId;
-    /**
-     * Json, содержащий дополнительные данные о примененной лояльности
-     */
-    private final String additionalLoyaltyData;
-
-    // Используйте конструктор
-    // public PaymentRequest(
-    //            int instanceId,
-    //            BigDecimal sum,
-    //            Date expiredAt,
-    //            String additionalDescription,
-    //            String paymentSessionId,
-    //            String loyaltyCardId,
-    //            String additionalLoyaltyData
-    //)
-    @Deprecated
-    public PaymentRequest(
-            int instanceId,
-            BigDecimal sum,
-            Date expiredAt,
-            String additionalDescription
-    ) {
-        this.instanceId = instanceId;
-        this.sum = sum;
-        this.expiredAt = expiredAt;
-        this.additionalDescription = additionalDescription;
-        this.paymentSessionId = null;
-        this.loyaltyCardId = null;
-        this.additionalLoyaltyData = null;
+    @SuppressWarnings("deprecation")
+    @Deprecated(since = "VERSION 2")
+    public PaymentRequest(int instanceId, @NotNull BigDecimal sum, @Nullable Date expiredAt,
+                          @Nullable String additionalDescription) {
+        this(instanceId, sum, expiredAt, additionalDescription,
+                null, null, null);
     }
 
-    public PaymentRequest(
-            int instanceId,
-            BigDecimal sum,
-            Date expiredAt,
-            String additionalDescription,
-            String paymentSessionId,
-            String loyaltyCardId,
-            String additionalLoyaltyData
-    ) {
-        this.instanceId = instanceId;
-        this.sum = sum;
-        this.expiredAt = expiredAt;
-        this.additionalDescription = additionalDescription;
-        this.paymentSessionId = paymentSessionId;
-        this.loyaltyCardId = loyaltyCardId;
-        this.additionalLoyaltyData = additionalLoyaltyData;
-    }
-
-    public int getInstanceId() {
-        return instanceId;
-    }
-
-    public BigDecimal getSum() {
-        return sum;
-    }
-
-    public Date getExpiredAt() {
-        return expiredAt;
-    }
-
-    public String getAdditionalDescription() {
-        return additionalDescription;
-    }
-
-    public String getPaymentSessionId() {
-        return paymentSessionId;
-    }
-
-    public String getLoyaltyCardId() {
-        return loyaltyCardId;
-    }
-
-    public String getAdditionalLoyaltyData() {
-        return additionalLoyaltyData;
+    @SuppressWarnings("DeprecatedIsStillUsed")
+    @Deprecated(since = "VERSION 3")
+    public PaymentRequest(int instanceId, @NotNull BigDecimal sum, @Nullable Date expiredAt,
+                          @Nullable String additionalDescription, @Nullable String paymentSessionId,
+                          @Nullable String loyaltyCardId, @Nullable String additionalLoyaltyData) {
+        this(instanceId, sum, expiredAt, additionalDescription, paymentSessionId, loyaltyCardId,
+                additionalLoyaltyData, null, null);
     }
 
     @Override
@@ -123,44 +57,47 @@ public class PaymentRequest implements Parcelable {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        ParcelableUtils.writeExpand(parcel, VERSION, parcel1 -> {
-            if (VERSION >= 1) {
-                parcel1.writeInt(instanceId);
-                parcel1.writeString(sum.toPlainString());
-                parcel1.writeSerializable(expiredAt);
-                parcel1.writeString(additionalDescription);
+    void writeTo(@NotNull Parcel parcel, int version) {
+        ParcelableUtils.writeExpand(parcel, version, () -> {
+            if (version >= 1) {
+                parcel.writeInt(instanceId);
+                parcel.writeString(sum.toPlainString());
+                parcel.writeSerializable(expiredAt);
+                parcel.writeString(additionalDescription);
             }
-            if (VERSION >= 2) {
-                parcel1.writeString(paymentSessionId);
-                parcel1.writeString(loyaltyCardId);
-                parcel1.writeString(additionalLoyaltyData);
+            if (version >= 2) {
+                parcel.writeString(paymentSessionId);
+                parcel.writeString(loyaltyCardId);
+                parcel.writeString(additionalLoyaltyData);
+            }
+            if (version >= 3) {
+                parcel.writeString(transactionId);
+                parcel.writeString(tipsCode);
             }
         });
     }
 
-    private static PaymentRequest create(Parcel parcel) {
-        return ParcelableUtils.readExpandData(
-                parcel,
-                VERSION,
-                (parcel1, version) ->
-                        new PaymentRequest(
-                                parcel1.readInt(),
-                                new BigDecimal(parcel1.readString()),
-                                (Date) parcel1.readSerializable(),
-                                parcel1.readString(),
-                                version >= 2 ? parcel1.readString() : null,
-                                version >= 2 ? parcel1.readString() : null,
-                                version >= 2 ? parcel1.readString() : null
-                        )
-        );
+    @Override
+    public void writeToParcel(@NotNull Parcel parcel, int i) {
+        writeTo(parcel, VERSION);
     }
 
-    public static final Creator<PaymentRequest> CREATOR = new Creator<PaymentRequest>() {
+    public static final Creator<PaymentRequest> CREATOR = new Creator<>() {
 
         public PaymentRequest createFromParcel(Parcel in) {
-            return create(in);
+            return ParcelableUtils.readExpandData(in,
+                    ( v) -> new PaymentRequest(
+                            in.readInt(),
+                            new BigDecimal(in.readString()),
+                            (Date) in.readSerializable(),
+                            in.readString(),
+                            v >= 2 ? in.readString() : null,
+                            v >= 2 ? in.readString() : null,
+                            v >= 2 ? in.readString() : null,
+                            v >= 3 ? in.readString() : null,
+                            v >= 3 ? in.readString() : null
+                    )
+            );
         }
 
         public PaymentRequest[] newArray(int size) {

@@ -3,29 +3,23 @@ package ru.evotor.devices.drivers.paysystem.hardware;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import ru.evotor.devices.drivers.ParcelableUtils;
 
-public class TerminalInfo implements Parcelable {
-    @Nullable
-    private final String terminalId;
-
-    @Nullable
-    private final String additionalJsonData;
-
-    public TerminalInfo(@Nullable String terminalId, @Nullable String additionalJsonData) {
-        this.terminalId = terminalId;
-        this.additionalJsonData = additionalJsonData;
-    }
+public record TerminalInfo(
+        @Nullable String terminalId,
+        @Nullable String additionalJsonData
+) implements Parcelable {
+    private static final int VERSION = 1;
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        ParcelableUtils.writeExpand(dest, 1, parcel -> {
-            parcel.writeString(terminalId);
-            parcel.writeString(additionalJsonData);
+    public void writeToParcel(@NotNull Parcel dest, int flags) {
+        ParcelableUtils.writeExpand(dest, VERSION, () -> {
+            dest.writeString(terminalId);
+            dest.writeString(additionalJsonData);
         });
-
     }
 
     @Override
@@ -33,17 +27,13 @@ public class TerminalInfo implements Parcelable {
         return 0;
     }
 
-    public static final Creator<TerminalInfo> CREATOR = new Creator<TerminalInfo>() {
+    public static final Creator<TerminalInfo> CREATOR = new Creator<>() {
         @Override
         public TerminalInfo createFromParcel(Parcel in) {
-            return ParcelableUtils.readExpandData(in, 1, (p, v) -> {
-                if (v == 1) {
-                    String terminalId = in.readString();
-                    String additionalJsonData = in.readString();
-                    return new TerminalInfo(terminalId, additionalJsonData);
-                }
-                throw new IllegalStateException("not yet implemented read code for version " + v);
-            });
+            return ParcelableUtils.readExpandData(in, (v) -> new TerminalInfo(
+                    in.readString(),
+                    in.readString()
+            ));
         }
 
         @Override

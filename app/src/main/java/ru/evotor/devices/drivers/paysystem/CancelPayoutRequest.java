@@ -5,107 +5,66 @@ import android.os.Parcelable;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.Objects;
 
 import ru.evotor.devices.drivers.ParcelableUtils;
 
-public class CancelPayoutRequest implements Parcelable {
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * @param instanceId            Идентификатор устройства
+ * @param sum                   Сумма
+ * @param expiredAt             Дата, до которой актуален запрос
+ *                              Может быть null
+ * @param additionalDescription Дополнительное описание операции
+ *                              Может быть null
+ * @param rrn                   RRN
+ */
+@SuppressWarnings("SameParameterValue")
+public record CancelPayoutRequest(
+        int instanceId,
+        @NotNull BigDecimal sum,
+        @Nullable Date expiredAt,
+        @Nullable String additionalDescription,
+        @NotNull String rrn
+) implements Parcelable {
     private static final int VERSION = 1;
-    /**
-     * Идентификатор устройства
-     */
-    private final int instanceId;
-
-    /**
-     * Сумма
-     */
-    private final BigDecimal sum;
-
-    /**
-     * Дата, до которой актуален запрос
-     * Может быть null
-     */
-    private final Date expiredAt;
-
-    /**
-     * Дополнительное описание операции
-     * Может быть null
-     */
-    private final String additionalDescription;
-
-    /**
-     * RRN
-     */
-    private final String rrn;
-
-    public CancelPayoutRequest(
-            int instanceId,
-            BigDecimal sum,
-            Date expiredAt,
-            String additionalDescription,
-            String rrn
-    ) {
-        this.instanceId = instanceId;
-        this.sum = sum;
-        this.expiredAt = expiredAt;
-        this.additionalDescription = additionalDescription;
-        this.rrn = rrn;
-    }
-
-    public int getInstanceId() {
-        return instanceId;
-    }
-
-    public BigDecimal getSum() {
-        return sum;
-    }
-
-    public Date getExpiredAt() {
-        return expiredAt;
-    }
-
-    public String getAdditionalDescription() {
-        return additionalDescription;
-    }
-
-    public String getRrn() {
-        return rrn;
-    }
 
     @Override
     public int describeContents() {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        ParcelableUtils.writeExpand(parcel, VERSION, parcel1 -> {
-            if (VERSION >= 1) {
-                parcel1.writeInt(instanceId);
-                parcel1.writeString(sum.toPlainString());
-                parcel1.writeSerializable(expiredAt);
-                parcel1.writeString(additionalDescription);
-                parcel1.writeString(rrn);
+    void writeTo(Parcel parcel, int version) {
+        ParcelableUtils.writeExpand(parcel, version, () -> {
+            if (version >= 1) {
+                parcel.writeInt(instanceId);
+                parcel.writeString(sum.toPlainString());
+                parcel.writeSerializable(expiredAt);
+                parcel.writeString(additionalDescription);
+                parcel.writeString(rrn);
             }
         });
     }
 
-    private static CancelPayoutRequest create(Parcel parcel) {
-        return ParcelableUtils.readExpandData(
-                parcel,
-                VERSION,
-                (parcel1, currentVersion) -> new CancelPayoutRequest(
-                        parcel1.readInt(),
-                        new BigDecimal(parcel1.readString()),
-                        (Date) parcel1.readSerializable(),
-                        parcel1.readString(),
-                        parcel1.readString()
-                ));
+    @Override
+    public void writeToParcel(@NotNull Parcel parcel, int i) {
+        writeTo(parcel, VERSION);
     }
 
-    public static final Creator<CancelPayoutRequest> CREATOR = new Creator<CancelPayoutRequest>() {
+    public static final Creator<CancelPayoutRequest> CREATOR = new Creator<>() {
 
         public CancelPayoutRequest createFromParcel(Parcel in) {
-            return create(in);
+            return ParcelableUtils.readExpandData(
+                    in,
+                    ( currentVersion) -> new CancelPayoutRequest(
+                            in.readInt(),
+                            new BigDecimal(in.readString()),
+                            (Date) in.readSerializable(),
+                            in.readString(),
+                            Objects.requireNonNull(in.readString())
+                    ));
         }
 
         public CancelPayoutRequest[] newArray(int size) {

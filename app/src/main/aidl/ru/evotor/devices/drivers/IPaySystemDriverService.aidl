@@ -10,6 +10,7 @@ import ru.evotor.devices.drivers.paysystem.PayoutRequest;
 import ru.evotor.devices.drivers.paysystem.CancelPayoutRequest;
 import ru.evotor.devices.drivers.paysystem.PayoutRevertRequest;
 import ru.evotor.devices.drivers.paysystem.CancelPayoutRevertRequest;
+import ru.evotor.devices.drivers.paysystem.ReportType;
 
 interface IPaySystemDriverService {
 
@@ -169,19 +170,27 @@ interface IPaySystemDriverService {
     /**
     * Получает от драйвера терминала список отчётов, которые он может сформировать
     */
-    String getSupportedReports(int instanceId) = 26;
+//    String getSupportedReports(int instanceId) = 26;
+    ReportType[] getSupportedReports(int instanceId) = 29;
 
     /**
     * Формирует отчёт
-    * @param report - имя отчета из getSupportedReports
-    * @param args - json с параметрами формируемого отчёта
+    * @param report - тип отчета из getSupportedReports
     */
-    PayResult makeReport(int instanceId, String report, String args) = 27;
+//    PayResult makeReport(int instanceId, String report, String args) = 27;
+    PayResult makeReport(int instanceId, in ReportType reportType) = 30;
 
     /**
 	 * Производит проверку статуса текущей транзакции
 	 * @param rrn - идентификатор транзакции
+	 * @param transactionId - внешний идентификатор транзакции
 	 * @return    - результат проверки
      */
-	PayResult checkTransactionStatus(int instanceId, String rrn) = 28;
+//	PayResult checkTransactionStatus(int instanceId, String rrn) = 28;
+    PayResult checkTransactionStatus(int instanceId, String rrn, String transactionId) = 31;
+
+    /**
+     * Выйти из режима прерывания оплаты (Нужно для автономного POS в режиме спасибо)
+     */
+    void cancelPaymentConfirmationMode(int instanceId) = 32;
 }

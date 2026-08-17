@@ -8,91 +8,56 @@ import java.util.Date;
 
 import ru.evotor.devices.drivers.ParcelableUtils;
 
-public class PayoutRequest implements Parcelable {
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+/**
+ * @param instanceId            Идентификатор устройства
+ * @param sum                   Сумма
+ * @param expiredAt             Дата, до которой актуален запрос
+ *                              Может быть null
+ * @param additionalDescription Дополнительное описание операции
+ *                              Может быть null
+ */
+@SuppressWarnings("SameParameterValue")
+public record PayoutRequest(int instanceId,
+                            @NotNull BigDecimal sum,
+                            @Nullable Date expiredAt,
+                            @Nullable String additionalDescription) implements Parcelable {
     private static final int VERSION = 1;
-    /**
-     * Идентификатор устройства
-     */
-    private final int instanceId;
-
-    /**
-     * Сумма
-     */
-    private final BigDecimal sum;
-
-    /**
-     * Дата, до которой актуален запрос
-     * Может быть null
-     */
-    private final Date expiredAt;
-
-    /**
-     * Дополнительное описание операции
-     * Может быть null
-     */
-    private final String additionalDescription;
-
-    public PayoutRequest(
-            int instanceId,
-            BigDecimal sum,
-            Date expiredAt,
-            String additionalDescription
-    ) {
-        this.instanceId = instanceId;
-        this.sum = sum;
-        this.expiredAt = expiredAt;
-        this.additionalDescription = additionalDescription;
-    }
-
-    public int getInstanceId() {
-        return instanceId;
-    }
-
-    public BigDecimal getSum() {
-        return sum;
-    }
-
-    public Date getExpiredAt() {
-        return expiredAt;
-    }
-
-    public String getAdditionalDescription() {
-        return additionalDescription;
-    }
 
     @Override
     public int describeContents() {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        ParcelableUtils.writeExpand(parcel, VERSION, parcel1 -> {
-            if (VERSION >= 1) {
-                parcel1.writeInt(instanceId);
-                parcel1.writeString(sum.toPlainString());
-                parcel1.writeSerializable(expiredAt);
-                parcel1.writeString(additionalDescription);
+    void writeTo(@NotNull Parcel parcel, int version) {
+        ParcelableUtils.writeExpand(parcel, version, () -> {
+            if (version >= 1) {
+                parcel.writeInt(instanceId);
+                parcel.writeString(sum.toPlainString());
+                parcel.writeSerializable(expiredAt);
+                parcel.writeString(additionalDescription);
             }
         });
     }
 
-    private static PayoutRequest create(Parcel parcel) {
-        return ParcelableUtils.readExpandData(
-                parcel,
-                VERSION,
-                (parcel1, currentVersion) -> new PayoutRequest(
-                        parcel1.readInt(),
-                        new BigDecimal(parcel1.readString()),
-                        (Date) parcel1.readSerializable(),
-                        parcel1.readString()
-                ));
+    @Override
+    public void writeToParcel(@NotNull Parcel parcel, int i) {
+        writeTo(parcel, VERSION);
     }
 
-    public static final Creator<PayoutRequest> CREATOR = new Creator<PayoutRequest>() {
+    public static final Creator<PayoutRequest> CREATOR = new Creator<>() {
 
         public PayoutRequest createFromParcel(Parcel in) {
-            return create(in);
+            return ParcelableUtils.readExpandData(
+                    in,
+                    (currentVersion) -> new PayoutRequest(
+                            in.readInt(),
+                            new BigDecimal(in.readString()),
+                            (Date) in.readSerializable(),
+                            in.readString()
+                    ));
         }
 
         public PayoutRequest[] newArray(int size) {
