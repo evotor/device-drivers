@@ -22,7 +22,7 @@ public class ParcelableUtils {
         final int startDataPosition = p.dataPosition();
 
         //Write additional data
-        writer.write(p);
+        writer.write();
 
         // Calculate additional data size
         final int dataSize = p.dataPosition() - startDataPosition;
@@ -36,10 +36,10 @@ public class ParcelableUtils {
 
     }
 
-    public static void readExpand(Parcel p, int version, ParcelableReader reader) {
-        readExpandData(p, version, (ParcelableDataReader<Void>) (parcel, currentVersion) -> {
+    public static void readExpand(Parcel p, ParcelableReader reader) {
+        readExpandData(p, (ParcelableDataReader<Void>) (version) -> {
             if (reader != null) {
-                reader.read(parcel, currentVersion);
+                reader.read(version);
             }
             return null;
         });
@@ -47,13 +47,12 @@ public class ParcelableUtils {
 
     /**
      * @param p       parcel
-     * @param version версия объекта
      * @param reader  объект, который будет вызван, если есть дополнительные данные.
      *                Если дополнительных данных нет, то объект вызван не будет!
      * @param <R>     возвращаемое значение
      * @return null если дополнительных данных нет или результат вызова reader, если дополнительные данные есть
      */
-    public static <R> R readExpandData(Parcel p, int version, ParcelableDataReader<R> reader) {
+    public static <R> R readExpandData(Parcel p, ParcelableDataReader<R> reader) {
 
         final int startReadingPosition = p.dataPosition();
 
@@ -68,23 +67,21 @@ public class ParcelableUtils {
         final int dataSize = p.readInt();
         final int startDataPosition = p.dataPosition();
 
-        R r = reader.read(p, currentVersion);
-        if (currentVersion > version) {
-            p.setDataPosition(startDataPosition + dataSize);
-        }
+        R r = reader.read(currentVersion);
+        p.setDataPosition(startDataPosition + dataSize);
         return r;
     }
 
     public interface ParcelableWriter {
-        void write(Parcel parcel);
+        void write();
     }
 
     public interface ParcelableReader {
-        void read(Parcel parcel, int currentVersion);
+        void read(int version);
     }
 
     public interface ParcelableDataReader<R> {
-        R read(Parcel parcel, int currentVersion);
+        R read(int version);
     }
 
     public static void writeParcelable(Parcel parcel, Parcelable parcelable, int flags) {

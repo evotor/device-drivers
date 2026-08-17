@@ -3,40 +3,25 @@ package ru.evotor.devices.drivers.paysystem.hardware;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import ru.evotor.devices.drivers.ParcelableUtils;
 
-public class Operation implements Parcelable {
-    private final int status;
-    @Nullable
-    private final OperationResult result;
+@SuppressWarnings("unused")
+public record Operation(
+        int status,
+        @Nullable OperationResult result
+) implements Parcelable {
 
-    public Operation(int status, @Nullable OperationResult result) {
-        this.status = status;
-        this.result = result;
-    }
+    private static final int VERSION = 1;
 
-    public int getStatus() {
-        return status;
-    }
-
-    @Nullable
-    public OperationResult getResult() {
-        return result;
-    }
-
-    public static final Creator<Operation> CREATOR = new Creator<Operation>() {
+    public static final Creator<Operation> CREATOR = new Creator<>() {
         @Override
         public Operation createFromParcel(Parcel in) {
-            return ParcelableUtils.readExpandData(in, 1, (p, v) -> {
-                if (v == 1) {
-                    int status = p.readInt();
-                    OperationResult result = ParcelableUtils.readParcelable(in, OperationResult.CREATOR);
-                    return new Operation(status, result);
-                }
-                throw new IllegalStateException("not yet implemented for version " + v);
-            });
+            return ParcelableUtils.readExpandData(in, (v) -> new Operation(
+                    in.readInt(),
+                    ParcelableUtils.readParcelable(in, OperationResult.CREATOR)));
         }
 
         @Override
@@ -51,10 +36,10 @@ public class Operation implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        ParcelableUtils.writeExpand(dest, 1, (p) -> {
-            p.writeInt(status);
-            ParcelableUtils.writeParcelable(p, result, flags);
+    public void writeToParcel(@NotNull Parcel dest, int flags) {
+        ParcelableUtils.writeExpand(dest, VERSION, () -> {
+            dest.writeInt(status);
+            ParcelableUtils.writeParcelable(dest, result, flags);
         });
     }
 
