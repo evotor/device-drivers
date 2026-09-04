@@ -119,12 +119,21 @@ public class PayResult implements Parcelable {
     }
 
     @Deprecated
-    public PayResult(String resultCode, String rrn, String[] slip) {
+    public PayResult(
+            String resultCode,
+            String rrn,
+            @Nullable String[] slip
+    ) {
         this(resultCode, rrn, slip, null);
     }
 
     @Deprecated
-    public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip) {
+    public PayResult(
+            String resultCode,
+            String rrn,
+            @Nullable String[] slip,
+            @Nullable String extendedSlip
+    ) {
         this(resultCode, rrn, slip, extendedSlip, null);
     }
 
@@ -132,7 +141,7 @@ public class PayResult implements Parcelable {
     public PayResult(
             String resultCode,
             String rrn,
-            String[] slip,
+            @Nullable String[] slip,
             @Nullable String extendedSlip,
             @Nullable CashlessInfo cashlessInfo
     ) {
@@ -143,7 +152,7 @@ public class PayResult implements Parcelable {
     public PayResult(
             String resultCode,
             String rrn,
-            String[] slip,
+            @Nullable String[] slip,
             @Nullable String extendedSlip,
             @Nullable CashlessInfo cashlessInfo,
             @Nullable AdditionalTransactionData additionalTransactionData,
@@ -159,7 +168,7 @@ public class PayResult implements Parcelable {
     public PayResult(
             String resultCode,
             String rrn,
-            String[] slip,
+            @Nullable String[] slip,
             @Nullable String extendedSlip,
             @Nullable CashlessInfo cashlessInfo,
             @Nullable AdditionalTransactionData additionalTransactionData,
@@ -179,7 +188,7 @@ public class PayResult implements Parcelable {
     public PayResult(
             String resultCode,
             String rrn,
-            String[] slip,
+            @Nullable String[] slip,
             @Nullable String extendedSlip,
             @Nullable CashlessInfo cashlessInfo,
             @Nullable AdditionalTransactionData additionalTransactionData,
