@@ -9,11 +9,13 @@ import ru.evotor.devices.drivers.ParcelableUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Date;
+
 @SuppressWarnings({"unused", "SameParameterValue"})
 public class PayResult implements Parcelable {
 
     private static final String RESULT_CODE_SUCCESS = "0";
-    private static final int VERSION = 8;
+    private static final int VERSION = 9;
 
     /**
      * ррн проведённой операции
@@ -98,42 +100,59 @@ public class PayResult implements Parcelable {
 
     private boolean isOwn = false;
 
-    @SuppressWarnings("deprecation")
+    // VERSION == 9
+    /**
+     * дата и время совершения операции
+     */
+    @Nullable
+    private Date datetime = null;
+
+    /**
+     * ошибка, возникшая при выполнении операции
+     */
+    @Nullable
+    private ErrorInfo errorInfo = null;
+
     @Deprecated
     public PayResult(String rrn, String[] slip) {
         this(RESULT_CODE_SUCCESS, rrn, slip);
     }
 
-    @SuppressWarnings("deprecation")
-    @Deprecated
-    public PayResult(String resultCode, String rrn, String[] slip) {
-        this(resultCode, rrn, slip, null);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Deprecated
-    public PayResult(String resultCode, String rrn, String[] slip, String extendedSlip) {
-        this(resultCode, rrn, slip, extendedSlip, null);
-    }
-
-    @SuppressWarnings("deprecation")
     @Deprecated
     public PayResult(
             String resultCode,
             String rrn,
-            String[] slip,
+            @Nullable String[] slip
+    ) {
+        this(resultCode, rrn, slip, null);
+    }
+
+    @Deprecated
+    public PayResult(
+            String resultCode,
+            String rrn,
+            @Nullable String[] slip,
+            @Nullable String extendedSlip
+    ) {
+        this(resultCode, rrn, slip, extendedSlip, null);
+    }
+
+    @Deprecated
+    public PayResult(
+            String resultCode,
+            String rrn,
+            @Nullable String[] slip,
             @Nullable String extendedSlip,
             @Nullable CashlessInfo cashlessInfo
     ) {
         this(resultCode, rrn, slip, extendedSlip, cashlessInfo, null, "", CardType.UNKNOWN, "", "");
     }
 
-    @SuppressWarnings("deprecation")
     @Deprecated
     public PayResult(
             String resultCode,
             String rrn,
-            String[] slip,
+            @Nullable String[] slip,
             @Nullable String extendedSlip,
             @Nullable CashlessInfo cashlessInfo,
             @Nullable AdditionalTransactionData additionalTransactionData,
@@ -149,7 +168,7 @@ public class PayResult implements Parcelable {
     public PayResult(
             String resultCode,
             String rrn,
-            String[] slip,
+            @Nullable String[] slip,
             @Nullable String extendedSlip,
             @Nullable CashlessInfo cashlessInfo,
             @Nullable AdditionalTransactionData additionalTransactionData,
@@ -161,7 +180,29 @@ public class PayResult implements Parcelable {
             @Nullable String paymentSessionId,
             @Nullable String loyaltyCardId
     ) {
-        this(resultCode, rrn, slip, extendedSlip, cashlessInfo, additionalTransactionData, maskedPan, cardType, stan, authCode, paymentState, paymentSessionId, loyaltyCardId, null, false);
+        this(resultCode, rrn, slip, extendedSlip, cashlessInfo, additionalTransactionData, maskedPan, cardType, stan, authCode, paymentState, paymentSessionId, loyaltyCardId, null, false, null, null);
+    }
+
+
+    @Deprecated
+    public PayResult(
+            String resultCode,
+            String rrn,
+            @Nullable String[] slip,
+            @Nullable String extendedSlip,
+            @Nullable CashlessInfo cashlessInfo,
+            @Nullable AdditionalTransactionData additionalTransactionData,
+            @Nullable String maskedPan,
+            @Nullable CardType cardType,
+            @Nullable String stan,
+            @Nullable String authCode,
+            @Nullable Constants.PaymentState paymentState,
+            @Nullable String paymentSessionId,
+            @Nullable String loyaltyCardId,
+            @Nullable String terminalId,
+            boolean isOwn
+    ) {
+        this(resultCode, rrn, slip, extendedSlip, cashlessInfo, additionalTransactionData, maskedPan, cardType, stan, authCode, paymentState, paymentSessionId, loyaltyCardId, terminalId, isOwn, null, null);
     }
 
     public PayResult(
@@ -179,7 +220,9 @@ public class PayResult implements Parcelable {
             @Nullable String paymentSessionId,
             @Nullable String loyaltyCardId,
             @Nullable String terminalId,
-            boolean isOwn
+            boolean isOwn,
+            @Nullable Date datetime,
+            @Nullable ErrorInfo errorInfo
     ) {
         this.resultCode = resultCode;
         this.rrn = rrn;
@@ -201,6 +244,8 @@ public class PayResult implements Parcelable {
         this.loyaltyCardId = loyaltyCardId;
         this.terminalId = terminalId;
         this.isOwn = isOwn;
+        this.datetime = datetime;
+        this.errorInfo = errorInfo;
     }
 
 
@@ -280,6 +325,16 @@ public class PayResult implements Parcelable {
         return isOwn;
     }
 
+    @Nullable
+    public Date getDatetime() {
+        return datetime;
+    }
+
+    @Nullable
+    public ErrorInfo getError() {
+        return errorInfo;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -321,6 +376,13 @@ public class PayResult implements Parcelable {
             if (version >= 8) {
                 parcel.writeString(terminalId);
                 parcel.writeInt(isOwn ? 1 : 0);
+            }
+            if (version >= 9) {
+                parcel.writeInt(datetime != null ? 1 : 0);
+                if (datetime != null) {
+                    parcel.writeLong(datetime.getTime());
+                }
+                ParcelableUtils.writeParcelable(parcel, errorInfo, 0);
             }
         });
     }
@@ -390,6 +452,12 @@ public class PayResult implements Parcelable {
             if (version >= 8) {
                 terminalId = parcel.readString();
                 isOwn = parcel.readInt() != 0;
+            }
+            if (version >= 9) {
+                if (parcel.readInt() != 0) {
+                    datetime = new Date(parcel.readLong());
+                }
+                errorInfo = ParcelableUtils.readParcelable(parcel, ErrorInfo.CREATOR);
             }
         });
     }
