@@ -9,6 +9,7 @@ import ru.evotor.devices.drivers.ParcelableUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Date;
 
 @SuppressWarnings({"unused", "SameParameterValue"})
@@ -462,4 +463,28 @@ public class PayResult implements Parcelable {
         });
     }
 
+    @NotNull
+    @Override
+    public String toString() {
+        return "PayResult{" +
+                "rrn='" + rrn + '\'' +
+                ", slipLength=" + slipLength +
+                ", slip=" + Arrays.toString(slip) +
+                ", resultCode='" + resultCode + '\'' +
+                ", extendedSlip='" + extendedSlip + '\'' +
+                ", cashlessInfo=" + cashlessInfo +
+                ", additionalTransactionData=" + additionalTransactionData +
+                ", maskedPan='" + maskedPan + '\'' +
+                ", cardType=" + cardType +
+                ", stan='" + stan + '\'' +
+                ", authCode='" + authCode + '\'' +
+                ", paymentState=" + paymentState +
+                ", paymentSessionId='" + paymentSessionId + '\'' +
+                ", loyaltyCardId='" + loyaltyCardId + '\'' +
+                ", terminalId='" + terminalId + '\'' +
+                ", isOwn=" + isOwn +
+                ", datetime=" + datetime +
+                ", errorInfo=" + errorInfo +
+                '}';
+    }
 }
