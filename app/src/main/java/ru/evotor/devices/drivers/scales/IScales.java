@@ -4,4 +4,9 @@ public interface IScales {
 
     Weight getWeight();
 
+    /**
+     * Обнулить показания весов
+     */
+    void zero();
+
 }

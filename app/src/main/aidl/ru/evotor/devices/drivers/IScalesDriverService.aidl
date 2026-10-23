@@ -13,4 +13,11 @@ interface IScalesDriverService {
 	*/
     Weight getWeight(int instanceId);
 
+	/**
+	* Обнулить показания весов
+	*
+    * @param instanceId    - номер экзмпляра драйвера
+	*/
+    void zero(int instanceId);
+
 }
